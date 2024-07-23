@@ -1,0 +1,7 @@
+obj/*
+bin/*
+video/*
+.cache/*
+*.make
+Makefile
+compile_commands.json
