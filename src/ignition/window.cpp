@@ -1,6 +1,6 @@
 #include "window.hpp"
 
-namespace Overload {
+namespace Ignition {
    Window::Window(int w, int h, const char* c)
    {
       glfwInit();

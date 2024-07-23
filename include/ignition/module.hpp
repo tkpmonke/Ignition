@@ -2,10 +2,13 @@
 #include <string>
 
 #define CREATE_MODULE(name) std::string type() override { return name; }
-namespace Overload {
+namespace Ignition {
    class Module {
    public:
-      virtual void Update() = 0;
+      virtual void Start() {};
+      virtual void Update() {};
+      virtual void Shutdown() {};
+
       virtual std::string type() = 0; 
    };
 }

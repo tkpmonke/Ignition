@@ -1,6 +1,6 @@
 #include "object.hpp"
 
-namespace Overload {
+namespace Ignition {
 
    void Object::Update()
    {

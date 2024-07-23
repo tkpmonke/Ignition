@@ -11,7 +11,7 @@
                            m->Update();                                 \
                         }
 
-namespace Overload {
+namespace Ignition {
    class Object {
    public:
       std::string name;

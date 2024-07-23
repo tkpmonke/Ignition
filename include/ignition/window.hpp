@@ -1,7 +1,9 @@
+#pragma once
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-namespace Overload {
+namespace Ignition {
    class Window {
    public:
       Window() = default;
