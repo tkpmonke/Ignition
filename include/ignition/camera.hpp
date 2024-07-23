@@ -4,7 +4,7 @@
 
 #include <glm/mat4x4.hpp>
 
-namespace Overload {
+namespace Ignition {
    class Camera : public Object {
    public:
       float fov;
@@ -12,7 +12,6 @@ namespace Overload {
          float min, max;
       } clipping_planes;
    
-      // Overload::MainCamera::camera = this;
       void MakeMainCamera();
 
       Matrix4 view_projection();
@@ -22,12 +21,12 @@ namespace Overload {
       void EndRender();
 
       Camera() = default;
-      Camera(Window* window) : window(window) {} 
+      Camera(Window* window) { this->window = window; } 
    private:
       Window* window;
    };
 
 }
-namespace Overload::MainCamera {
+namespace Ignition::MainCamera {
    extern Camera* camera;
 }
