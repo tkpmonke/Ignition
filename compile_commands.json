@@ -1,0 +1,21 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-DDEBUG",
+      "-Iinclude/overload",
+      "-Iinclude/offload",
+      "-Iinclude/offload/imgui",
+      "-m64",
+      "-g",
+      "-std=gnu++17",
+      "-c",
+      "-o",
+      "obj/Debug/main.o",
+      "src/offload/main.cpp"
+    ],
+    "directory": "/home/turdle/Projects/overload",
+    "file": "/home/turdle/Projects/overload/src/offload/main.cpp",
+    "output": "/home/turdle/Projects/overload/obj/Debug/main.o"
+  }
+]

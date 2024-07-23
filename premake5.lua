@@ -7,7 +7,7 @@ project "overload"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "libs/include", "src", "src/rendering", "src/game", "src/utils", "editor/imgui" }
+   includedirs { "include/overload", "include/offload", "include/offload/imgui" }
    files { "**.h", "**.cpp", "**.hpp" }
    
    links { "glfw", "GL", "GLEW", "m" }
