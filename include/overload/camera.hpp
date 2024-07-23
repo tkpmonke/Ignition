@@ -27,7 +27,7 @@ namespace Overload {
       Window* window;
    };
 
-   namespace Overload::MainCamera {
-      extern Camera* camera;
-   }
+}
+namespace Overload::MainCamera {
+   extern Camera* camera;
 }
