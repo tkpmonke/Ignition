@@ -1,5 +1,9 @@
 #include "camera.hpp"
 
+namespace Overload::MainCamera {
+   Camera* camera;
+}
+
 namespace Overload {
    void Camera::MakeMainCamera()
    {
