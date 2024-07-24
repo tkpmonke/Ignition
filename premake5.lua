@@ -7,7 +7,7 @@ project "implosion"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/implosion", "include/implosion/imgui" }
+   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/imgui" }
    files { "**.h", "**.cpp", "**.hpp" }
    
    links { "glfw", "GL", "GLEW", "m" }

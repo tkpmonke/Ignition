@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 
 #define CREATE_MODULE(name) std::string type() override { return name; }
@@ -10,5 +11,7 @@ namespace Ignition {
       virtual void Shutdown() {};
 
       virtual std::string type() = 0; 
+
+      bool enabled;
    };
 }
