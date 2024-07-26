@@ -6,8 +6,9 @@
 
 namespace Ignition::Rendering {
    class Shader {
-   
-      void Load(std::string vert, std::string frag);
+   public:   
+      Shader(std::string vert, std::string frag);
+      Shader() = default;
 
       int program;
    };
