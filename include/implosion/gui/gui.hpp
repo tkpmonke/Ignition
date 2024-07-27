@@ -8,7 +8,7 @@
 namespace Implosion {
    class GUI {
    public:
-      GUI();
+      GUI(GLFWwindow*);
       
       void NewFrame();
 
@@ -19,16 +19,18 @@ namespace Implosion {
 
       void FileExplorer();
 
-      void SceneGraph(std::vector<Ignition::Object>);
+      void SceneGraph(std::vector<Ignition::Object>*);
 
-      void MenuBar();
+      void MenuBar(std::vector<Ignition::Object>*);
 
-      Ignition::Object AddObject();
+      Ignition::Object AddObjectMenu();
       
       void DebugMenu();
 
       void EndFrame();
 
       void Shutdown();
+   private:
+      GLFWwindow* window;
    };
 }
