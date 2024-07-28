@@ -2,6 +2,7 @@
 
 #include "types/shader.hpp"
 #include "types/model.hpp"
+#include "camera.hpp"
 
 #include <GL/glew.h>
 #include <module.hpp>
@@ -13,7 +14,9 @@ namespace Ignition::Rendering {
 
       Shader shader;
       Model model;     
-      MeshRenderer();
+
+      MeshRenderer() = default;
+      MeshRenderer(Camera* camera) : camera(camera) {}      
       
       void LoadShader(Shader s) {this->shader = s; }
       void LoadModel(Model m); 
@@ -22,6 +25,8 @@ namespace Ignition::Rendering {
 
    private:
       uint vao;
+      Camera* camera;
+
    };
 
 }

@@ -1,8 +1,11 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
-#define CREATE_MODULE(name) std::string type() override { return name; }
+#include "types/transform.hpp"
+
+#define CREATE_MODULE(name) std::string type() const override { return name; }
 namespace Ignition {
    class Module {
    public:
@@ -10,8 +13,9 @@ namespace Ignition {
       virtual void Update() {};
       virtual void Shutdown() {};
 
-      virtual std::string type() = 0; 
+      virtual std::string type() const = 0; 
 
       bool enabled;
+      std::shared_ptr<Transform> transform;
    };
 }

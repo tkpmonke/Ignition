@@ -5,6 +5,8 @@ namespace Ignition {
    void Transform::UpdateVectors()
    {
       Vector3 euler = glm::eulerAngles(this->rotation);
+      euler = glm::radians(euler);
+
       float pitch = euler.y;
       float yaw = euler.z;
       this->forward.x = cos(yaw) * cos(pitch);

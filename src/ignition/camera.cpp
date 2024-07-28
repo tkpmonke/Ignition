@@ -15,16 +15,18 @@ namespace Ignition {
       this->transform.UpdateVectors();
 
       Matrix4 view = glm::lookAt(this->transform.position, this->transform.position + this->transform.forward, this->transform.up);
+
       
       int width, height;
       glfwGetWindowSize((GLFWwindow*)*this->window, &width, &height);
-      Matrix4 projection = glm::perspective(this->fov, (float)width/(float)height, this->clipping_planes.min, this->clipping_planes.max);
+      Matrix4 projection = glm::perspective(glm::radians(this->fov), (float)width/(float)height, this->clipping_planes.min, this->clipping_planes.max);
 
       return projection * view;
    }
 
    void Camera::BeginRender()
    {
+      glClearColor(.2f,.3f,.7f,1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    }
 
