@@ -7,9 +7,10 @@
 #include "module.hpp"
 #include "types/transform.hpp"
 
-#define UPDATE_OBJECT() this->transform.UpdateVectors();                \
-                        for (std::shared_ptr<Module> m : modules)  {    \
-                           m->Update();                                 \
+#define UPDATE_OBJECT() this->transform.UpdateVectors();                                  \
+                        for (std::shared_ptr<Module> m : modules)  {                      \
+                           m->transform = std::make_shared<Transform>(this->transform);   \
+                           m->Update();                                                   \
                         }
 
 namespace Ignition {
@@ -17,10 +18,11 @@ namespace Ignition {
    public:
       std::string name;
       std::string tag;
+      bool enabled = true;
 
       Transform transform;
 
-      virtual void Update() { UPDATE_OBJECT() };
+      virtual void Update();
 
       Object* parent;
       

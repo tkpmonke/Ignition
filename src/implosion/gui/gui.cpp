@@ -1,16 +1,20 @@
 #include "gui/gui.hpp"
 
 namespace Implosion {
-   GUI::GUI(GLFWwindow* window)
+   GUI::GUI(GLFWwindow* window, Ignition::Camera* camera)
    {
+      IMGUI_CHECKVERSION();
       ImGui::CreateContext();
+      ImGui::SetCurrentContext(ImGui::GetCurrentContext());
       ImGuiIO& io = ImGui::GetIO();
       io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
       io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-      
+
       this->window = window;
+      this->camera = camera;
+
       ImGui_ImplGlfw_InitForOpenGL(this->window, true);
-      ImGui_ImplOpenGL3_Init();
+      ImGui_ImplOpenGL3_Init("#version 330");
    }
 
    void GUI::NewFrame()
@@ -19,7 +23,7 @@ namespace Implosion {
       ImGui_ImplGlfw_NewFrame();
       ImGui::NewFrame();
    
-      ImGui::DockSpaceOverViewport(ImGuiDockNodeFlags_PassthruCentralNode, ImGui::GetMainViewport());
+      ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
    }
 
    void GUI::EndFrame()

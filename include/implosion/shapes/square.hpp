@@ -2,4 +2,4 @@
 
 #include "types/model.hpp"
 
-extern Ignition::Model square_model;
+extern const Ignition::Model square_model;

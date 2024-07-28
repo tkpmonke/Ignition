@@ -3,21 +3,23 @@
 namespace Implosion {
    void GUI::MenuBar(std::vector<Ignition::Object>* objects)
    {
-      ImGui::BeginMainMenuBar();
-      if (ImGui::BeginMenu("Ignition"))
-      {
-         if (ImGui::MenuItem("Exit"))
+      if (ImGui::BeginMainMenuBar()) {
+         if (ImGui::BeginMenu("Ignition"))
          {
-            exit(0);
+            if (ImGui::MenuItem("Exit"))
+            {
+               exit(0);
+            }
+            ImGui::EndMenu();
          }
-         ImGui::EndMenu();
-      }
-      if (ImGui::BeginMenu("Scene"))
-      {
-         if (ImGui::MenuItem("Add Object"))
+         if (ImGui::BeginMenu("Scene"))
          {
-            objects->push_back(AddObjectMenu()); 
+            ImGui::SeparatorText("Add Object");
+            AddObjectMenu(objects); 
+
+            ImGui::EndMenu();
          }
+         ImGui::EndMainMenuBar();
       }
    }
 }  

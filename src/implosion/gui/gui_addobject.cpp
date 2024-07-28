@@ -1,56 +1,37 @@
 #include "gui/gui.hpp"
 #include "components/rendering/meshrenderer.hpp"
-#include "GLFW/glfw3.h"
 #include "shapes/square.hpp"
+#include "types/shader.hpp"
+#include "utils/unlit_shader.hpp"
+
 #include <memory>
+#include <iostream>
 
 using namespace Ignition::Rendering;
 
 namespace Implosion {
-   Ignition::Object GUI::AddObjectMenu()
+   void GUI::AddObjectMenu(std::vector<Ignition::Object>* objects)
    {
+
       Ignition::Object o = Ignition::Object();
-      
-      bool open = true;
-
-      ImGui::OpenPopup("Add Object Menu");
-      
-      while (open) {
-         glfwPollEvents();
-         NewFrame();
-
-
-         if (ImGui::BeginPopupModal("Add Object Menu"))
-         {
-            ImGui::Text("do stuff");
-            
-            if (ImGui::BeginMenuBar())
-            {
-               if (ImGui::MenuItem("Exit"))
-               {
-                  open = false;
-                  ImGui::CloseCurrentPopup();
-               }
-            }
-
-            if (ImGui::Button("Empty"))
-            {
-               return o;
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Square"))
-            {
-               MeshRenderer m = MeshRenderer();
-               m.LoadModel(square_model);
-               o.AddComponent(std::shared_ptr(m));
-            }
-
-            ImGui::EndPopup();
-         }
-
-         EndFrame();
-         glfwSwapBuffers(this->window);
+      Shader s = Shader(unlit_vertex, unlit_fragment);
+   
+      o.name = "Object " + std::to_string(objects->size());
+      o.tag = "Default";
+      if (ImGui::MenuItem("Empty"))
+      {
+         objects->push_back(o);
       }
-      return o;
+      if (ImGui::MenuItem("Square"))
+      {
+         MeshRenderer m = MeshRenderer(this->camera);
+         m.LoadModel(square_model);
+         m.LoadShader(s);
+         
+
+         std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
+         o.AddComponent(ptr);
+         objects->push_back(o);
+      }
    }
 }
