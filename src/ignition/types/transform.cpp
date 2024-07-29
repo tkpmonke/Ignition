@@ -4,7 +4,7 @@ namespace Ignition {
    
    void Transform::UpdateVectors()
    {
-      Vector3 euler = glm::eulerAngles(this->rotation);
+      Vector3 euler = this->rotation;
       euler = glm::radians(euler);
 
       float pitch = euler.y;

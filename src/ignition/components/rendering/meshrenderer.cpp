@@ -2,6 +2,8 @@
 #include "GLFW/glfw3.h"
 
 #include <iostream>
+
+#define PI (float)3.14159265359
 namespace Ignition::Rendering {
    void MeshRenderer::LoadModel(Model m)
    {
@@ -50,12 +52,28 @@ namespace Ignition::Rendering {
 
       Matrix4 model = Matrix4(1);
       model = glm::translate(model, this->transform->position);
+      model *= glm::mat4_cast(glm::quat(glm::radians(this->transform->rotation)));
       model = glm::scale(model, this->transform->scale);
-      
-      this->shader.SetVec4(Vector4(1,0,0,1), "color");
-      
+
       this->shader.SetMatrix4(camera->view_projection() * model, "projection");
       this->shader.SetMatrix4(model, "model");
+
+      this->shader.SetVec4(this->shader.color, "material.color");
+      this->shader.SetInt(this->shader.albedo, "material.albedo");
+      
+      glActiveTexture(GL_TEXTURE0 + this->shader.albedo -1); 
+      glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
+      
+      std::cout << this->shader.albedo << "\n";
+
+      if (this->shader.type == ShaderType::Lit)
+      {
+         this->shader.SetInt(this->shader.diffuse, "material.diffuse");
+         this->shader.SetFloat(this->shader.shininess, "material.shininess");
+         this->shader.SetVec3(this->shader.specular, "material.specular");
+         glActiveTexture(GL_TEXTURE0 + this->shader.diffuse -1); 
+         glBindTexture(GL_TEXTURE_2D, this->shader.diffuse);
+      }
 
       glDrawElements(GL_TRIANGLES, this->model.indices.size(), GL_UNSIGNED_INT, 0);
    }

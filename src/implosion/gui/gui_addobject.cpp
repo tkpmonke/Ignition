@@ -3,6 +3,8 @@
 #include "shapes/square.hpp"
 #include "types/shader.hpp"
 #include "utils/unlit_shader.hpp"
+#include "types/texture.hpp"
+#include "utils/files.hpp"
 
 #include <memory>
 #include <iostream>
@@ -14,8 +16,13 @@ namespace Implosion {
    {
 
       Ignition::Object o = Ignition::Object();
-      Shader s = Shader(unlit_vertex, unlit_fragment);
+      Shader s = Shader(unlit_vertex, unlit_fragment, ShaderType::Unlit);
    
+      Ignition::Rendering::Texture tex;
+      tex.SetFlags(TextureFlags::Repeat | TextureFlags::Linear);
+      FS::_Read texdata = FS::Read("./crate.png", FS::_Type::Texture, &tex);
+
+      s.albedo = tex.location;
       o.name = "Object " + std::to_string(objects->size());
       o.tag = "Default";
       if (ImGui::MenuItem("Empty"))

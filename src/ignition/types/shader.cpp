@@ -4,8 +4,9 @@
 #include <iostream>
 
 namespace Ignition::Rendering {
-   Shader::Shader(std::string vert, std::string frag)
+   Shader::Shader(std::string vert, std::string frag, ShaderType type)
    {
+      this->type = type;
       const char* vShaderCode = vert.c_str();
       const char* fShaderCode = frag.c_str();
       

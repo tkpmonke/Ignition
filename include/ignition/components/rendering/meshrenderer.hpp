@@ -20,7 +20,7 @@ namespace Ignition::Rendering {
       
       void LoadShader(Shader s) {this->shader = s; }
       void LoadModel(Model m); 
-
+      
       void Update() override;
 
    private:

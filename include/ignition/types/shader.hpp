@@ -6,12 +6,22 @@
 #include <string>
 
 namespace Ignition::Rendering {
+   enum ShaderType {
+      Lit,
+      Unlit
+   };
    class Shader {
    public:   
-      Shader(std::string vert, std::string frag);
+      Shader(std::string vert, std::string frag, ShaderType type);
       Shader() = default;
 
       int program;
+      
+      Vector4 color = Vector4(1,1,1,1);
+      int albedo;
+      int diffuse;
+      float shininess;
+      Vector3 specular;
 
       void SetFloat(float v, std::string name);
       void SetInt(int v, std::string name);
@@ -22,5 +32,7 @@ namespace Ignition::Rendering {
       void SetVec2(Vector2 v, std::string name);
       void SetVec3(Vector3 v, std::string name);
       void SetVec4(Vector4 v, std::string name);
+
+      ShaderType type;
    };
 }
