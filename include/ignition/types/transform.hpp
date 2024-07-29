@@ -20,7 +20,7 @@ namespace Ignition {
    class Transform {
    public:
       Vector3 position;
-      Quaternion rotation;
+      Vector3 rotation;
       Vector3 scale = Vector3(1,1,1);
       
       Vector3 forward;
@@ -29,9 +29,8 @@ namespace Ignition {
 
       Transform() = default;
       Transform(Vector3 position) : position(position) {}
-      Transform(Vector3 position, Quaternion rotation) : position(position), rotation(rotation) {}
-      Transform(Vector3 position, Vector3 scale) : position(position), scale(scale) {}
-      Transform(Vector3 position, Quaternion rotation, Vector3 scale) : position(position), rotation(rotation), scale(scale) {}
+      Transform(Vector3 position, Vector3 rotation) : position(position), rotation(rotation) {}
+      Transform(Vector3 position, Vector3 rotation, Vector3 scale) : position(position), rotation(rotation), scale(scale) {}
       
       void UpdateVectors();
 

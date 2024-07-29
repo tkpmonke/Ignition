@@ -9,13 +9,35 @@ const std::string unlit_vertex =
 "layout(location = 2) in vec2 uv;\n"
 "uniform mat4 projection;"
 "uniform mat4 model;"
+"out vec2 tex_uv;\n"
 "void main() {\n"
 "  gl_Position = projection * model * vec4(position, 1);\n"
+"  tex_uv = uv;\n"
 "}";
 
 const std::string unlit_fragment = 
 "#version 330\n"
-"uniform vec4 color;\n"
+"struct Material {\n"
+"  vec4 color;\n"
+"  sampler2D albedo;\n"
+"};\n"
+"uniform Material material;\n"
+"out vec4 o;\n"
+"in vec2 tex_uv;\n"
+"void main() {\n"
+"  o = material.color * texture(material.albedo, tex_uv);\n"
+"}";
+
+const std::string lit_fragment = 
+"#version 330\n"
+"struct Material {\n"
+"  vec4 color;\n"
+"  sampler2D albedo;\n"
+"  sampler2D diffuse;\n"
+"  float shininess;\n"
+"  vec3 specular;\n"
+"};\n"
+"uniform Material material;\n" 
 "out vec4 o;\n"
 "void main() {\n"
 "  o = color;\n"

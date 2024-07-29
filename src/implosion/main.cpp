@@ -1,14 +1,13 @@
 #include "window.hpp"
 #include "camera.hpp"
-
 #include "gui/gui.hpp"
-
-#include "shapes/square.hpp"
-#include "utils/unlit_shader.hpp"
-#include "components/rendering/meshrenderer.hpp"
+#include "input/camera_movement.hpp"
+#include "types/texture.hpp"
+#include "utils/files.hpp"
 
 #include <iostream>
 
+using namespace Ignition::Rendering;
 
 int main() 
 {
@@ -31,18 +30,16 @@ int main()
    obj.AddComponent(std::make_shared<Ignition::Rendering::MeshRenderer>(m));
    objects.push_back(obj);
    */
-
+   
 
    while (window.IsOpen())
    {
       window.Update();
       camera.BeginRender();
       
-      camera.transform.position = Ignition::Vector3(-3, 0, -1);
-
+      cameraMovement(&window, &camera);
       for (int i = 0; i < objects.size(); i++)
       {
-
          if (objects[i].enabled)
             objects[i].Update();
       }

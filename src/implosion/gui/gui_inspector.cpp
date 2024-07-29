@@ -26,13 +26,13 @@ namespace Implosion {
             if (ImGui::BeginChild("Transform"))
             {
                Ignition::Vector3 pos = obj->transform.position;
-               Ignition::Quat rot = obj->transform.rotation;
+               Ignition::Vector3 rot = obj->transform.rotation;
                Ignition::Vector3 sca = obj->transform.scale;
                if (ImGui::InputFloat3("Position", glm::value_ptr(pos)))
                {
                   obj->transform.position = pos;
                }
-               if (ImGui::InputFloat4("Rotation", glm::value_ptr(rot)))
+               if (ImGui::InputFloat3("Rotation", glm::value_ptr(rot)))
                {
                   obj->transform.rotation = rot;
                }
