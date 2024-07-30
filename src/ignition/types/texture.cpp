@@ -1,5 +1,5 @@
 #include "types/texture.hpp"
-
+#include <iostream>
 namespace Ignition::Rendering {
    void Texture::LoadData(unsigned char* data, int w, int h, int nr)
    {
@@ -26,6 +26,8 @@ namespace Ignition::Rendering {
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       }
+
+
       GLenum format;
       switch (nr) {
          case(1):
@@ -44,8 +46,8 @@ namespace Ignition::Rendering {
             format = GL_RGB;
             break;
       }
-
       glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, data);
       glGenerateMipmap(GL_TEXTURE_2D);
+
    }
 }

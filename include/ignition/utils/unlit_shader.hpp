@@ -25,7 +25,7 @@ const std::string unlit_fragment =
 "out vec4 o;\n"
 "in vec2 tex_uv;\n"
 "void main() {\n"
-"  o = material.color * texture(material.albedo, tex_uv);\n"
+"  o = texture(material.albedo, tex_uv);\n"
 "}";
 
 const std::string lit_fragment = 

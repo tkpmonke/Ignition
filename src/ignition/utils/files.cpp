@@ -18,14 +18,14 @@ namespace FS {
          r.data = s.str();
       } else if (type == Texture) {
          stbi_set_flip_vertically_on_load(true);
-         r.texdata = stbi_load(path.data(), &r.w, &r.h, &r.nr, 0);
-         if (!r.texdata)
+         unsigned char* d= stbi_load(path.data(), &r.w, &r.h, &r.nr, 0);
+         if (!d)
          {
             std::cerr << "texture can't be loaded\n";
          }
          else
          {
-            tex->LoadData(r.texdata, r.w, r.h, r.nr);
+            tex->LoadData(d, r.w, r.h, r.nr);
          }  
       }
       return r;
