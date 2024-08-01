@@ -18,9 +18,9 @@ namespace Ignition::Rendering {
       Texture() = default;
 
       void SetFlags(int flags) {this->flags = flags;}
-      void LoadData(std::string file);
+      void LoadData(std::string file, std::string name);
+      void LoadData(unsigned char* data, int w, int h, int nr, std::string name);
       unsigned int location = 0;
-      unsigned int id;
       operator int() const { return location; };
    private:
       int flags;

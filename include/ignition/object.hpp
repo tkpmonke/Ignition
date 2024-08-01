@@ -26,9 +26,9 @@ namespace Ignition {
 
       Object* parent;
       
-      void AddComponent(std::shared_ptr<Module>);
-     Module* GetComponent(std::string);
-      std::vector<Module*> GetComponents(std::string);
+      void AddModule(std::shared_ptr<Module>);
+     Module* GetModule(std::string);
+      std::vector<Module*> GetModules(std::string);
 
       std::vector<Object*> GetChildren() { return children; };
       std::vector<Object*> GetChildrenWithModule(std::string);

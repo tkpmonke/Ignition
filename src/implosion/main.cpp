@@ -21,23 +21,16 @@ int main()
    std::vector<Ignition::Object> objects;
 
    Implosion::GUI gui = Implosion::GUI(window, &camera);
-   /*
-   Ignition::Object obj;
-   Ignition::Rendering::MeshRenderer m;
-   m.LoadModel(square_model);
-   m.LoadShader(Ignition::Rendering::Shader(unlit_vertex, unlit_fragment));
-   
-   obj.AddComponent(std::make_shared<Ignition::Rendering::MeshRenderer>(m));
-   objects.push_back(obj);
-   */
-   
-
+   gui.InitGrid();
    while (window.IsOpen())
    {
       window.Update();
       camera.BeginRender();
-      
+       
       cameraMovement(&window, &camera);
+      
+      gui.RenderGrid();
+
       for (int i = 0; i < objects.size(); i++)
       {
          if (objects[i].enabled)
