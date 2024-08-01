@@ -34,6 +34,9 @@ namespace Ignition {
       glfwSetFramebufferSizeCallback(this->window, framebuffer_size_callback);
       glewInit();
       glEnable(GL_DEPTH_TEST);
+      glDepthFunc(GL_LESS); 
+      glEnable(GL_BLEND);  
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #ifdef DEBUG
       glEnable(GL_DEBUG_OUTPUT);
       glDebugMessageCallback(MessageCallback, 0);

@@ -1,4 +1,6 @@
 #include "gui/gui.hpp"
+#include "components/rendering/meshrenderer.hpp"
+
 #include "imgui_stdlib.h"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -23,7 +25,7 @@ namespace Implosion {
             
             ImGui::Separator();
 
-            if (ImGui::BeginChild("Transform"))
+            ImGui::BeginChild("Transform", ImVec2(0, 100));
             {
                Ignition::Vector3 pos = obj->transform.position;
                Ignition::Vector3 rot = obj->transform.rotation;
@@ -47,10 +49,25 @@ namespace Implosion {
                   ImGui::Text("Right : %f, %f, %f", obj->transform.right.x, obj->transform.right.y, obj->transform.right.z);
                   ImGui::Text("Up : %f, %f, %f", obj->transform.up.x, obj->transform.up.y, obj->transform.up.z);
                }
-
-               ImGui::EndChild();
+            
             }
+            ImGui::EndChild();
             ImGui::Separator();
+            Ignition::Rendering::MeshRenderer* renderer = (Ignition::Rendering::MeshRenderer*)obj->GetModule("Mesh Renderer"); 
+            ImGui::BeginChild("Material");
+            if (renderer != nullptr)
+            {
+               Ignition::Vector4 color = renderer->shader.color;
+               if (ImGui::ColorEdit4("Color", glm::value_ptr(color)))
+               {
+                  renderer->shader.color = color;
+               }
+            }
+            else
+            {
+               std::cout << "Object Has No Renderer\n";
+            }
+            ImGui::EndChild();
          }
       }
 

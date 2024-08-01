@@ -50,7 +50,7 @@ namespace Ignition::Rendering {
       glUseProgram(this->shader.program);
       glBindVertexArray(this->vao); 
 
-      Matrix4 model = Matrix4(1);
+      Matrix4 model = Matrix4(1.f);
       model = glm::translate(model, this->transform->position);
       model *= glm::mat4_cast(glm::quat(glm::radians(this->transform->rotation)));
       model = glm::scale(model, this->transform->scale);
@@ -61,10 +61,9 @@ namespace Ignition::Rendering {
       
       glActiveTexture(GL_TEXTURE0 ); 
       glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
+      this->shader.SetInt(0, "material.albedo");
       this->shader.SetVec4(this->shader.color, "material.color");
       
-      std::cout << this->shader.albedo << "\n";
-
       if (this->shader.type == ShaderType::Lit)
       {
          this->shader.SetInt(this->shader.diffuse, "material.diffuse");

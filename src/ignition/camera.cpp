@@ -26,7 +26,6 @@ namespace Ignition {
 
    void Camera::BeginRender()
    {
-      glClearColor(.2f,.3f,.7f,1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    }
 
