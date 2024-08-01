@@ -58,11 +58,10 @@ namespace Ignition::Rendering {
       this->shader.SetMatrix4(camera->view_projection() * model, "projection");
       this->shader.SetMatrix4(model, "model");
 
-      this->shader.SetVec4(this->shader.color, "material.color");
-      this->shader.SetInt(this->shader.albedo, "material.albedo");
       
-      glActiveTexture(GL_TEXTURE0 + this->shader.albedo -1); 
+      glActiveTexture(GL_TEXTURE0 ); 
       glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
+      this->shader.SetVec4(this->shader.color, "material.color");
       
       std::cout << this->shader.albedo << "\n";
 
@@ -71,7 +70,7 @@ namespace Ignition::Rendering {
          this->shader.SetInt(this->shader.diffuse, "material.diffuse");
          this->shader.SetFloat(this->shader.shininess, "material.shininess");
          this->shader.SetVec3(this->shader.specular, "material.specular");
-         glActiveTexture(GL_TEXTURE0 + this->shader.diffuse -1); 
+         glActiveTexture(GL_TEXTURE1); 
          glBindTexture(GL_TEXTURE_2D, this->shader.diffuse);
       }
 

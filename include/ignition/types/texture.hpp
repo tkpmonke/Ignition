@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GL/glew.h"
+#include <string>
 
 namespace Ignition::Rendering {
    enum TextureFlags {
@@ -17,8 +18,9 @@ namespace Ignition::Rendering {
       Texture() = default;
 
       void SetFlags(int flags) {this->flags = flags;}
-      void LoadData(unsigned char* data, int w, int h, int nr);
-      unsigned int location;
+      void LoadData(std::string file);
+      unsigned int location = 0;
+      unsigned int id;
       operator int() const { return location; };
    private:
       int flags;

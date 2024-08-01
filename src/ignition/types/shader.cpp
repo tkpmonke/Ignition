@@ -41,7 +41,7 @@ namespace Ignition::Rendering {
       glAttachShader(this->program, fragment);
       glLinkProgram(this->program);
 
-      glGetShaderiv(this->program, GL_LINK_STATUS, &success);
+      glGetProgramiv(this->program, GL_LINK_STATUS, &success);
       if (!success)
       {
          glGetProgramInfoLog(this->program, 512, NULL, infoLog);

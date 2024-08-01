@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include "types/transform.hpp"
+#include "types/texture.hpp"
 
 #include <string>
 
@@ -15,11 +16,11 @@ namespace Ignition::Rendering {
       Shader(std::string vert, std::string frag, ShaderType type);
       Shader() = default;
 
-      int program;
+      unsigned int program;
       
       Vector4 color = Vector4(1,1,1,1);
-      int albedo;
-      int diffuse;
+      Texture albedo;
+      Texture diffuse;
       float shininess;
       Vector3 specular;
 
