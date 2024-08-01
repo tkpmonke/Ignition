@@ -16,6 +16,7 @@ int main()
    camera.fov = 75;
    camera.clipping_planes.min = 0.1f;
    camera.clipping_planes.max = 100.f;
+   camera.transform.position = Ignition::Vector3(-5,1,0);
    camera.MakeMainCamera();
 
    std::vector<Ignition::Object> objects;

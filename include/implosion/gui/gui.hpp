@@ -36,7 +36,7 @@ namespace Implosion {
       void Shutdown();
 
       float gridSpacing = 1.f, gridSize = 10000, gridHeight = 0;
-      Ignition::Vector4 gridColor = Ignition::Vector4(.4f, .4f, .4f, 1.f);
+      Ignition::Vector4 gridColor = Ignition::Vector4(.4f, .4f, .4f, 5.f);
    private:
       GLFWwindow* window;
       Ignition::Camera* camera;
