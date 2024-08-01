@@ -4,7 +4,7 @@ namespace Implosion {
    void GUI::MenuBar(std::vector<Ignition::Object>* objects)
    {
       if (ImGui::BeginMainMenuBar()) {
-         if (ImGui::BeginMenu("Ignition"))
+         if (ImGui::BeginMenu("Implosion"))
          {
             if (ImGui::MenuItem("Exit"))
             {
