@@ -54,12 +54,11 @@ namespace Implosion {
          vertices.push_back(i * this->gridSpacing);
       }
 
-      unsigned int vbo;
       glGenVertexArrays(1, &this->gridVao);
-      glGenBuffers(1, &vbo);
+      glGenBuffers(1, &this->gridVbo);
       glBindVertexArray(this->gridVao);
 
-      glBindBuffer(GL_ARRAY_BUFFER, vbo);
+      glBindBuffer(GL_ARRAY_BUFFER, this->gridVbo);
       glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
       glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
@@ -76,5 +75,26 @@ namespace Implosion {
       glUniformMatrix4fv(glGetUniformLocation(this->gridProgram, "proj"), 1, GL_FALSE, glm::value_ptr(this->camera->view_projection()));
       glBindVertexArray(this->gridVao);
       glDrawArrays(GL_LINES, 0, gridVertSize); 
+   }
+
+   void GUI::RemakeGrid()
+   {
+      int gridCount = static_cast<int>(this->gridSize / this->gridSpacing );
+      std::vector<float> vertices;
+      for (int i = -gridCount; i <= gridCount; ++i)
+      {
+         vertices.push_back(i * this->gridSpacing);
+         vertices.push_back(this->gridSize); 
+         vertices.push_back(i * this->gridSpacing);
+         vertices.push_back(-this->gridSize); 
+
+         vertices.push_back(-this->gridSize); 
+         vertices.push_back(i * this->gridSpacing);
+         vertices.push_back(this->gridSize); 
+         vertices.push_back(i * this->gridSpacing);
+      }
+      glBindBuffer(GL_ARRAY_BUFFER, this->gridVbo);
+      glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+
    }
 }

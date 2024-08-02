@@ -18,6 +18,7 @@ namespace Implosion {
       
       void InitGrid();
       void RenderGrid();
+      void RemakeGrid();
 
       void FileExplorer();
 
@@ -28,6 +29,8 @@ namespace Implosion {
       void AddObjectMenu(std::vector<Ignition::Object>*);
       
       void DebugMenu();
+
+      void Preferences();
 
       void Style();
 
@@ -40,6 +43,6 @@ namespace Implosion {
    private:
       GLFWwindow* window;
       Ignition::Camera* camera;
-      uint gridVao, gridProgram, gridVertSize;
+      uint gridVao, gridVbo, gridProgram, gridVertSize;
    };
 }
