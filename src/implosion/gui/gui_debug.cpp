@@ -16,11 +16,29 @@ const char* os = "Windows";
 const char* os = "Unknown";
 #endif
 
+float ptime;
+int frameCount = 0;
+float fps = 0;
 namespace Implosion {
    void GUI::DebugMenu()
    {
 ImGuiWindowFlags flags = ImGuiWindowFlags_NoBackground;
    if (ImGui::Begin("Debug Menu")) {
+      float time = glfwGetTime();
+      float dt = time-ptime;
+      frameCount++;
+
+      if (dt >= 1.0)
+      {
+         fps = frameCount;
+         frameCount = 0;
+         ptime = time;
+
+      }
+      
+
+      ImGui::Text("Delta Time %f", dt);
+      ImGui::Text("FPS %f", fps);
 
       if (ImGui::CollapsingHeader("Hardware"))
       {
