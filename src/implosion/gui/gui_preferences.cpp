@@ -67,7 +67,7 @@ namespace Implosion {
 
             ImGui::SeparatorText("Camera");
 
-            ImGui::SliderFloat("Sensitivity", &sensitivity, 0.025f, 0.5f);
+            ImGui::SliderFloat("Sensitivity", &sensitivity, 0.025f, 10.f);
             ImGui::InputFloat("Speed", &movespeed);
 
             ImGui::EndTabItem();

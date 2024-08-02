@@ -3,12 +3,17 @@
 
 double px, py;
 
-float sensitivity = 0.2f, movespeed = 0.1f;
+float sensitivity = 5.f, movespeed = 5.f;
+float prtime;
 
 void cameraMovement(Ignition::Window* window, Ignition::Camera* camera)
 {
    double x, y, offx, offy;
    glfwGetCursorPos((GLFWwindow*)*window, &x, &y);
+
+   float time = glfwGetTime();
+   float dt = time-prtime;
+   prtime = time;
 
    offx = x - px;
    offy = py - y;
@@ -22,13 +27,13 @@ void cameraMovement(Ignition::Window* window, Ignition::Camera* camera)
       camera->transform.rotation.y += offy * sensitivity;
 
       if (glfwGetKey((GLFWwindow*)*window, GLFW_KEY_W) == GLFW_PRESS)
-         camera->transform.position += movespeed * camera->transform.forward;
+         camera->transform.position += movespeed * camera->transform.forward * dt;
       if (glfwGetKey((GLFWwindow*)*window, GLFW_KEY_A) == GLFW_PRESS)
-         camera->transform.position += movespeed * -camera->transform.right;
+         camera->transform.position += movespeed * -camera->transform.right * dt;
       if (glfwGetKey((GLFWwindow*)*window, GLFW_KEY_S) == GLFW_PRESS)
-         camera->transform.position += movespeed * -camera->transform.forward;
+         camera->transform.position += movespeed * -camera->transform.forward * dt;
       if (glfwGetKey((GLFWwindow*)*window, GLFW_KEY_D) == GLFW_PRESS)
-         camera->transform.position += movespeed * camera->transform.right;
+         camera->transform.position += movespeed * camera->transform.right * dt;
 
    } else {
       glfwSetInputMode((GLFWwindow*)*window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
