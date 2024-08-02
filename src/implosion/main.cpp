@@ -49,6 +49,9 @@ int main()
       
 
       gui.DebugMenu();
+
+      gui.Preferences();
+
       gui.MenuBar(&objects);
       //ImGui::ShowDemoWindow();
       gui.EndFrame();
