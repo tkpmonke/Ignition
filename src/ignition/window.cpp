@@ -1,5 +1,6 @@
 #include "window.hpp"
 #include "stdio.h"
+#include "input/commands.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -43,6 +44,7 @@ namespace Ignition {
       glEnable(GL_DEBUG_OUTPUT);
       glDebugMessageCallback(MessageCallback, 0);
 #endif
+      SetKeyCallback(this->window);
    }
 
    bool Window::IsOpen() { return !glfwWindowShouldClose(this->window); }

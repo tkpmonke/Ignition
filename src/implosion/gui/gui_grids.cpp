@@ -23,6 +23,9 @@ const char* gridFragmentShader =
 "#version 330\n"
 "uniform vec4 color;"
 "uniform vec3 camera;"
+"uniform float dist;"
+"uniform float distanceFalloff;"
+"uniform int enableDistanceFalloff;"
 "out vec4 o;"
 "in vec3 opos;"
 "float expo(float dis, float k, float b) {"
@@ -30,7 +33,9 @@ const char* gridFragmentShader =
 "}"
 "void main() {"
 "  float a = color.a;"
-"  a = -expo(distance(camera, opos)/30, 5.7f, 10)+1;"
+"  if (enableDistanceFalloff == 1) {"
+"     a = -expo(distance(vec3(camera.x, opos.y, camera.z), opos)/dist, 5.7, distanceFalloff)+1*color.a;"
+"  }"
 "  o = vec4(color.rgb, a);"
 "}";
 
@@ -68,8 +73,15 @@ namespace Implosion {
    }
    void GUI::RenderGrid()
    {
+      if (!this->enableGrid)
+         return;
+
+
       glUseProgram(this->gridProgram);
       glUniform1f(glGetUniformLocation(this->gridProgram, "height"), this->gridHeight);
+      glUniform1f(glGetUniformLocation(this->gridProgram, "dist"), this->gridDistance);
+      glUniform1f(glGetUniformLocation(this->gridProgram, "distanceFalloff"), this->gridFalloff);
+      glUniform1i(glGetUniformLocation(this->gridProgram, "enableDistanceFalloff"), this->enableDistanceFalloff);
       glUniform4f(glGetUniformLocation(this->gridProgram, "color"), this->gridColor.x, this->gridColor.y, this->gridColor.z, this->gridColor.w);
       glUniform3f(glGetUniformLocation(this->gridProgram, "camera"), this->camera->transform.position.x, this->camera->transform.position.y, this->camera->transform.position.z);
       glUniformMatrix4fv(glGetUniformLocation(this->gridProgram, "proj"), 1, GL_FALSE, glm::value_ptr(this->camera->view_projection()));
@@ -95,6 +107,7 @@ namespace Implosion {
       }
       glBindBuffer(GL_ARRAY_BUFFER, this->gridVbo);
       glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+      this->gridVertSize = vertices.size();
 
    }
 }
