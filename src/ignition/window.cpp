@@ -34,12 +34,21 @@ namespace Ignition {
       this->window = glfwCreateWindow(w,h,c,NULL,NULL);
       glfwMakeContextCurrent(this->window);
       glfwSetFramebufferSizeCallback(this->window, framebuffer_size_callback);
+
       glewInit();
+
       glEnable(GL_DEPTH_TEST);
       glDepthFunc(GL_LESS); 
+
       glEnable(GL_BLEND);  
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      
       glEnable(GL_MULTISAMPLE); 
+
+      glEnable(GL_CULL_FACE);
+      glCullFace(GL_FRONT);
+      glFrontFace(GL_CW);
+
 #ifdef DEBUG
       glEnable(GL_DEBUG_OUTPUT);
       glDebugMessageCallback(MessageCallback, 0);

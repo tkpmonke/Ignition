@@ -33,6 +33,7 @@ namespace Ignition {
    void Camera::EndRender()
    {
       glfwSwapBuffers((GLFWwindow*)*this->window);
-      Rendering::currentProgram = 99;
+      Rendering::currentProgram = 9999;
+      Rendering::currentVao = 9999;
    }
 }

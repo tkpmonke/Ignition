@@ -9,6 +9,7 @@
 
 namespace Ignition::Rendering {
    extern int currentProgram;
+   extern int currentVao;
 
    class MeshRenderer : public Module{
    public:
@@ -21,7 +22,7 @@ namespace Ignition::Rendering {
       MeshRenderer(Camera* camera) : camera(camera) {}      
       
       void LoadShader(Shader s) {this->shader = s; }
-      void LoadModel(Model m); 
+      void LoadModel(Model m, std::string name); 
       
       void Update() override;
 

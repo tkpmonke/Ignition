@@ -9,69 +9,64 @@
 
 #include "textures/grid.hpp"
 
+#include "scene.hpp"
+
 #include <memory>
 
 using namespace Ignition::Rendering;
 
-#define CREATE_OBJECT(objects)                                                                     \
-         Ignition::Object o = Ignition::Object();                                                  \
+#define CREATE_SHADER()                                                                     \
          Shader s = Shader(unlit_vertex, unlit_fragment, ShaderType::Unlit);                       \
          s.albedo = Texture();                                                                           \
          s.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);                                \
-         s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "ignition_grid_texture");                                                               \
-         o.name = "Object " + std::to_string(objects->size());                                     \
-         o.tag = "Default";                                                      
+         s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "ignition_grid_texture");              \
 
 namespace Implosion {
-   void GUI::AddObjectMenu(std::vector<Ignition::Object>* objects)
+   void GUI::AddObjectMenu()
    {
 
 
       if (ImGui::MenuItem("Empty"))
       {
-         Ignition::Object o;
-         objects->push_back(o);
+         Ignition::scene.CreateObject();
       }
       if (ImGui::MenuItem("Square"))
       {
-         CREATE_OBJECT(objects); 
+         CREATE_SHADER(); 
          MeshRenderer m = MeshRenderer(this->camera);
-         m.LoadModel(square_model);
+         m.LoadModel(square_model, "square");
          m.LoadShader(s);
          glUseProgram(m.shader.program);
          std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
-         o.AddModule(ptr);
-         objects->push_back(o);
+         Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
       }
       if (ImGui::MenuItem("Cube"))
       {
-         CREATE_OBJECT(objects); 
+         CREATE_SHADER(); 
          MeshRenderer m = MeshRenderer(this->camera);
-         m.LoadModel(cube_model);
+         m.LoadModel(cube_model, "cube");
          m.LoadShader(s);
          glUseProgram(m.shader.program);
          std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
-         o.AddModule(ptr);
-         objects->push_back(o);
+         Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
       }
       if (ImGui::MenuItem("Performance Test"))
       {
-         for (int i = 0; i < 200; ++i)
+         for (int i = 0; i < 1000; ++i)
          {
-            CREATE_OBJECT(objects); 
+            CREATE_SHADER(); 
             MeshRenderer m = MeshRenderer(this->camera);
-            m.LoadModel(cube_model);
+            m.LoadModel(cube_model, "cube");
             m.LoadShader(s);
             glUseProgram(m.shader.program);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
-            o.AddModule(ptr);
+            Ignition::Object* o = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
             int x = -10 + rand() % 20;
             int y = -10 + rand() % 20;
             int z = -10 + rand() % 20;
+            o->AddModule(ptr);
+            o->transform.position = Ignition::Vector3(x,y,z);
 
-            o.transform.position = Ignition::Vector3(x,y,z);
-
-            objects->push_back(o);
          }
       }
    }

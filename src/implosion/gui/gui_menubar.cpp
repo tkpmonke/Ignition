@@ -1,7 +1,7 @@
 #include "gui/gui.hpp"
 
 namespace Implosion {
-   void GUI::MenuBar(std::vector<Ignition::Object>* objects)
+   void GUI::MenuBar()
    {
       if (ImGui::BeginMainMenuBar()) {
          if (ImGui::BeginMenu("Implosion"))
@@ -15,7 +15,7 @@ namespace Implosion {
          if (ImGui::BeginMenu("Scene"))
          {
             ImGui::SeparatorText("Add Object");
-            AddObjectMenu(objects); 
+            AddObjectMenu(); 
 
             ImGui::EndMenu();
          }

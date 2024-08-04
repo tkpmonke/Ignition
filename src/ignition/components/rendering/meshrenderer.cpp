@@ -2,15 +2,30 @@
 #include "GLFW/glfw3.h"
 
 #include <iostream>
+#include <unordered_map>
 
 #define PI (float)3.14159265359
+
+std::unordered_map<std::string, int> models;
 namespace Ignition::Rendering {
    int currentProgram = 999;
+   int currentVao = 999;
 
-   void MeshRenderer::LoadModel(Model m)
+   void MeshRenderer::LoadModel(Model m, std::string name)
    {
-      unsigned int VBO, EBO;
+
       this->model = m;
+      
+      for (auto i : models)
+      {
+         if (i.first == name)
+         {
+            this->vao = i.second;
+            return;
+         }
+      }
+
+      unsigned int VBO, EBO;
       glGenVertexArrays(1, &this->vao);
       glGenBuffers(1, &VBO);
       glGenBuffers(1, &EBO);
@@ -46,24 +61,29 @@ namespace Ignition::Rendering {
       glEnableVertexAttribArray(2);
 
 
-       
+       models[name] = this->vao;
    }
-
+   
    void MeshRenderer::Update() {
       if (this->shader.program != currentProgram) {
          glUseProgram(this->shader.program);
          currentProgram = this->shader.program;
+         
+
+         this->shader.SetMatrix4(camera->view_projection(), "projection");
       }
-      glBindVertexArray(this->vao); 
+      if (this->vao != currentVao) {
+         glBindVertexArray(this->vao); 
+         currentVao = this->vao;
+      }
+
 
       Matrix4 model = Matrix4(1.f);
-      model = glm::translate(model, this->transform->position/2.f);
+      model = glm::translate(model, this->transform->position);
       model *= glm::mat4_cast(glm::quat(glm::radians(this->transform->rotation)));
       model = glm::scale(model, this->transform->scale);
-
-      this->shader.SetMatrix4(camera->view_projection() * model, "projection");
-      this->shader.SetMatrix4(model, "model");
  
+      this->shader.SetMatrix4(model, "model");
       glActiveTexture(GL_TEXTURE0 ); 
       glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
       this->shader.SetInt(0, "material.albedo");
