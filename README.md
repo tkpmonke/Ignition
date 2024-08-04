@@ -10,5 +10,6 @@ requires the following
 - GLFW
 - IMGUI (included)
 
-run `premake5 gmake2 && make` for unix-like systems
-run `premake5 vs2022` and open the .sln file for windows devices
+run `premake5 gmake2 && make` for unix-like systems<br/><br/>
+or<br/><br/>
+run `premake5 vs2022` and open the .sln file for windows devices (windows isn't fully supported yet, don't be surprised if it doesn't work)
