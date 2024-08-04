@@ -8,6 +8,8 @@
 #include <module.hpp>
 
 namespace Ignition::Rendering {
+   extern int currentProgram;
+
    class MeshRenderer : public Module{
    public:
       CREATE_MODULE("Mesh Renderer");

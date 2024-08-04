@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include "components/rendering/meshrenderer.hpp"
 
 namespace Ignition::MainCamera {
    Camera* camera;
@@ -32,5 +33,6 @@ namespace Ignition {
    void Camera::EndRender()
    {
       glfwSwapBuffers((GLFWwindow*)*this->window);
+      Rendering::currentProgram = 99;
    }
 }
