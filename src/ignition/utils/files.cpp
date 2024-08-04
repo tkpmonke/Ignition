@@ -20,6 +20,14 @@
 #endif 
 
 namespace FS {
+   
+   std::string projectName;
+   void SetProjectHome(std::string s)
+   {
+      projectName = s;
+   }
+   std::string GetProjectHome() { return projectName; }
+
    std::string ReadTextFile(std::string path) 
    {
       std::ifstream f(path);
@@ -56,14 +64,19 @@ namespace FS {
       std::string path;
    } write;
 
-   void BeginBinaryRead(std::string path)
+   bool BeginBinaryRead(std::string path)
    {
       read.file = std::ifstream(path);
+      
+      if (!read.file.is_open())
+         return false;
+
       std::stringstream s;
       s << read.file.rdbuf();
       read.data = s.str();
       read.size = read.data.size();
       read.i = -1;
+      return true;
    }
    void BeginBinaryWrite(std::string path)
    {

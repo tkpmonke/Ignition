@@ -9,7 +9,7 @@
 
 #define UPDATE_OBJECT() this->transform.UpdateVectors();                                  \
                         for (std::shared_ptr<Module> m : modules)  {                      \
-                           m->transform = std::make_shared<Transform>(this->transform);   \
+                           m->transform = &this->transform;\
                            m->Update();                                                   \
                         }
 

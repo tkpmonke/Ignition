@@ -7,13 +7,15 @@ project "implosion"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/imgui" }
+   removefiles "hub/*"
+   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "imgui" }
    files { "**.h", "**.cpp", "**.hpp" }
    
    links { "glfw", "GL", "GLEW", "m" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
+      optimize "On"
       symbols "On"
 
    filter "configurations:Release"

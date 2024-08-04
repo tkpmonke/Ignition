@@ -68,9 +68,12 @@ namespace Ignition::Rendering {
       if (this->shader.program != currentProgram) {
          glUseProgram(this->shader.program);
          currentProgram = this->shader.program;
-         
+        
+         if (camera->viewProj == Matrix4(0)) {
+            camera->viewProj = camera->view_projection();
+         }
 
-         this->shader.SetMatrix4(camera->view_projection(), "projection");
+         this->shader.SetMatrix4(camera->viewProj, "projection");
       }
       if (this->vao != currentVao) {
          glBindVertexArray(this->vao); 
@@ -78,11 +81,12 @@ namespace Ignition::Rendering {
       }
 
 
-      Matrix4 model = Matrix4(1.f);
-      model = glm::translate(model, this->transform->position);
+      Matrix4 model;
+
+      model = glm::translate(Matrix4(1.f), this->transform->position);
       model *= glm::mat4_cast(glm::quat(glm::radians(this->transform->rotation)));
       model = glm::scale(model, this->transform->scale);
- 
+
       this->shader.SetMatrix4(model, "model");
       glActiveTexture(GL_TEXTURE0 ); 
       glBindTexture(GL_TEXTURE_2D, this->shader.albedo);

@@ -2,6 +2,7 @@
 #include "input/camera_movement.hpp"
 
 #include <iostream>
+#include <filesystem>
 
 bool preferencesChanged;
 Implosion::GUI* gui;
@@ -10,7 +11,11 @@ void PreferencesChanged() { preferencesChanged = true; }
 
 void WritePreferences() 
 {
-   FS::BeginBinaryWrite(FS::GetHome() + "/Ignition/preferences");
+   if (!std::filesystem::exists(FS::GetHome() + "/Implosion"))
+   {
+      std::filesystem::create_directory(FS::GetHome() + "/Implosion");
+   }
+   FS::BeginBinaryWrite(FS::GetHome() + "/Implosion/preferences");
 
    FS::Write8(gui->vsync);
    FS::Write8(gui->anti);
@@ -43,7 +48,9 @@ void WritePreferences()
 
 void ReadPreferences(Implosion::GUI* guis)
 {
-   FS::BeginBinaryRead(FS::GetHome() + "/Ignition/preferences");
+   gui = guis;
+   if (!FS::BeginBinaryRead(FS::GetHome() + "/Implosion/preferences"))
+      return;
    
    if (!FS::CanRead())
       return;
@@ -71,5 +78,4 @@ void ReadPreferences(Implosion::GUI* guis)
    guis->camera->fov = FS::ReadFloat();
 
    FS::EndBinaryRead();
-   gui = guis;
 }

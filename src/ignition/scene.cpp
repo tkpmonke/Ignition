@@ -1,6 +1,8 @@
 #include "scene.hpp"
+#include "utils/files.hpp"
 
 namespace Ignition {
+
    void Scene::Update()
    {
       for (int i = 0; i < objects.size(); ++i)
@@ -34,6 +36,11 @@ namespace Ignition {
       o.tag = "Default";                                                      
       objects.push_back(o);
       return objects.size()-1;
+   }
+
+   void Scene::WriteSceneToDisk()
+   {
+      FS::BeginBinaryWrite(FS::GetProjectHome() + ""); 
    }
 
    Scene scene;

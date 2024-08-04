@@ -16,6 +16,8 @@ namespace Ignition {
       void WriteSceneToDisk();
       void ReadSceneFromDisk();
 
+      std::string name;
+
    private:
       std::vector<Object> objects;
    };

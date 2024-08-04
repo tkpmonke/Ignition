@@ -36,6 +36,7 @@ int main()
 
       Ignition::scene.Update();
       gui.NewFrame();
+      
       if (Ignition::scene.GetObjects()->size() > 0)
       {
          gui.Inspector(&Ignition::scene.GetObjects()->at(0));
@@ -52,7 +53,7 @@ int main()
       gui.EndFrame();
       camera.EndRender();
    }
-   
+   WritePreferences(); 
    gui.Shutdown();
    window.Shutdown();
 }

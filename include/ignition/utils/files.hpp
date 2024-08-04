@@ -8,13 +8,16 @@ namespace FS {
 
    std::string GetHome();
 
+   void SetProjectHome(std::string);
+   std::string GetProjectHome();
+
    std::string ReadTextFile(std::string path);
    std::string ReadFileFromHome(std::string path);
 
    void WriteFile(std::string path, std::string data);
    void WriteFileFromHome(std::string path, std::string data);
 
-   void BeginBinaryRead(std::string path);
+   bool BeginBinaryRead(std::string path);
    void BeginBinaryWrite(std::string path);
 
    uint8_t Read8();
