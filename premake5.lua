@@ -22,3 +22,23 @@ project "implosion"
       defines { "NDEBUG" }
       optimize "On"
 
+project "implosion"
+   kind "ConsoleApp"
+   language "C++"
+   cppdialect "gnu++17"
+   targetdir "bin"
+
+   includedirs { "imgui" }
+   files { "hub/**.h", "hub/**.cpp", "hub/**.hpp" }
+   
+   links { "glfw", "GL" }
+
+   filter "configurations:Debug"
+      defines { "DEBUG" }
+      optimize "On"
+      symbols "On"
+
+   filter "configurations:Release"
+      defines { "NDEBUG" }
+      optimize "On"
+
