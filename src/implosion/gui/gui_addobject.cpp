@@ -54,5 +54,25 @@ namespace Implosion {
          o.AddModule(ptr);
          objects->push_back(o);
       }
+      if (ImGui::MenuItem("Performance Test"))
+      {
+         for (int i = 0; i < 200; ++i)
+         {
+            CREATE_OBJECT(objects); 
+            MeshRenderer m = MeshRenderer(this->camera);
+            m.LoadModel(cube_model);
+            m.LoadShader(s);
+            glUseProgram(m.shader.program);
+            std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
+            o.AddModule(ptr);
+            int x = -10 + rand() % 20;
+            int y = -10 + rand() % 20;
+            int z = -10 + rand() % 20;
+
+            o.transform.position = Ignition::Vector3(x,y,z);
+
+            objects->push_back(o);
+         }
+      }
    }
 }
