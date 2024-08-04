@@ -1,12 +1,26 @@
 #include "types/shader.hpp"
 
 #include "glm/gtc/type_ptr.hpp"
+
 #include <iostream>
+#include <unordered_map>
+#include <utility>
+
+std::unordered_map<std::string, int> shaders;
 
 namespace Ignition::Rendering {
    Shader::Shader(std::string vert, std::string frag, ShaderType type)
    {
       this->type = type;
+      for (auto i : shaders)
+      {
+         if (vert+frag == i.first)
+         {
+            this->program = i.second;
+            return;
+         }
+      }
+
       const char* vShaderCode = vert.c_str();
       const char* fShaderCode = frag.c_str();
       
@@ -51,6 +65,8 @@ namespace Ignition::Rendering {
        
       glDeleteShader(vertex);
       glDeleteShader(fragment);
+
+      shaders[vert+frag] = this->program;
    }
 
    void Shader::SetFloat(float v, std::string name)
