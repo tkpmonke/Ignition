@@ -2,6 +2,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "scene.hpp"
+
 #ifdef __unix__
 #  ifdef __linux__
 const char* os = "Linux";
@@ -39,6 +41,11 @@ ImGuiWindowFlags flags = ImGuiWindowFlags_NoBackground;
 
       ImGui::Text("Delta Time %f", dt);
       ImGui::Text("FPS %f", fps);
+
+      ImGui::Separator();
+
+      ImGui::Text("Objects %lu", Ignition::scene.GetObjects()->size());
+      ImGui::Text("Objects with tag \"Bananna\" %lu", Ignition::scene.GetObjectsWithTag("Banana").size());
 
       if (ImGui::CollapsingHeader("Hardware"))
       {

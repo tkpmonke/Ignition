@@ -16,6 +16,6 @@ namespace Ignition {
       virtual std::string type() const = 0; 
 
       bool enabled;
-      std::shared_ptr<Transform> transform;
+      Transform* transform;
    };
 }

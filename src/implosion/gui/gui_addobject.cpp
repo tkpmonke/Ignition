@@ -61,11 +61,16 @@ namespace Implosion {
             glUseProgram(m.shader.program);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
             Ignition::Object* o = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
-            int x = -10 + rand() % 20;
-            int y = -10 + rand() % 20;
-            int z = -10 + rand() % 20;
+            int x = -50 + rand() % 100;
+            int y = -50 + rand() % 100;
+            int z = -50 + rand() % 100;
+
+            int rx = -180 + rand() % 360;
+            int ry = -180 + rand() % 360;
+            int rz = -180 + rand() % 360;
             o->AddModule(ptr);
             o->transform.position = Ignition::Vector3(x,y,z);
+            o->transform.rotation = Ignition::Vector3(rx,ry,rz);
 
          }
       }

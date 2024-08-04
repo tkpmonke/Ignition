@@ -35,5 +35,6 @@ namespace Ignition {
       glfwSwapBuffers((GLFWwindow*)*this->window);
       Rendering::currentProgram = 9999;
       Rendering::currentVao = 9999;
+      viewProj = Matrix4(0);
    }
 }
