@@ -5,3 +5,5 @@ video/*
 *.make
 Makefile
 compile_commands.json
+hub/target/*
+*.rmeta
