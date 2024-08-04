@@ -4,6 +4,7 @@
 #include "input/camera_movement.hpp"
 #include "types/texture.hpp"
 #include "utils/files.hpp"
+#include "serialization/saving.hpp"
 
 #include <iostream>
 
@@ -22,6 +23,7 @@ int main()
    std::vector<Ignition::Object> objects;
 
    Implosion::GUI gui = Implosion::GUI(window, &camera);
+   ReadPreferences(&gui);
    gui.InitGrid();
    while (window.IsOpen())
    {

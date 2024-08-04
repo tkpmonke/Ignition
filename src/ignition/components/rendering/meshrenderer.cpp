@@ -51,7 +51,7 @@ namespace Ignition::Rendering {
       glBindVertexArray(this->vao); 
 
       Matrix4 model = Matrix4(1.f);
-      model = glm::translate(model, this->transform->position);
+      model = glm::translate(model, this->transform->position/2.f);
       model *= glm::mat4_cast(glm::quat(glm::radians(this->transform->rotation)));
       model = glm::scale(model, this->transform->scale);
 
