@@ -1,0 +1,8 @@
+[package]
+name = "implosion-hub"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+glfw = "0.58.0"
+imgui = "0.12.0"
