@@ -22,11 +22,11 @@ namespace Implosion {
 
       void FileExplorer();
 
-      void SceneGraph(std::vector<Ignition::Object>*);
+      void SceneGraph();
 
-      void MenuBar(std::vector<Ignition::Object>*);
+      void MenuBar();
 
-      void AddObjectMenu(std::vector<Ignition::Object>*);
+      void AddObjectMenu();
       
       void DebugMenu();
 

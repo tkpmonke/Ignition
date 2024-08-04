@@ -2,9 +2,8 @@
 #include "camera.hpp"
 #include "gui/gui.hpp"
 #include "input/camera_movement.hpp"
-#include "types/texture.hpp"
-#include "utils/files.hpp"
 #include "serialization/saving.hpp"
+#include "scene.hpp"
 
 #include <iostream>
 
@@ -20,11 +19,12 @@ int main()
    camera.transform.position = Ignition::Vector3(-5,1,0);
    camera.MakeMainCamera();
 
-   std::vector<Ignition::Object> objects;
-
    Implosion::GUI gui = Implosion::GUI(window, &camera);
    ReadPreferences(&gui);
+   Ignition::Scene scene;
+   Ignition::scene = scene;
    gui.InitGrid();
+   gui.Style(); 
    while (window.IsOpen())
    {
       window.Update();
@@ -34,30 +34,22 @@ int main()
       
       gui.RenderGrid();
 
-      for (int i = 0; i < objects.size(); i++)
-      {
-         if (objects[i].enabled)
-            objects[i].Update();
-      }
-      gui.Style(); 
+      Ignition::scene.Update();
       gui.NewFrame();
-       
-      if (objects.size() > 0)
+      if (Ignition::scene.GetObjects()->size() > 0)
       {
-         gui.Inspector(&objects[0]);
+         gui.Inspector(&Ignition::scene.GetObjects()->at(0));
       } else {
          gui.Inspector(nullptr);
       }
-      
 
       gui.DebugMenu();
 
       gui.Preferences();
 
-      gui.MenuBar(&objects);
+      gui.MenuBar();
       //ImGui::ShowDemoWindow();
       gui.EndFrame();
-      
       camera.EndRender();
    }
    
