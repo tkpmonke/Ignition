@@ -41,10 +41,15 @@ namespace Implosion {
       float gridSpacing = 1.f, gridSize = 10000, gridHeight = 0, gridDistance = 30, gridFalloff = 10;
       Ignition::Vector4 gridColor = Ignition::Vector4(.4f, .4f, .4f, .5f);
 
+      float gridWidth = 1;
+
       bool enableGrid = true, enableDistanceFalloff = true;
-   private:
+      bool vsync = true;
+      bool anti = true;
       GLFWwindow* window;
       Ignition::Camera* camera;
       uint gridVao, gridVbo, gridProgram, gridVertSize;
+
+      GUI() = default;
    };
 }

@@ -48,15 +48,15 @@ namespace Implosion {
       std::vector<float> vertices;
       for (int i = -gridCount; i <= gridCount; ++i)
       {
-         vertices.push_back(i * this->gridSpacing);
-         vertices.push_back(this->gridSize); 
-         vertices.push_back(i * this->gridSpacing);
-         vertices.push_back(-this->gridSize); 
+         vertices.push_back(i * this->gridSpacing + 0.5f);
+         vertices.push_back(this->gridSize + 0.5f); 
+         vertices.push_back(i * this->gridSpacing + 0.5f);
+         vertices.push_back(-this->gridSize + 0.5f); 
 
-         vertices.push_back(-this->gridSize); 
-         vertices.push_back(i * this->gridSpacing);
-         vertices.push_back(this->gridSize); 
-         vertices.push_back(i * this->gridSpacing);
+         vertices.push_back(-this->gridSize + 0.5f); 
+         vertices.push_back(i * this->gridSpacing + 0.5f);
+         vertices.push_back(this->gridSize + 0.5f); 
+         vertices.push_back(i * this->gridSpacing + 0.5f);
       }
 
       glGenVertexArrays(1, &this->gridVao);
@@ -85,6 +85,7 @@ namespace Implosion {
       glUniform4f(glGetUniformLocation(this->gridProgram, "color"), this->gridColor.x, this->gridColor.y, this->gridColor.z, this->gridColor.w);
       glUniform3f(glGetUniformLocation(this->gridProgram, "camera"), this->camera->transform.position.x, this->camera->transform.position.y, this->camera->transform.position.z);
       glUniformMatrix4fv(glGetUniformLocation(this->gridProgram, "proj"), 1, GL_FALSE, glm::value_ptr(this->camera->view_projection()));
+      glLineWidth(this->gridWidth);
       glBindVertexArray(this->gridVao);
       glDrawArrays(GL_LINES, 0, gridVertSize); 
    }
@@ -95,15 +96,15 @@ namespace Implosion {
       std::vector<float> vertices;
       for (int i = -gridCount; i <= gridCount; ++i)
       {
-         vertices.push_back(i * this->gridSpacing);
-         vertices.push_back(this->gridSize); 
-         vertices.push_back(i * this->gridSpacing);
-         vertices.push_back(-this->gridSize); 
+         vertices.push_back(i * this->gridSpacing + 0.5f);
+         vertices.push_back(this->gridSize + 0.5f); 
+         vertices.push_back(i * this->gridSpacing + 0.5f);
+         vertices.push_back(-this->gridSize + 0.5f); 
 
-         vertices.push_back(-this->gridSize); 
-         vertices.push_back(i * this->gridSpacing);
-         vertices.push_back(this->gridSize); 
-         vertices.push_back(i * this->gridSpacing);
+         vertices.push_back(-this->gridSize + 0.5f); 
+         vertices.push_back(i * this->gridSpacing + 0.5f);
+         vertices.push_back(this->gridSize + 0.5f); 
+         vertices.push_back(i * this->gridSpacing + 0.5f);
       }
       glBindBuffer(GL_ARRAY_BUFFER, this->gridVbo);
       glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);

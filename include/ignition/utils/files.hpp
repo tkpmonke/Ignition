@@ -20,10 +20,14 @@ namespace FS {
    uint8_t Read8();
    uint16_t Read16();
    uint32_t Read32();
+   float ReadFloat();
+
+   bool CanRead();
 
    void Write8(uint8_t data);
    void Write16(uint16_t data);
    void Write32(uint32_t data);
+   void WriteFloat(float data);
 
    void EndBinaryRead();
    void EndBinaryWrite();

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include <string.h>
 
 #ifdef __linux__
 #include <unistd.h>
@@ -52,6 +53,7 @@ namespace FS {
 
    struct {
       std::string data;
+      std::string path;
    } write;
 
    void BeginBinaryRead(std::string path)
@@ -66,17 +68,18 @@ namespace FS {
    void BeginBinaryWrite(std::string path)
    {
       write.data = "";
+      write.path = path;
    }
 
    uint8_t Read8()
    {
-      return read.data[read.i++];
+      return read.data[++read.i];
    }
    uint16_t Read16()
    {
       uint16_t a, b;
-      a = read.data[read.i++];
-      b = read.data[read.i++];
+      a = read.data[++read.i];
+      b = read.data[++read.i];
       return (a << 8) + b;
    }
    uint32_t Read32()
@@ -94,15 +97,71 @@ namespace FS {
       return (a << 24) + (b << 16) + (c << 8) + d;
    }
 
-   void Write8(uint8_t data);
-   void Write16(uint16_t data);
-   void Write32(uint32_t data);
+   float ReadFloat()
+   {
+      char a, b, c, d;
+      float o;
+      if (read.i + 4 > read.size)
+      {
+         std::cerr << "reading too far\n";
+         return 0;
+      }
+      a = read.data[++read.i];
+      b = read.data[++read.i];
+      c = read.data[++read.i];
+      d = read.data[++read.i];
+      char e[4] = {a, b, c, d}; 
+      memcpy(&o, &e, sizeof(o));
+      return o;
+   }
+
+   bool CanRead()
+   {
+      return read.size > 0;
+   }
+
+   void Write8(uint8_t data)
+   {
+      write.data.push_back(data);
+   }
+
+   void Write16(uint16_t data)
+   {
+      write.data.push_back(data >> 8);
+      write.data.push_back(data);
+   }
+
+   void Write32(uint32_t data)
+   {
+      write.data.push_back(data >> 24);
+      write.data.push_back(data >> 16);
+      write.data.push_back(data >> 8);
+      write.data.push_back(data);
+   }
+
+   void WriteFloat(float data)
+   {  
+      char b[4];  
+      memcpy(&b, &data, sizeof(b));
+      write.data.push_back(b[0]);
+      write.data.push_back(b[1]);
+      write.data.push_back(b[2]);
+      write.data.push_back(b[3]);
+   }
 
    void EndBinaryRead()
    {
       read.file.close();
    }
-   void EndBinaryWrite();
+   void EndBinaryWrite()
+   {
+      std::ofstream o(write.path);
+      o << write.data;
+
+      o.close();
+      write.data = "";
+      write.path = "";
+   }
 
 
 #ifdef __linux__

@@ -2,9 +2,6 @@
 #include "input/camera_movement.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-bool vsync = true;
-bool anti = true;
-
 namespace Implosion {
    void GUI::Preferences()
    {
@@ -15,13 +12,13 @@ namespace Implosion {
 
          if (ImGui::BeginTabItem("Graphics"))
          {
-            if (ImGui::Checkbox("Enable V-Sync", &vsync))
+            if (ImGui::Checkbox("Enable V-Sync", &this->vsync))
             {
-               glfwSwapInterval(vsync ? 1 : 0);
+               glfwSwapInterval(this->vsync ? 1 : 0);
             }
-            if (ImGui::Checkbox("Anti-Aliasing", &anti))
+            if (ImGui::Checkbox("Anti-Aliasing", &this->anti))
             {
-               if (anti)
+               if (this->anti)
                   glEnable(GL_MULTISAMPLE);
                else
                   glDisable(GL_MULTISAMPLE);
@@ -68,6 +65,7 @@ namespace Implosion {
             ImGui::Checkbox("##Distance Falloff Enabled", &this->enableDistanceFalloff);
             ImGui::Spacing();
             ImGui::ColorEdit4("Grid Color", glm::value_ptr(this->gridColor));
+            ImGui::SliderFloat("Grid Width", &this->gridWidth, 1, 10);
             ImGui::Spacing();
             if (ImGui::Button("Remake Grid")) this->RemakeGrid();
 #ifdef DEBUG
