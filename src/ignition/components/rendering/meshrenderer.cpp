@@ -5,6 +5,8 @@
 
 #define PI (float)3.14159265359
 namespace Ignition::Rendering {
+   int currentProgram = 999;
+
    void MeshRenderer::LoadModel(Model m)
    {
       unsigned int VBO, EBO;
@@ -46,8 +48,12 @@ namespace Ignition::Rendering {
 
        
    }
+
    void MeshRenderer::Update() {
-      glUseProgram(this->shader.program);
+      if (this->shader.program != currentProgram) {
+         glUseProgram(this->shader.program);
+         currentProgram = this->shader.program;
+      }
       glBindVertexArray(this->vao); 
 
       Matrix4 model = Matrix4(1.f);
@@ -57,8 +63,7 @@ namespace Ignition::Rendering {
 
       this->shader.SetMatrix4(camera->view_projection() * model, "projection");
       this->shader.SetMatrix4(model, "model");
-
-      
+ 
       glActiveTexture(GL_TEXTURE0 ); 
       glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
       this->shader.SetInt(0, "material.albedo");
