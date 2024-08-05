@@ -28,8 +28,6 @@ namespace Ignition {
    Window::Window(int w, int h, const char* c)
    {
       glfwInit();
-      glfwWindowHint(GLFW_FLOATING, GL_TRUE);
-      glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
       glfwWindowHint(GLFW_SAMPLES, 8);
       this->window = glfwCreateWindow(w,h,c,NULL,NULL);
       glfwMakeContextCurrent(this->window);

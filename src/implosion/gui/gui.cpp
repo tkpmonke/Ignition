@@ -1,6 +1,8 @@
 #include "gui/gui.hpp"
+#include "utils/files.hpp"
 
 namespace Implosion {
+   std::string s = FS::GetHome() + "/Implosion/gui";
    GUI::GUI(GLFWwindow* window, Ignition::Camera* camera)
    {
       IMGUI_CHECKVERSION();
@@ -9,6 +11,7 @@ namespace Implosion {
       ImGuiIO& io = ImGui::GetIO();
       io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
       io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+      io.IniFilename = s.data(); 
 
       this->window = window;
       this->camera = camera;
