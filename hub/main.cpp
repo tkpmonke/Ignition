@@ -31,7 +31,15 @@ bool checkDependinces()
       std::cerr << "Python needs to be installed to use the hub\n";
       return 0;
    }
-
+   
+   if (std::system("7z --help") != 0)
+   {
+#ifdef __linux__
+      std::system("clear");
+#endif 
+      std::cerr << "7z needs to be installed to use the hub\n";
+      return 0;
+   }
 #ifdef __linux__
       std::system("clear");
 #endif 
@@ -67,7 +75,52 @@ std::string releasetostr(Release* r)
    }
    return s;
 }
+ImGuiWindowFlags flags = 
+                 ImGuiWindowFlags_NoMove 
+               | ImGuiWindowFlags_NoResize 
+               | ImGuiWindowFlags_NoCollapse 
+               | ImGuiWindowFlags_NoSavedSettings 
+               | ImGuiWindowFlags_NoTitleBar;
+int g = -1;
 
+void Installer()
+{
+   ImGui::Begin("Installer", NULL, flags);
+   {
+
+      ImGui::SetWindowPos(ImVec2(0, 0));
+	   ImGui::SetWindowSize(ImVec2(640, 480));
+          
+      ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(50, 25.f));
+      ImGui::SetNextItemWidth(625);
+      if (ImGui::BeginCombo("##Version", g == -1 ? "Version" : releaseStrs[g].data()))
+      {
+         for (int i = 0; i < releaseStrs.size(); ++i)
+         {
+            bool selected = (i == g);
+            if (ImGui::Selectable(releaseStrs[i].data(), selected))
+            {
+               g = i;
+            }
+
+         }
+         ImGui::EndCombo();
+      }
+
+      if (ImGui::Button("Download", ImVec2(625, 0)))
+      {
+         std::string s = "curl -L https://github.com/juice2011/Ignition/releases/download/v" + releaseStrs[g] + "/implosion.7z -o /tmp/implosion.7z";
+         
+         s += " && 7z e /tmp/implosion.7z -o/usr/bin";
+
+         isInstalled = std::system(s.data()) == 0;
+      }
+
+      ImGui::PopStyleVar(1);
+
+      ImGui::End(); 
+   }
+}
 
 int main()
 {
@@ -81,6 +134,7 @@ int main()
    ImGui::CreateContext();
    ImGui::SetCurrentContext(ImGui::GetCurrentContext());
    ImGuiIO& io = ImGui::GetIO();
+   io.IniFilename = NULL;
    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
    ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -91,7 +145,7 @@ int main()
    if (!checkDependinces())
       return -1;
 
-   if (!std::system("implosion -i"))
+   if (std::system("implosion -i") != 0)
    {
       if (getuid()) 
       {
@@ -137,14 +191,8 @@ int main()
       
       isInstalled = false;
    }
-   ImGuiWindowFlags flags = 
-                 ImGuiWindowFlags_NoMove 
-               | ImGuiWindowFlags_NoResize 
-               | ImGuiWindowFlags_NoCollapse 
-               | ImGuiWindowFlags_NoSavedSettings 
-               | ImGuiWindowFlags_NoTitleBar;
+   
 
-   int g = -1;
    while (!glfwWindowShouldClose(window))
    {
       glfwPollEvents();
@@ -154,39 +202,11 @@ int main()
       ImGui::NewFrame();
       if (!isInstalled)
       {
-
-         ImGui::Begin("Installer", NULL, flags);
+         Installer();
+      } else {
+         if (ImGui::Begin("Hub", NULL, flags))
          {
-
-            ImGui::SetWindowPos(ImVec2(0, 0));
-	         ImGui::SetWindowSize(ImVec2(640, 480));
-            
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(50, 25.f));
-            ImGui::SetNextItemWidth(625);
-            if (ImGui::BeginCombo("##Version", g == -1 ? "Version" : releaseStrs[g].data()))
-            {
-               for (int i = 0; i < releaseStrs.size(); ++i)
-               {
-                  bool selected = (i == g);
-
-                  if (ImGui::Selectable(releaseStrs[i].data(), selected))
-                  {
-                     g = i;
-                  }
-
-               }
-               ImGui::EndCombo();
-            }
-
-            if (ImGui::Button("Download", ImVec2(625, 0)))
-            {
-
-            }
-
-
-            ImGui::PopStyleVar(1);
-
-            ImGui::End(); 
+            ImGui::End();
          }
       }
       ImGui::Render();

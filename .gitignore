@@ -6,3 +6,5 @@ video/*
 Makefile
 compile_commands.json
 bin/*.py
+bin/implosion-hub
+bin/imgui.ini
