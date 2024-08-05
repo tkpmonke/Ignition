@@ -6,11 +6,26 @@
 #include "scene.hpp"
 
 #include <iostream>
+#include <string.h>
 
 using namespace Ignition::Rendering;
 
-int main() 
+int main(int argc, char** argv) 
 {
+
+   for (int i = 0; i < argc; ++i)
+   {
+      if (strcmp(argv[i], "-f") == 0)
+      {
+         FS::SetProjectHome(argv[++i]);
+      }
+      if (strcmp(argv[i], "-i") == 0)
+      {
+         std::cout << "Ignition Engine Is Installed\n";
+         return 0;
+      }
+   }
+
    Ignition::Window window = Ignition::Window(1920, 1080, "Implosion");
    Ignition::Camera camera = Ignition::Camera(&window);
    camera.fov = 75;

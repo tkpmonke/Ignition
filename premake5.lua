@@ -7,9 +7,9 @@ project "implosion"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   removefiles "hub/*"
    includedirs { "include/ignition", "include/ignition/components", "include/implosion", "imgui" }
-   files { "**.h", "**.cpp", "**.hpp" }
+   files { "src/**.cpp", "include/**.hpp", "include/**.cpp", "include/**.h", "imgui/**.h", "imgui/**.cpp" }
+   removefiles "hub/*"
    
    links { "glfw", "GL", "GLEW", "m" }
 
@@ -22,16 +22,19 @@ project "implosion"
       defines { "NDEBUG" }
       optimize "On"
 
-project "implosion"
+project "implosion-hub"
    kind "ConsoleApp"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
 
    includedirs { "imgui" }
-   files { "hub/**.h", "hub/**.cpp", "hub/**.hpp" }
+   files { "hub/**.h", "hub/**.cpp", "hub/**.hpp", "imgui/**.cpp", "imgui/**.hpp" }
    
    links { "glfw", "GL" }
+   objdir "obj/hub"
+
+   postbuildcommands "cp hub/scraper.py bin/scraper.py"
 
    filter "configurations:Debug"
       defines { "DEBUG" }
