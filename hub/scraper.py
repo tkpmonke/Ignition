@@ -1,7 +1,7 @@
 import requests
 
 def get_releases():
-    url = "https://api.github.com/repos/Lost-Empire-Entertainment/Elypso-engine/releases"
+    url = "https://api.github.com/repos/juice2011/Ignition/releases"
 
     response = requests.get(url)
     response.raise_for_status()
