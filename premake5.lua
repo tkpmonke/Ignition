@@ -7,7 +7,7 @@ project "implosion"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "imgui" }
+   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "imgui" }
    files { "src/**.cpp", "include/**.hpp", "include/**.cpp", "include/**.h", "imgui/**.h", "imgui/**.cpp" }
    removefiles "hub/*"
    
@@ -29,7 +29,7 @@ project "implosion-hub"
    targetdir "bin"
 
    includedirs { "imgui" }
-   files { "hub/**.h", "hub/**.cpp", "hub/**.hpp", "imgui/**.cpp", "imgui/**.hpp" }
+   files { "hub/**.h", "hub/**.cpp", "hub/**.hpp", "imgui/**.cpp", "imgui/**.hpp"}
    
    links { "glfw", "GL" }
    objdir "obj/hub"
