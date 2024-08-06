@@ -8,6 +8,7 @@ nothing for games yet, but the editor has a customizeable grid, can create objec
 requires the following
 - GLEW
 - GLFW
+- GLM
 - IMGUI (included)
 
 run `premake5 gmake2 && make` for unix-like systems<br/><br/>
