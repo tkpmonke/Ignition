@@ -8,21 +8,21 @@
 #include <locale>
 #include <codecvt>
 #else
-#error your out of luck ig (for now)
+#error your out of luck ig
 #endif
 
 #include <cstdlib>
 #include <iostream>
 #include <vector>
-
 #include <fstream>
-#include <sstream>
 #include <filesystem>
+#include <thread>
 
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "imgui_stdlib.h"
 
 void Style();
 
@@ -64,6 +64,16 @@ bool checkDependinces()
       std::cerr << "Echo needs to be installed to use the hub\n";
       return 0;
    }
+
+#ifdef __linux__
+   if (std::system("zenity --help") != 0)
+   {
+      clear();
+      std::cerr << "Zenity needs to be installed to use the hub\n";
+      return 0;
+   }
+#endif 
+
    clear(); 
    return 1;
 }
@@ -79,6 +89,15 @@ struct Release {
 
 std::vector<Release> releases;
 std::vector<std::string> releaseStrs;
+
+std::string FileExplorer()
+{
+   char s[1024];
+   
+   FILE* f = popen("zenity --file-selection --directory", "r");
+   fgets(s, 1024, f);
+   return s;
+}
 
 std::string releasetostr(Release* r)
 {
@@ -142,12 +161,19 @@ void Installer()
 
       if (ImGui::Button("Download", ImVec2(625, 0)))
       {
+         if (getuid()) 
+         {
+            std::cerr << "Superuser Privlege is required for installer\n";
+            exit(-1);
+         }
+
          std::string s = "curl -L https://github.com/juice2011/Ignition/releases/download/v" + releaseStrs[g] + "/implosion.7z -o /tmp/implosion.7z";
          
          s += " && 7z e /tmp/implosion.7z -o/usr/bin";
 
          isInstalled = std::system(s.data()) == 0;
          acctuallyInstalled = isInstalled;
+         setuid(1000);
       }
       
       if (ImGui::Button("Cancel", ImVec2(625, 0)))
@@ -225,12 +251,15 @@ void GetProjects()
    f.close();
 }
 
+bool notProjectError = false;
+
+
 int main()
 {
    glfwInit();
    glfwWindowHint(GLFW_FLOATING, true);
    glfwWindowHint(GLFW_RESIZABLE, false);
-   GLFWwindow* window = glfwCreateWindow(640, 484, "Implosion Hub", NULL, NULL); 
+   GLFWwindow* window = glfwCreateWindow(640, 480, "Implosion Hub", NULL, NULL); 
    glfwMakeContextCurrent(window);
 
    IMGUI_CHECKVERSION();
@@ -248,19 +277,18 @@ int main()
    if (!checkDependinces())
       return -1;
 
+   char projectName[64] = "";
+   std::string projectPath;
+
    if (std::system("implosion -i") != 0)
    {
       acctuallyInstalled = 0;
-      if (getuid()) 
-      {
-         std::cerr << "Superuser Privlege is required for installer\n";
-         return -1;
-      }
+
       std::string h = "echo -e " + (std::string)pyScript + " > /tmp/implosion-temp.py";
       std::system(h.data());
       FILE* scraper = popen("python /tmp/implosion-temp.py", "r");
-      char* scraped = (char*)malloc(64 * sizeof(char));
-      while (fgets(scraped, 64, scraper) != NULL)
+      char* scraped = (char*)malloc(128 * sizeof(char));
+      while (fgets(scraped, 128, scraper) != NULL)
       {
          std::string s = scraped;
          Release r;
@@ -299,8 +327,16 @@ int main()
    }
    
    GetProjects();
+   std::ifstream file(GetHome() + "/Implosion-hub/engine");
+
+   std::stringstream s;
+   if (file.is_open())
+      s << file.rdbuf();
+
    
    int selected = -1;
+   bool createProject = false;
+   std::string enginePath = acctuallyInstalled && !s.str().empty() ? "implosion" : s.str();
    while (!glfwWindowShouldClose(window))
    {
       glfwPollEvents();
@@ -316,9 +352,12 @@ int main()
          if (ImGui::Begin("Hub", NULL, flags))
          {
             ImGui::SetWindowPos(ImVec2(0, 0));
-	         ImGui::SetWindowSize(ImVec2(640, 484));
+	         ImGui::SetWindowSize(ImVec2(640, 480));
             ImGui::Text("Projects");
-            if (ImGui::BeginChild("Projects", ImVec2(500, 440)))
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(400);
+            ImGui::InputText("Set Custom Engine Path", &enginePath); 
+            if (ImGui::BeginChild("Projects", ImVec2(510, 440)))
             {
                if (projects.size() == 0) {
                   ImGui::Text("Either Create A New Project Or Add On From Disk.");
@@ -326,10 +365,17 @@ int main()
                   for (int i = 0; i < projects.size(); ++i)
                   {
                      bool isSelected = (selected == i);
-                     if (ImGui::Selectable((projects[i].name + '\n' + projects[i].path + '\n').data(), isSelected))
+                     if (ImGui::Selectable(("##" + projects[i].name).data(), isSelected, ImGuiSelectableFlags_AllowOverlap))
                      {
                         selected = i;
                      }
+                     ImGui::SameLine();
+                     std::string s = projects[i].name + "\n" + projects[i].path;
+                     ImGui::Text("%s", projects[i].name.c_str());
+
+                     ImGui::TextDisabled("%s", projects[i].path.c_str());
+
+                     ImGui::Separator();
                   }
                }
                ImGui::EndChild();
@@ -344,20 +390,48 @@ int main()
                }
                if (ImGui::Button("Create", ImVec2(100, 84)))
                {
-                  std::ofstream o;
-                  o.open(GetHome() + "/Implosion-hub/projects", std::ios_base::app);
-                  o << "path:name\n";
-                  projects.push_back({.path="path",.name="name"});
-                  o.close();
+                  createProject = true;                
                }
                if (ImGui::Button("Add Local", ImVec2(100,84)))
                {
+                  std::string path = FileExplorer();
+                  path.pop_back();
+                  std::ifstream file(path + "/project");
+                  std::cout << path + "/project\n";
+                  if (!file.is_open()) {
+                     std::cerr << "Folder Is Not Project\n";
+                  } else {
+                     std::stringstream s;
+                     s << file.rdbuf();
 
+                     int nameSize = ((int)s.str()[0] << 8) + ((int)s.str()[1]);
+                     std::string name;
+                     for (int i = 0; i < nameSize; ++i)
+                     {
+                        name.push_back(s.str()[i+2]);
+                     }
+
+                     std::ofstream o;
+                     o.open(GetHome() + "/Implosion-hub/projects", std::ios_base::app);
+                     o << path + ":" + name + "\n";
+
+                     o.close();
+                     file.close();
+                     GetProjects();
+                  }
+
+                  
                }
                if (selected != -1) {
                   if (ImGui::Button("Run", ImVec2(100, 84)))
                   {
+                     std::ofstream o;
+                     o.open(GetHome() + "/Implosion-hub/engine");
+                     o << enginePath;
+                     o.close();
 
+                     char* s[] = {enginePath.data(), (char*)"-f", projects[selected].path.data()};
+                     execvp(s[0], s);
                   }
                   if (ImGui::Button("Remove", ImVec2(100,84)))
                   {
@@ -380,6 +454,7 @@ int main()
                      ofs.close();
 
                      GetProjects();
+                     selected = -1;
                   }
                }
                ImGui::EndChild();
@@ -387,6 +462,47 @@ int main()
             ImGui::End();
          }
       }
+
+      if (createProject)
+      {
+         
+         if (ImGui::Begin("Create Project", (bool*)1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar))
+         {
+            ImGui::SetWindowSize(ImVec2(250, 150));
+
+            ImGui::InputText("Name", projectName, 64);
+            if (ImGui::Button("Find Project Folder")) {
+               projectPath = FileExplorer();
+               projectPath.pop_back();
+            }
+            if (ImGui::Button("Close"))
+               createProject = false;
+            ImGui::SameLine();
+            if (ImGui::Button("Create"))
+            {
+
+               std::string n = projectName;
+
+               std::ofstream projectFile(projectPath + "/project");
+               
+               projectFile << (char)((int)n.size() >> 8);
+               projectFile << (char)(int)n.size();
+               projectFile << n;
+
+               projectFile.close();
+
+               std::ofstream projects;
+               projects.open(GetHome() + "/Implosion-hub/projects", std::ios::app);
+
+               projects << projectPath + ":" + n + "\n";
+
+               createProject = false;
+               GetProjects();
+            }
+            ImGui::End(); 
+         }
+      }
+
       ImGui::Render();
       ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
       glfwSwapBuffers(window);
@@ -427,7 +543,7 @@ void Style()
 
       ImVec4* colors = ImGui::GetStyle().Colors;
       colors[ImGuiCol_Text]                   = ImVec4(0.00f, 1.00f, 0.85f, 0.77f);
-      colors[ImGuiCol_TextDisabled]           = ImVec4(0.09f, 0.50f, 0.54f, 1.00f);
+      colors[ImGuiCol_TextDisabled]           = ImVec4(0.09f, 0.50f, 0.54f, 0.80f);
       colors[ImGuiCol_WindowBg]               = ImVec4(0.03f, 0.03f, 0.03f, 0.94f);
       colors[ImGuiCol_ChildBg]                = ImVec4(0.06f, 0.06f, 0.06f, 1.f);
       colors[ImGuiCol_PopupBg]                = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);

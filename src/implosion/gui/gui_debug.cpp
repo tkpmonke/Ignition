@@ -45,7 +45,7 @@ ImGuiWindowFlags flags = ImGuiWindowFlags_NoBackground;
       ImGui::Separator();
 
       ImGui::Text("Objects %lu", Ignition::scene.GetObjects()->size());
-      ImGui::Text("Objects with tag \"Bananna\" %lu", Ignition::scene.GetObjectsWithTag("Banana").size());
+      ImGui::Text("Objects with tag \"Banana\" %lu", Ignition::scene.GetObjectsWithTag("Banana").size());
 
       if (ImGui::CollapsingHeader("Hardware"))
       {

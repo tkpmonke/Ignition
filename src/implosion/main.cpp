@@ -26,6 +26,8 @@ int main(int argc, char** argv)
       }
    }
 
+   std::cout << FS::GetHome() << " " << FS::GetProjectHome() << "\n";
+
    Ignition::Window window = Ignition::Window(1920, 1080, "Implosion");
    Ignition::Camera camera = Ignition::Camera(&window);
    camera.fov = 75;

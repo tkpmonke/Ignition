@@ -43,5 +43,5 @@ void cameraMovement(Ignition::Window* window, Ignition::Camera* camera)
    }
 
 
-   camera->transform.rotation.y = std::clamp(camera->transform.rotation.y, -90.f, 90.f);
+   camera->transform.rotation.y = std::clamp(camera->transform.rotation.y, -89.f, 89.f);
 }
