@@ -24,6 +24,7 @@ namespace FS {
    uint16_t Read16();
    uint32_t Read32();
    float ReadFloat();
+   std::string ReadString();
 
    bool CanRead();
 
@@ -31,6 +32,7 @@ namespace FS {
    void Write16(uint16_t data);
    void Write32(uint32_t data);
    void WriteFloat(float data);
+   void WriteString(std::string data);
 
    void EndBinaryRead();
    void EndBinaryWrite();

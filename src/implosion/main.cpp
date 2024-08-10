@@ -4,6 +4,7 @@
 #include "input/camera_movement.hpp"
 #include "serialization/saving.hpp"
 #include "scene.hpp"
+#include "project.hpp"
 
 #include <iostream>
 #include <string.h>
@@ -25,8 +26,12 @@ int main(int argc, char** argv)
          return 0;
       }
    }
-
-   std::cout << FS::GetHome() << " " << FS::GetProjectHome() << "\n";
+   
+   if (FS::GetProjectHome() == "")
+   {
+      std::cerr << "No Project Provided\n";
+      return -1;
+   }
 
    Ignition::Window window = Ignition::Window(1920, 1080, "Implosion");
    Ignition::Camera camera = Ignition::Camera(&window);
@@ -35,11 +40,12 @@ int main(int argc, char** argv)
    camera.clipping_planes.max = 100.f;
    camera.transform.position = Ignition::Vector3(-5,1,0);
    camera.MakeMainCamera();
+   
+   Ignition::project = Ignition::Project(0);
 
    Implosion::GUI gui = Implosion::GUI(window, &camera);
    ReadPreferences(&gui);
-   Ignition::Scene scene;
-   Ignition::scene = scene;
+   
    gui.InitGrid();
    gui.Style(); 
    while (window.IsOpen())
@@ -71,6 +77,7 @@ int main(int argc, char** argv)
       camera.EndRender();
    }
    WritePreferences(); 
+   Ignition::scene.WriteSceneToDisk();
    gui.Shutdown();
    window.Shutdown();
 }

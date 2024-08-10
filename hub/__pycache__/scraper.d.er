@@ -1,6 +1,0 @@
-##[pylyzer] failed /home/turdle/Projects/ignition/hub/scraper.py 1722816977 298
-.requests = pyimport "__init__"
-.__init__ = pyimport "__init__"
-
-.get_releases: () -> NoneType
-

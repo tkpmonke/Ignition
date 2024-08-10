@@ -1,0 +1,38 @@
+-- PROJECT FILE --
+TWO BYTES, project name size
+x BYTES, project name
+TWO BYTES, num of scenes
+TWO BYTES, last scene
+
+FOR EACH SCENE
+   TWO BYTES, scene id
+   TWO BYTES, name length
+   x BYTES, name
+
+-- SCENE FILE --
+TWO BYTES num of objects
+
+FOR EACH OBJECT
+   TWO BYTES, name length
+   x BYTES, name
+   TWO BYTES, tag length
+   x BYTES, tag
+
+   FOUR BYTES, pos.x
+   FOUR BYTES, pos.y
+   FOUR BYTES, pos.z
+   FOUR BYTES, rot.x
+   FOUR BYTES, rot.y
+   FOUR BYTES, rot.z
+   FOUR BYTES, scale.x
+   FOUR BYTES, scale.y
+   FOUR BYTES, scale.z
+
+   ONE BYTE, enabled
+
+   TWO BYTES, num of modules
+
+   FOR EACH MODULE
+      TWO BYTES, mod name length
+      x BYTES, module type
+      -- this depends on each module, so idk --

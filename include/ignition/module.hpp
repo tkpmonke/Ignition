@@ -12,6 +12,8 @@ namespace Ignition {
       virtual void Start() {};
       virtual void Update() {};
       virtual void Shutdown() {};
+      virtual void Serialize() {};
+      virtual void Deserialize() {};
 
       virtual std::string type() const = 0; 
 

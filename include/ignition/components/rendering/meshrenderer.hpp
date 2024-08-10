@@ -26,6 +26,9 @@ namespace Ignition::Rendering {
       
       void Update() override;
 
+      void Serialize() override;
+      void Deserialize() override;
+
    private:
       uint vao;
       Camera* camera;

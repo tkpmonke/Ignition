@@ -16,7 +16,6 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
-#include <thread>
 
 #include "GLFW/glfw3.h"
 #include "imgui.h"
@@ -489,15 +488,39 @@ int main()
                projectFile << (char)(int)n.size();
                projectFile << n;
 
+               // one scene
+               projectFile << (char)0;
+               projectFile << (char)1; 
+               
+               // last scene is 0
+               projectFile << (char)0;
+               projectFile << (char)0;
+
+               // scene id is 0
+               projectFile << (char)0;
+               projectFile << (char)0;
+                  
+               // length of name
+               projectFile << (char)0;
+               projectFile << (char)strlen("Default");
+
+               projectFile << "Default";
+
                projectFile.close();
+
+               std::ofstream sceneFile(projectPath + "/Default.scn");
+
+               // 0 objects
+               sceneFile << (char)0;
+               sceneFile << (char)0;
 
                std::ofstream projects;
                projects.open(GetHome() + "/Implosion-hub/projects", std::ios::app);
 
                projects << projectPath + ":" + n + "\n";
 
-               createProject = false;
                GetProjects();
+               createProject = false;
             }
             ImGui::End(); 
          }

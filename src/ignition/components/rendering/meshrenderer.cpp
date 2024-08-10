@@ -1,6 +1,15 @@
 #include "components/rendering/meshrenderer.hpp"
 #include "GLFW/glfw3.h"
 
+#include "utils/files.hpp"
+
+#include "shapes/cube.hpp"
+#include "shapes/square.hpp"
+
+#include "utils/unlit_shader.hpp"
+
+#include "textures/grid.hpp"
+
 #include <iostream>
 #include <unordered_map>
 
@@ -103,5 +112,53 @@ namespace Ignition::Rendering {
       }
 
       glDrawElements(GL_TRIANGLES, this->model.indices.size(), GL_UNSIGNED_INT, 0);
+   }
+
+   void MeshRenderer::Serialize() {
+      FS::WriteString(model.path);
+
+      // for testing, the only shader that works is the default unlit
+      FS::WriteString("");
+
+      FS::Write8((int)shader.type);
+
+      FS::WriteFloat(shader.color.r);
+      FS::WriteFloat(shader.color.g);
+      FS::WriteFloat(shader.color.b);
+      FS::WriteFloat(shader.color.a);
+
+      FS::WriteString(shader.albedo.name);
+   }
+
+   void MeshRenderer::Deserialize() {
+      std::string modelName = FS::ReadString();
+      std::cout << modelName << "\n";
+      if (modelName == "cube")
+         LoadModel(cube_model, modelName);
+      else if (modelName == "square")
+         LoadModel(square_model, modelName);
+      else 
+         LoadModel(cube_model, modelName);
+
+      std::string shaderName = FS::ReadString();
+      bool isLit = FS::Read8(); 
+      if (shaderName.empty())
+      {
+         Shader s = Shader(unlit_vertex, unlit_fragment, (ShaderType)isLit);
+         LoadShader(s);
+      }
+
+      std::cout << "Passed\n";
+
+      shader.color.r = FS::ReadFloat();
+      shader.color.g = FS::ReadFloat();
+      shader.color.b = FS::ReadFloat();
+      shader.color.a = FS::ReadFloat();
+
+      std::string s = FS::ReadString();
+      shader.albedo = Texture(); 
+      shader.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);
+      shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "ignition_grid_texture");              
+      
    }
 }

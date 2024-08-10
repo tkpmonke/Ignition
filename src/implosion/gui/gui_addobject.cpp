@@ -36,7 +36,6 @@ namespace Implosion {
          MeshRenderer m = MeshRenderer(this->camera);
          m.LoadModel(square_model, "square");
          m.LoadShader(s);
-         glUseProgram(m.shader.program);
          std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
          Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
       }
@@ -46,7 +45,6 @@ namespace Implosion {
          MeshRenderer m = MeshRenderer(this->camera);
          m.LoadModel(cube_model, "cube");
          m.LoadShader(s);
-         glUseProgram(m.shader.program);
          std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
          Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
       }
@@ -58,7 +56,6 @@ namespace Implosion {
             MeshRenderer m = MeshRenderer(this->camera);
             m.LoadModel(cube_model, "cube");
             m.LoadShader(s);
-            glUseProgram(m.shader.program);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
             Ignition::Object* o = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
             int x = -50 + rand() % 100;
