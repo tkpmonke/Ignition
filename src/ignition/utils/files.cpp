@@ -67,6 +67,7 @@ namespace FS {
    bool BeginBinaryRead(std::string path)
    {
       read.file = std::ifstream(path);
+      std::cout << path << "\n";
       
       if (!read.file.is_open())
          return false;
@@ -128,6 +129,17 @@ namespace FS {
       return o;
    }
 
+   std::string ReadString()
+   {
+      uint16_t s = Read16();
+      std::string o;
+
+      for (int i = 0; i < s; ++i)
+         o += Read8();
+
+      return o;
+   }
+
    bool CanRead()
    {
       return read.size > 0;
@@ -160,6 +172,14 @@ namespace FS {
       write.data.push_back(b[1]);
       write.data.push_back(b[2]);
       write.data.push_back(b[3]);
+   }
+
+   void WriteString(std::string data)
+   {
+      Write16((int)data.size());
+
+      for (int i = 0; i < data.size(); ++i)
+         Write8(data[i]);
    }
 
    void EndBinaryRead()

@@ -28,10 +28,12 @@ namespace Ignition {
       
       void AddModule(std::shared_ptr<Module>);
      Module* GetModule(std::string);
-      std::vector<Module*> GetModules(std::string);
+      std::vector<std::shared_ptr<Module>> GetModules() { return modules; }
 
       std::vector<Object*> GetChildren() { return children; };
       std::vector<Object*> GetChildrenWithModule(std::string);
+
+      int GetModuleCount() {return modules.size();}
       
    private:
       std::vector<std::shared_ptr<Module>> modules;

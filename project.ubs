@@ -1,0 +1,22 @@
+project "implosion"
+
+outdir "bin"
+objdir "obj"
+
+cxx "gnu++17"
+
+incdir "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "imgui"
+
+addfile "src/**.cpp", "include/**.hpp", "include/**.cpp", "include/**.h", "imgui/**.h", "imgui/**.cpp" 
+
+rmfile "hub/*"
+
+compiler "g++"
+ifos "Windows"
+compiler "mingw-g++"
+endif
+
+compile
+
+project "implosion-hub"
+objdir "obj/hub"

@@ -17,6 +17,7 @@ namespace Ignition {
       void ReadSceneFromDisk();
 
       std::string name;
+      int id;
 
    private:
       std::vector<Object> objects;

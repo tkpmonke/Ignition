@@ -12,6 +12,7 @@ int i = 0;
 namespace Ignition::Rendering {
    void Texture::LoadData(std::string file, std::string name)
    {
+      this->name = name;
       for (auto [key, value] : textures)
       {
          if (name == key)
@@ -20,6 +21,7 @@ namespace Ignition::Rendering {
             return;
          }
       }
+
 
       glGenTextures(1, &this->location);
       glBindTexture(GL_TEXTURE_2D, this->location);

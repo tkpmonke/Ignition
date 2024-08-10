@@ -34,8 +34,6 @@ project "implosion-hub"
    links { "glfw", "GL" }
    objdir "obj/hub"
 
-   postbuildcommands "cp hub/scraper.py bin/scraper.py"
-
    filter "configurations:Debug"
       defines { "DEBUG" }
       optimize "On"

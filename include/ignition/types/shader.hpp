@@ -8,13 +8,15 @@
 
 namespace Ignition::Rendering {
    enum ShaderType {
-      Lit,
-      Unlit
-   };
+      Unlit = 0,
+      Lit = 1,
+   }; 
    class Shader {
    public:   
       Shader(std::string vert, std::string frag, ShaderType type);
       Shader() = default;
+
+      std::string vert, frag;
 
       unsigned int program;
       

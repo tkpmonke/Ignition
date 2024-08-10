@@ -21,6 +21,7 @@ namespace Ignition::Rendering {
          }
       }
 
+
       const char* vShaderCode = vert.c_str();
       const char* fShaderCode = frag.c_str();
       

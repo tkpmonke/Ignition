@@ -21,6 +21,7 @@ namespace Ignition::Rendering {
       void LoadData(std::string file, std::string name);
       void LoadData(unsigned char* data, int w, int h, int nr, std::string name);
       unsigned int location = 0;
+      std::string name;
       operator int() const { return location; };
    private:
       int flags;

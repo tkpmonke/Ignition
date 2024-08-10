@@ -13,7 +13,7 @@ const std::string unlit_vertex =
 "void main() {\n"
 "  gl_Position = projection * model * vec4(position, 1);\n"
 "  tex_uv = uv;\n"
-"}";
+"}\0";
 
 const std::string unlit_fragment = 
 "#version 330\n"
@@ -26,7 +26,7 @@ const std::string unlit_fragment =
 "in vec2 tex_uv;\n"
 "void main() {\n"
 "  o = material.color * texture(material.albedo, tex_uv);\n"
-"}";
+"}\0";
 
 const std::string lit_fragment = 
 "#version 330\n"
@@ -41,4 +41,4 @@ const std::string lit_fragment =
 "out vec4 o;\n"
 "void main() {\n"
 "  o = color;\n"
-"}";
+"}\0";

@@ -11,5 +11,6 @@ const Ignition::Model square_model {
    .uv = {1,1,0,
           1,0,0,
           0,0,0,
-          0,1,0}
+          0,1,0},
+   .path = "square"
 };
