@@ -54,8 +54,8 @@ namespace FS {
    
    struct {
       std::ifstream file;
-      int i;
-      int size;
+      uint64_t i = 0;
+      uint64_t size;
       std::string data;
    } read;
 
@@ -76,7 +76,7 @@ namespace FS {
       s << read.file.rdbuf();
       read.data = s.str();
       read.size = read.data.size();
-      read.i = -1;
+      read.i = 0;
       return true;
    }
    void BeginBinaryWrite(std::string path)
@@ -87,43 +87,50 @@ namespace FS {
 
    uint8_t Read8()
    {
-      return read.data[++read.i];
+      return read.data[read.i++];
    }
    uint16_t Read16()
    {
       uint16_t a, b;
-      a = read.data[++read.i];
-      b = read.data[++read.i];
+      a = read.data[read.i++];
+      b = read.data[read.i++];
       return (a << 8) + b;
    }
    uint32_t Read32()
    {
-      uint32_t a, b, c, d;
+      char a, b, c, d;
+      std::cout << read.i << " " << read.size << "\n";
       if (read.i + 4 > read.size)
       {
-         std::cerr << "reading too far\n";
+         std::cerr << "reading too far Read32\n";
          return 0;
       }
-      a = read.data[++read.i];
-      b = read.data[++read.i];
-      c = read.data[++read.i];
-      d = read.data[++read.i];
-      return (a << 24) + (b << 16) + (c << 8) + d;
+      a = read.data[read.i++];
+      b = read.data[read.i++];
+      c = read.data[read.i++];
+      d = read.data[read.i++];
+      uint32_t o;
+      o = o << 8 | static_cast<unsigned char>(a);
+      o = o << 8 | static_cast<unsigned char>(b);
+      o = o << 8 | static_cast<unsigned char>(c);
+      o = o << 8 | static_cast<unsigned char>(d);
+      return o;
    }
 
    float ReadFloat()
    {
       char a, b, c, d;
       float o;
+      
       if (read.i + 4 > read.size)
       {
-         std::cerr << "reading too far\n";
+         //std::cerr << "reading too far float\n";
          return 0;
       }
-      a = read.data[++read.i];
-      b = read.data[++read.i];
-      c = read.data[++read.i];
-      d = read.data[++read.i];
+      a = read.data[read.i++];
+      b = read.data[read.i++];
+      c = read.data[read.i++];
+      d = read.data[read.i++];
       char e[4] = {a, b, c, d}; 
       memcpy(&o, &e, sizeof(o));
       return o;
@@ -152,8 +159,8 @@ namespace FS {
 
    void Write16(uint16_t data)
    {
-      write.data.push_back(data >> 8);
-      write.data.push_back(data);
+      write.data.push_back((char)(data >> 8));
+      write.data.push_back((char)data);
    }
 
    void Write32(uint32_t data)

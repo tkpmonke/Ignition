@@ -132,7 +132,6 @@ namespace Ignition::Rendering {
 
    void MeshRenderer::Deserialize() {
       std::string modelName = FS::ReadString();
-      std::cout << modelName << "\n";
       if (modelName == "cube")
          LoadModel(cube_model, modelName);
       else if (modelName == "square")
@@ -147,8 +146,6 @@ namespace Ignition::Rendering {
          Shader s = Shader(unlit_vertex, unlit_fragment, (ShaderType)isLit);
          LoadShader(s);
       }
-
-      std::cout << "Passed\n";
 
       shader.color.r = FS::ReadFloat();
       shader.color.g = FS::ReadFloat();

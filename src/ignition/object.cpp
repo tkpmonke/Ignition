@@ -25,4 +25,15 @@ namespace Ignition {
 
       return nullptr;
    }
+
+   std::vector<Object*> Object::GetChildrenWithModule(std::string m)
+   {
+      std::vector<Object*> objs;
+      for (int i = 0; i < this->children.size(); ++i)
+      {
+         if (this->children[i]->GetModule(m))
+            objs.push_back(this->children[i]);
+      }
+      return objs;
+   }
 }

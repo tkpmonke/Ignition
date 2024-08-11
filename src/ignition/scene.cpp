@@ -3,6 +3,8 @@
 
 #include "components/rendering/meshrenderer.hpp"
 
+#include <iostream>
+
 using namespace Ignition::Rendering;
 
 namespace Ignition {
@@ -45,7 +47,7 @@ namespace Ignition {
    void Scene::WriteSceneToDisk()
    {
       FS::BeginBinaryWrite(FS::GetProjectHome() + "/" + name + ".scn"); 
-      FS::Write16(objects.size());
+      FS::Write32(objects.size());
 
       for (int i = 0; i < objects.size(); ++i)
       {
@@ -80,12 +82,17 @@ namespace Ignition {
 
    void Scene::ReadSceneFromDisk()
    {
-      FS::BeginBinaryRead(FS::GetProjectHome() + "/" + name + ".scn");
-
-      int count = FS::Read16();
+      if (!FS::BeginBinaryRead(FS::GetProjectHome() + "/" + name + ".scn")) {
+         std::cerr << "can't open scene\n";
+         return;
+      }
+      uint32_t count = FS::Read32();
+      std::cout << count << "\n" << sizeof(int) << "\n";
 
       for (int i = 0; i < count; ++i)
       {
+         //std::cout << i << "\n";
+
          Object o;
 
          o.name = FS::ReadString();

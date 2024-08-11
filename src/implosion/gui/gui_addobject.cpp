@@ -71,5 +71,10 @@ namespace Implosion {
 
          }
       }
+      ImGui::Separator();
+      if (ImGui::MenuItem("Clear All Objects"))
+      {
+         Ignition::scene.GetObjects()->clear();
+      }
    }
 }
