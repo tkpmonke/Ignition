@@ -42,8 +42,6 @@ void WritePreferences()
    FS::WriteFloat(gui->camera->fov);
 
    FS::EndBinaryWrite();
-
-   std::cout << "-- PREFERENCES SAVED --\n";
 }
 
 void ReadPreferences(Implosion::GUI* guis)
