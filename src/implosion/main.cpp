@@ -5,6 +5,10 @@
 #include "serialization/saving.hpp"
 #include "scene.hpp"
 #include "project.hpp"
+#include "components/rendering/meshrenderer.hpp"
+#include "utils/unlit_shader.hpp"
+#include "shapes/cube.hpp"
+#include "textures/grid.hpp"
 
 #include <iostream>
 #include <string.h>
@@ -45,6 +49,17 @@ int main(int argc, char** argv)
 
    Implosion::GUI gui = Implosion::GUI(window, &camera);
    ReadPreferences(&gui);
+
+   Ignition::Object* obj = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
+   Ignition::Rendering::MeshRenderer mr = Ignition::Rendering::MeshRenderer(&camera);
+   Shader s = Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::Unlit);
+   s.albedo = Texture();
+   s.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest); 
+   s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "ignition_grid_texture");
+   mr.LoadShader(s);
+   mr.LoadModel(cube_model, "cube");
+
+   obj->AddModule(std::make_shared<Ignition::Rendering::MeshRenderer>(mr));
    
    gui.InitGrid();
    gui.Style(); 
@@ -76,6 +91,7 @@ int main(int argc, char** argv)
       gui.EndFrame();
       camera.EndRender();
    }
+   Ignition::scene.GetObjects()->clear();
    WritePreferences(); 
    Ignition::scene.WriteSceneToDisk();
    gui.Shutdown();
