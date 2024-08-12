@@ -1,0 +1,53 @@
+body {
+   background-color:black;
+   color: white;
+   font-family:monospace;
+   font-size:15px;
+   text-align:center;
+}
+
+img {
+   width:  150px;
+   height: 150px;
+}
+         
+#center {
+   display:flex;
+   justify-content:center;
+}
+
+#Logo {margin-right:10px;} 
+#Ignition-Text {       
+   font-size:25px;
+}
+
+.ignition-subtext {
+   font-size:15px;
+   margin-top:-100px;
+}
+         
+.logo-container {
+   display: grid;
+   grid-template-columns: auto 1fr;
+   align-items: center;
+}
+
+.content {
+   flex:1;
+}
+
+footer {
+   padding: 20px;
+   text-align: center;
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   font-size:15px;
+}
+
+a {
+   color:aqua;
+   text-decoration:none;
+}
+
+
