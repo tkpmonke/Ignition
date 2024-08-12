@@ -57,10 +57,13 @@ namespace Implosion {
             ImGui::BeginChild("Material");
             if (renderer != nullptr)
             {
-               Ignition::Vector4 color = renderer->shader.color;
-               if (ImGui::ColorEdit4("Color", glm::value_ptr(color)))
+               if (ImGui::CollapsingHeader("Mesh Renderer", ImGuiTreeNodeFlags_DefaultOpen))
                {
-                  renderer->shader.color = color;
+                  Ignition::Vector4 color = renderer->shader.color;
+                  if (ImGui::ColorEdit4("Color", glm::value_ptr(color)))
+                  {
+                     renderer->shader.color = color;
+                  }
                }
             }
             else
