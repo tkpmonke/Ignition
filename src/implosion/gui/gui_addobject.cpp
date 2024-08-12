@@ -1,5 +1,5 @@
 #include "gui/gui.hpp"
-#include "components/rendering/meshrenderer.hpp"
+#include "modules/rendering/meshrenderer.hpp"
 #include "types/shader.hpp"
 #include "utils/unlit_shader.hpp"
 #include "types/texture.hpp"

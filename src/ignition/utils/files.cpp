@@ -147,9 +147,9 @@ namespace FS {
       return o;
    }
 
-   bool CanRead()
+   bool CanRead(int amount)
    {
-      return read.size > 0;
+      return read.size > read.i+amount;
    }
 
    void Write8(uint8_t data)

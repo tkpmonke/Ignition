@@ -1,5 +1,5 @@
 #include "gui/gui.hpp"
-#include "components/rendering/meshrenderer.hpp"
+#include "modules/rendering/meshrenderer.hpp"
 
 #include "imgui_stdlib.h"
 

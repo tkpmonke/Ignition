@@ -5,7 +5,7 @@
 #include "serialization/saving.hpp"
 #include "scene.hpp"
 #include "project.hpp"
-#include "components/rendering/meshrenderer.hpp"
+#include "modules/rendering/meshrenderer.hpp"
 #include "utils/unlit_shader.hpp"
 #include "shapes/cube.hpp"
 #include "textures/grid.hpp"

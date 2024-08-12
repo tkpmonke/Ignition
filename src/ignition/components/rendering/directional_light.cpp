@@ -1,1 +1,1 @@
-#include "components/rendering/directional_light.hpp"
+#include "modules/rendering/directional_light.hpp"
