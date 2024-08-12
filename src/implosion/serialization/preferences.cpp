@@ -50,7 +50,7 @@ void ReadPreferences(Implosion::GUI* guis)
    if (!FS::BeginBinaryRead(FS::GetHome() + "/Implosion/preferences"))
       return;
    
-   if (!FS::CanRead())
+   if (!FS::CanRead(0))
       return;
    guis->vsync = FS::Read8();
    guis->anti = FS::Read8();

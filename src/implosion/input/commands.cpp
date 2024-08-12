@@ -29,7 +29,7 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
    }
 }
 
-void SetKeyCallback(GLFWwindow* w)
+void SetCommandCallback(GLFWwindow* w)
 {
    glfwSetKeyCallback(w, GLFWKeyCallback);
 }

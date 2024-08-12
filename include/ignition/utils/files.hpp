@@ -12,10 +12,7 @@ namespace FS {
    std::string GetProjectHome();
 
    std::string ReadTextFile(std::string path);
-   std::string ReadFileFromHome(std::string path);
-
-   void WriteFile(std::string path, std::string data);
-   void WriteFileFromHome(std::string path, std::string data);
+   void WriteTextFile(std::string path, std::string data);
 
    bool BeginBinaryRead(std::string path);
    void BeginBinaryWrite(std::string path);
@@ -26,7 +23,7 @@ namespace FS {
    float ReadFloat();
    std::string ReadString();
 
-   bool CanRead();
+   bool CanRead(int);
 
    void Write8(uint8_t data);
    void Write16(uint16_t data);

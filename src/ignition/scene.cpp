@@ -1,7 +1,7 @@
 #include "scene.hpp"
 #include "utils/files.hpp"
 
-#include "components/rendering/meshrenderer.hpp"
+#include "modules/rendering/meshrenderer.hpp"
 
 #include <iostream>
 

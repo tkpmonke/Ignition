@@ -1,5 +1,5 @@
 #include "camera.hpp"
-#include "components/rendering/meshrenderer.hpp"
+#include "modules/rendering/meshrenderer.hpp"
 
 namespace Ignition::MainCamera {
    Camera* camera;

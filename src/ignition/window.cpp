@@ -51,7 +51,7 @@ namespace Ignition {
       glEnable(GL_DEBUG_OUTPUT);
       glDebugMessageCallback(MessageCallback, 0);
 #endif
-      SetKeyCallback(this->window);
+      SetCommandCallback(this->window);
    }
 
    bool Window::IsOpen() { return !glfwWindowShouldClose(this->window); }

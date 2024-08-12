@@ -4,6 +4,7 @@ body {
    font-family:monospace;
    font-size:15px;
    text-align:center;
+   overflow:auto;
 }
 
 img {
@@ -36,7 +37,7 @@ img {
    flex:1;
 }
 
-footer {
+footer, footer {
    padding: 20px;
    text-align: center;
    position: fixed;

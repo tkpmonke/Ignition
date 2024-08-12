@@ -1,4 +1,4 @@
-#include "components/rendering/meshrenderer.hpp"
+#include "modules/rendering/meshrenderer.hpp"
 #include "GLFW/glfw3.h"
 
 #include "utils/files.hpp"
