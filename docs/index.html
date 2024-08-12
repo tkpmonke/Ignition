@@ -7,7 +7,8 @@
             background-color: black;
             color: white;
             font-family:monospace;
-            font-size:25px;
+            font-size:15px;
+            text-align:center;
          }
          img {
             width:  150px;
@@ -22,6 +23,7 @@
          #Logo {margin-right:10px;} 
          #Ignition-Text {
              
+            font-size:25px;
          }
 
          .ignition-subtext {
@@ -53,10 +55,26 @@
             text-decoration:none;
          }
 
+         .download {
+            color:aqua;
+            font-size: 25px;
+            background-color:black;
+            border-color: black;
+            border-width:0px;
+            margin-top: -30px;
+         }
+         .download:hover {
+            background-color:#333333;
+         }  
+
+         .download:focus {
+            background-color:#666666;
+         }
+
       </style>
    </head>
    <body>
-      <div class="content">
+      <div class=="content">
          <div id="center">
             <div class="logo-container">
                <img id="Logo" src=ignition-logo.png alt="logo">
@@ -64,8 +82,13 @@
                <p></p>
                <p class="ignition-subtext">A Powerful & Fast, FOSS Game Engine</p>
             </div>
+            
          </div>
-         <hr width=300px style="margin-top:-30px;"> 
+         <hr width=500px style="margin-top:-10px;"> 
+         <p>Ignition (+ Implosion Editor) was designed to be a fast and memory efficent game engine.</p>
+         <hr width=300px style="margin-top:0px;"> 
+         <p style="font-size:25px;">Download The Engine!</p>
+         <a href="https://github.com/tkpmonke/Ignition/releases" class="download">Download</a>
       </div>
       <footer>
          <p>Ignition Engine, 2024. </p>
