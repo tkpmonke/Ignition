@@ -46,7 +46,7 @@ namespace Ignition {
 
    void Scene::WriteSceneToDisk()
    {
-      FS::BeginBinaryWrite(FS::GetProjectHome() + "/" + name + ".scn"); 
+      FS::BeginBinaryWrite(FS::GetProjectHome() + "/" + name + ".igscn"); 
       FS::Write32(objects.size());
 
       for (int i = 0; i < objects.size(); ++i)
@@ -82,7 +82,7 @@ namespace Ignition {
 
    void Scene::ReadSceneFromDisk()
    {
-      if (!FS::BeginBinaryRead(FS::GetProjectHome() + "/" + name + ".scn")) {
+      if (!FS::BeginBinaryRead(FS::GetProjectHome() + "/" + name + ".igscn")) {
          std::cerr << "can't open scene\n";
          return;
       }
