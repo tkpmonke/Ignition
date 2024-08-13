@@ -9,6 +9,8 @@ requires the following
 - GLEW
 - GLFW
 - GLM
+- Assimp
+- stb_image.h (included)
 - IMGUI (included)
 
 run `premake5 gmake2 && make` for unix-like systems<br/><br/>

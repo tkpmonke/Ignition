@@ -1,5 +1,5 @@
 #include <types/model.hpp>
 
 namespace Ignition::ModelLoader {
-   Model LoadOBJ(std::string path);
+   std::vector<Model> LoadModel(std::string path);
 }

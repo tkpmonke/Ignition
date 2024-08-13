@@ -22,7 +22,7 @@ namespace Ignition::Rendering {
       MeshRenderer(Camera* camera) : camera(camera) {}      
       
       void LoadShader(Shader s) {this->shader = s; }
-      void LoadModel(Model m, std::string name); 
+      void LoadModel(Model m); 
       
       void Update() override;
 
