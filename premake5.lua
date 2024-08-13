@@ -11,7 +11,7 @@ project "implosion"
    files { "src/**.cpp", "include/**.hpp", "include/**.cpp", "include/**.h", "imgui/**.h", "imgui/**.cpp" }
    removefiles "hub/*"
    
-   links { "glfw", "GL", "GLEW", "m" }
+   links { "glfw", "GL", "GLEW", "m", "assimp" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }

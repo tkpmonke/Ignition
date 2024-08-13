@@ -1,13 +1,9 @@
 #include "modules/rendering/meshrenderer.hpp"
-#include "GLFW/glfw3.h"
-
 #include "utils/files.hpp"
-
 #include "shapes/cube.hpp"
 #include "shapes/square.hpp"
-
+#include "utils/model_loader.hpp"
 #include "utils/unlit_shader.hpp"
-
 #include "textures/grid.hpp"
 
 #include <iostream>
@@ -20,14 +16,14 @@ namespace Ignition::Rendering {
    int currentProgram = 999;
    int currentVao = 999;
 
-   void MeshRenderer::LoadModel(Model m, std::string name)
+   void MeshRenderer::LoadModel(Model m)
    {
 
       this->model = m;
       
       for (auto i : models)
       {
-         if (i.first == name)
+         if (i.first == model.path)
          {
             this->vao = i.second;
             return;
@@ -70,7 +66,7 @@ namespace Ignition::Rendering {
       glEnableVertexAttribArray(2);
 
 
-       models[name] = this->vao;
+       models[m.path] = this->vao;
    }
    
    void MeshRenderer::Update() {
@@ -133,11 +129,11 @@ namespace Ignition::Rendering {
    void MeshRenderer::Deserialize() {
       std::string modelName = FS::ReadString();
       if (modelName == "cube")
-         LoadModel(cube_model, modelName);
+         LoadModel(cube_model);
       else if (modelName == "square")
-         LoadModel(square_model, modelName);
+         LoadModel(square_model);
       else 
-         LoadModel(cube_model, modelName);
+         LoadModel(Ignition::ModelLoader::LoadModel(FS::GetProjectHome() + "/" + modelName)[0]);
 
       std::string shaderName = FS::ReadString();
       bool isLit = FS::Read8(); 

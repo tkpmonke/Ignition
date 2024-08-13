@@ -9,6 +9,7 @@
 #include "utils/unlit_shader.hpp"
 #include "shapes/cube.hpp"
 #include "textures/grid.hpp"
+#include "utils/model_loader.hpp"
 
 #include <iostream>
 #include <string.h>
@@ -45,11 +46,11 @@ int main(int argc, char** argv)
    camera.transform.position = Ignition::Vector3(-5,1,0);
    camera.MakeMainCamera();
    
-   Ignition::project = Ignition::Project(0);
 
    Implosion::GUI gui = Implosion::GUI(window, &camera);
    ReadPreferences(&gui);
-
+   Ignition::project = Ignition::Project(0);
+   /*
    Ignition::Object* obj = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
    Ignition::Rendering::MeshRenderer mr = Ignition::Rendering::MeshRenderer(&camera);
    Shader s = Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::Unlit);
@@ -57,10 +58,13 @@ int main(int argc, char** argv)
    s.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest); 
    s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "ignition_grid_texture");
    mr.LoadShader(s);
-   mr.LoadModel(cube_model, "cube");
+   std::cout << "hey\n";
+   auto models = Ignition::ModelLoader::LoadModel(FS::GetProjectHome() + "/thing.fbx");
+   mr.LoadModel(models[0]);
+   std::cout << "hey\n";
 
    obj->AddModule(std::make_shared<Ignition::Rendering::MeshRenderer>(mr));
-   
+   */   
    gui.InitGrid();
    gui.Style(); 
    while (window.IsOpen())
@@ -91,7 +95,6 @@ int main(int argc, char** argv)
       gui.EndFrame();
       camera.EndRender();
    }
-   Ignition::scene.GetObjects()->clear();
    WritePreferences(); 
    Ignition::scene.WriteSceneToDisk();
    gui.Shutdown();
