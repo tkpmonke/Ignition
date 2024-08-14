@@ -67,7 +67,6 @@ namespace FS {
    bool BeginBinaryRead(std::string path)
    {
       read.file = std::ifstream(path);
-      std::cout << path << "\n";
       
       if (!read.file.is_open())
          return false;
@@ -99,7 +98,6 @@ namespace FS {
    uint32_t Read32()
    {
       char a, b, c, d;
-      std::cout << read.i << " " << read.size << "\n";
       if (read.i + 4 > read.size)
       {
          std::cerr << "reading too far Read32\n";

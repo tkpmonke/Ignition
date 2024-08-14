@@ -48,7 +48,7 @@ namespace Implosion {
       bool anti = true;
       GLFWwindow* window;
       Ignition::Camera* camera;
-      uint gridVao, gridVbo, gridProgram, gridVertSize;
+      uint gridVao, gridVbo, gridProgram, gridVertSize, gridXYVao, gridXYVbo, gridXYProgram;
 
       GUI() = default;
    };

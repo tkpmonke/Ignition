@@ -87,7 +87,6 @@ namespace Ignition {
          return;
       }
       uint32_t count = FS::Read32();
-      std::cout << count << "\n" << sizeof(int) << "\n";
 
       for (int i = 0; i < count; ++i)
       {
