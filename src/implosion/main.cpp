@@ -47,7 +47,7 @@ int main(int argc, char** argv)
    camera.MakeMainCamera();
    
 
-   Implosion::GUI gui = Implosion::GUI(window, &camera);
+   Implosion::GUI gui = Implosion::GUI(&window, &camera);
    ReadPreferences(&gui);
    Ignition::project = Ignition::Project(0);
    /*
@@ -70,6 +70,7 @@ int main(int argc, char** argv)
    while (window.IsOpen())
    {
       window.Update();
+      window.Bind();
       camera.BeginRender();
        
       cameraMovement(&window, &camera);
@@ -77,6 +78,8 @@ int main(int argc, char** argv)
       gui.RenderGrid();
 
       Ignition::scene.Update();
+      
+
       gui.NewFrame();
       
       if (Ignition::scene.GetObjects()->size() > 0)
@@ -92,8 +95,13 @@ int main(int argc, char** argv)
 
       gui.MenuBar();
       //ImGui::ShowDemoWindow();
+      
+      gui.SceneView();
+      
+      camera.EndRender(true);
+      
       gui.EndFrame();
-      camera.EndRender();
+      camera.EndGUI();
    }
    WritePreferences(); 
    Ignition::scene.WriteSceneToDisk();

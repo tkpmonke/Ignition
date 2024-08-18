@@ -10,7 +10,7 @@
 namespace Implosion {
    class GUI {
    public:
-      GUI(GLFWwindow*, Ignition::Camera*);
+      GUI(Ignition::Window*, Ignition::Camera*);
       
       void NewFrame();
 
@@ -34,6 +34,8 @@ namespace Implosion {
 
       void Style();
 
+      void SceneView();
+
       void EndFrame();
 
       void Shutdown();
@@ -46,7 +48,8 @@ namespace Implosion {
       bool enableGrid = true, enableDistanceFalloff = true;
       bool vsync = true;
       bool anti = true;
-      GLFWwindow* window;
+      Ignition::Window* window;
+      int color;
       Ignition::Camera* camera;
       uint gridVao, gridVbo, gridProgram, gridVertSize, gridXYVao, gridXYVbo, gridXYProgram;
 
