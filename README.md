@@ -10,6 +10,8 @@ requires the following
 - GLFW
 - GLM
 - Assimp
+- 7z (for hub)
+- python (for hub)
 - stb_image.h (included)
 - IMGUI (included)
 
