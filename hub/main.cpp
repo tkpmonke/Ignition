@@ -508,7 +508,7 @@ int main()
 
                projectFile.close();
 
-               std::ofstream sceneFile(projectPath + "/Default.scn");
+               std::ofstream sceneFile(projectPath + "/Default.igscn");
 
                // 0 objects
                sceneFile << (char)0;
