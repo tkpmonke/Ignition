@@ -158,7 +158,7 @@ void Installer()
          ImGui::EndCombo();
       }
 
-      if (ImGui::Button("Download", ImVec2(625, 0)))
+      if (ImGui::Button("Download", ImVec2(625, 0)) && g != -1)
       {
          if (getuid()) 
          {

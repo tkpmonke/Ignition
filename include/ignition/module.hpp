@@ -5,7 +5,7 @@
 
 #include "types/transform.hpp"
 
-#define CREATE_MODULE(name) std::string type() const override { return name; }
+#define CREATE_MODULE(name) const std::string type() const override { return name; }
 namespace Ignition {
    class Module {
    public:
@@ -15,7 +15,7 @@ namespace Ignition {
       virtual void Serialize() {};
       virtual void Deserialize() {};
 
-      virtual std::string type() const = 0; 
+      virtual const std::string type() const = 0; 
 
       bool enabled;
       Transform* transform;

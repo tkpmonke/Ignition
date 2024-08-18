@@ -18,13 +18,17 @@ namespace Ignition {
 
       void BeginRender();
 
-      void EndRender();
+      void EndRender(bool);
+
+      void EndGUI();
 
       Camera() = default;
       Camera(Window* window) { this->window = window; } 
       Matrix4 viewProj;
-   private:
+
       Window* window;
+
+      Vector2 size;
    };
 
 }

@@ -1,9 +1,11 @@
 #include "gui/gui.hpp"
 #include "utils/files.hpp"
 
+#include <iostream>
+
 namespace Implosion {
    std::string s = FS::GetHome() + "/Implosion/gui";
-   GUI::GUI(GLFWwindow* window, Ignition::Camera* camera)
+   GUI::GUI(Ignition::Window* window, Ignition::Camera* camera)
    {
       IMGUI_CHECKVERSION();
       ImGui::CreateContext();
@@ -15,8 +17,9 @@ namespace Implosion {
 
       this->window = window;
       this->camera = camera;
+      color = window->color;
 
-      ImGui_ImplGlfw_InitForOpenGL(this->window, true);
+      ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)*this->window, true);
       ImGui_ImplOpenGL3_Init("#version 330");
    }
 
@@ -33,6 +36,23 @@ namespace Implosion {
    {
       ImGui::Render();
       ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+   }
+
+   void GUI::SceneView() {
+      if (ImGui::Begin("Scene")) {
+         ImVec2 size = ImGui::GetWindowSize();
+
+         
+         
+         ImGui::Image((void*)(intptr_t)this->color, size, ImVec2(0,0), ImVec2(1, -1));
+         camera->size.x = size.x;
+         camera->size.y = size.y;
+
+         window->Resize(size.x, size.y);
+         
+
+         ImGui::End();
+      }
    }
 
    void GUI::Shutdown()

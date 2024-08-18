@@ -20,7 +20,7 @@ namespace Ignition::Rendering {
             return;
          }
       }
-
+      
 
       const char* vShaderCode = vert.c_str();
       const char* fShaderCode = frag.c_str();
@@ -63,11 +63,49 @@ namespace Ignition::Rendering {
          std::cout << "error in shader \n" << infoLog << std::endl;
       }
 
-       
+      
       glDeleteShader(vertex);
       glDeleteShader(fragment);
 
       shaders[vert+frag] = this->program;
+   }
+
+   Shader::Shader(std::string data, ShaderType type)
+   {
+      this->type = type;
+      for (auto i : shaders)
+      {
+         if (vert+frag == i.first)
+         {
+            this->program = i.second;
+            return;
+         }
+      }
+      
+      const char* shaderCode = data.c_str();
+      int success;
+      char infoLog[512];
+      uint shader;
+
+      assert(type == ShaderType::Compute);
+      // should always be true
+      if (type == ShaderType::Compute)
+      {
+         shader = glCreateShader(GL_COMPUTE_SHADER);
+         glShaderSource(shader, 1, &shaderCode, NULL);
+         glCompileShader(shader);
+         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+         if(!success)
+         {
+            glGetShaderInfoLog(shader, 512, NULL, infoLog);
+            std::cout << "ERROR::SHADER::COMPUTE::COMPILATION_FAILED\n" << infoLog << "\n";
+         }
+
+         this->program = glCreateProgram();
+         glAttachShader(this->program, shader);
+         glLinkProgram(this->program);
+
+      }
    }
 
    void Shader::SetFloat(float v, std::string name)
