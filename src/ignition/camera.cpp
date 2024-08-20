@@ -43,7 +43,11 @@ namespace Ignition {
       glDisable(GL_DEPTH_TEST);
       glClear(GL_COLOR_BUFFER_BIT);
       if (!gui) {
-         
+        
+         //int w,h;
+         //glfwGetFramebufferSize((GLFWwindow*)*window, &w,&h);
+         //window->Resize(w,h);
+
          glUseProgram(window->s.program);
          glBindTexture(GL_TEXTURE_2D, window->color);
          glBindVertexArray(window->vao);

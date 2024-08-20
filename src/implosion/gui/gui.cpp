@@ -32,15 +32,23 @@ namespace Implosion {
       ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
    }
 
+   ImVec2 size;
+   
    void GUI::EndFrame()
    {
       ImGui::Render();
       ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+      glBindFramebuffer(GL_FRAMEBUFFER, window->framebuffer);
+      window->Resize(size.x, size.y);
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
    }
-
+   
    void GUI::SceneView() {
-      if (ImGui::Begin("Scene")) {
-         ImVec2 size = ImGui::GetWindowSize();
+      ImGuiWindowFlags flags =   ImGuiWindowFlags_NoScrollbar |
+                                 ImGuiWindowFlags_NoScrollWithMouse;
+
+      if (ImGui::Begin("Scene",nullptr,flags)) {
+         size = ImGui::GetWindowSize();
 
          
          
@@ -48,11 +56,10 @@ namespace Implosion {
          camera->size.x = size.x;
          camera->size.y = size.y;
 
-         window->Resize(size.x, size.y);
          
 
-         ImGui::End();
       }
+      ImGui::End();
    }
 
    void GUI::Shutdown()
