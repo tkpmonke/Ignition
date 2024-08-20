@@ -11,12 +11,15 @@ using namespace Ignition::Rendering;
 const char* gridVertexShader = 
 "#version 330\n"
 "layout (location = 0) in vec2 pos;"
+"layout (location = 1) in float alphaMul;"
 "uniform float height;"
 "uniform mat4 proj;"
 "out vec3 opos;"
+"out float alpha;"
 "void main() {"
 "  gl_Position = proj * vec4(pos.x, height, pos.y, 1);"
 "  opos = vec3(pos.x, 0, pos.y);"
+"  alpha = alphaMul;"
 "}";
 
 const char* gridFragmentShader =
@@ -28,6 +31,7 @@ const char* gridFragmentShader =
 "uniform int enableDistanceFalloff;"
 "out vec4 o;"
 "in vec3 opos;"
+"in float alpha;"
 "float expo(float dis, float k, float b) {"
 "  return pow(pow(b,k),dis-1);"
 "}"
@@ -38,7 +42,7 @@ const char* gridFragmentShader =
 "  }"
 "  if (a <= -0.5f)"
 "     discard;"
-"  o = vec4(color.rgb, a);"
+"  o = vec4(color.rgb, a*alpha);"
 "}";
 
 const char* gridXYVertexShader = 
@@ -85,18 +89,27 @@ namespace Implosion {
       this->gridProgram = s.program;
       int gridCount = static_cast<int>(this->gridSize / this->gridSpacing );
       std::vector<float> vertices;
+      float a;
       for (int i = -gridCount; i <= gridCount; ++i)
       {
          if (i != 0) {
+            
+            a = i % 5  == 0 ? 0.75f : 0.5f;
+            a = i % 10 == 0 ? 1 : a;
+
             vertices.push_back(i * this->gridSpacing );
             vertices.push_back(this->gridSize ); 
+            vertices.push_back(a); 
             vertices.push_back(i * this->gridSpacing );
             vertices.push_back(-this->gridSize ); 
+            vertices.push_back(a); 
 
             vertices.push_back(-this->gridSize ); 
             vertices.push_back(i * this->gridSpacing );
+            vertices.push_back(a); 
             vertices.push_back(this->gridSize ); 
             vertices.push_back(i * this->gridSpacing );
+            vertices.push_back(a); 
          }
          
       }
@@ -108,8 +121,10 @@ namespace Implosion {
       glBindBuffer(GL_ARRAY_BUFFER, this->gridVbo);
       glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
-      glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+      glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
       glEnableVertexAttribArray(0);
+      glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(2*sizeof(float)));
+      glEnableVertexAttribArray(1);
 
       this->gridVertSize = vertices.size();
 

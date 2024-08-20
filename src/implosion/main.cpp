@@ -10,6 +10,8 @@
 #include "shapes/cube.hpp"
 #include "textures/grid.hpp"
 #include "utils/model_loader.hpp"
+#include "utils/postprocess.hpp"
+#include "utils/postprocessing_shaders.hpp"
 
 #include <iostream>
 #include <string.h>
@@ -67,6 +69,9 @@ int main(int argc, char** argv)
    */   
    gui.InitGrid();
    gui.Style(); 
+
+   PostProcess pp = PostProcess(pp_vignette, &window);
+
    while (window.IsOpen())
    {
       window.Update();
@@ -97,7 +102,8 @@ int main(int argc, char** argv)
       //ImGui::ShowDemoWindow();
       
       gui.SceneView();
-      
+
+      pp.Render();
       camera.EndRender(true);
       
       gui.EndFrame();

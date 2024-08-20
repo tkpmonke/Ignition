@@ -2,11 +2,13 @@
 #include "window.hpp"
 
 namespace Ignition::Rendering {
-   class PostProcess : public Shader {
+   class PostProcess {
    public:
-      PostProcess(std::string data, Window* window);
+      PostProcess(std::string data, Window* window) : window(window), shader(data, ShaderType::Compute) {}
+      void Render();
       PostProcess() = default;
    private:
       Window* window;
+      Shader shader;
    };
 }

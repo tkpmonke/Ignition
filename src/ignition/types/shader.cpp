@@ -105,6 +105,8 @@ namespace Ignition::Rendering {
          glAttachShader(this->program, shader);
          glLinkProgram(this->program);
 
+         glDeleteShader(shader);
+
       }
    }
 
