@@ -70,7 +70,7 @@ int main(int argc, char** argv)
    gui.InitGrid();
    gui.Style(); 
 
-   PostProcess pp = PostProcess(pp_vignette, &window);
+   pp_manager = PPManager(&window);
 
    while (window.IsOpen())
    {
@@ -86,6 +86,8 @@ int main(int argc, char** argv)
       
 
       gui.NewFrame();
+
+      
       
       if (Ignition::scene.GetObjects()->size() > 0)
       {
@@ -103,7 +105,8 @@ int main(int argc, char** argv)
       
       gui.SceneView();
 
-      pp.Render();
+      gui.PostProcessManagerUI();
+
       camera.EndRender(true);
       
       gui.EndFrame();

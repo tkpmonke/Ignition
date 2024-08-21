@@ -7,6 +7,8 @@
 #include "object.hpp"
 #include "camera.hpp"
 
+#include "utils/postprocessingmanager.hpp"
+
 namespace Implosion {
    class GUI {
    public:
@@ -35,6 +37,8 @@ namespace Implosion {
       void Style();
 
       void SceneView();
+
+      void PostProcessManagerUI();
 
       void EndFrame();
 
