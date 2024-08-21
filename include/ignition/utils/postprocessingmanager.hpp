@@ -5,18 +5,22 @@
 
 namespace Ignition::Rendering {
    class PPManager {
+   public:
       struct PPEffect {
          std::string name;
-         std::string data;
+         bool enabled;
          PostProcess pp;
       };
 
-      std::vector<int> active_effects;
-      std::vector<PPEffect> all_effects;
+      std::vector<PPEffect> effects;
+      std::vector<int>      index;
 
+      PPManager(Window*);
       PPManager() = default;
+      void RenderEffects();
 
-      void RenderEffects(Window*);
+   private:
+      Window* window;
    };
 
    extern PPManager pp_manager;
