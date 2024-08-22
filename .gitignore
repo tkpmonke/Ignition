@@ -1,11 +1,7 @@
 obj/*
-bin/implosion
 video/*
 .cache/*
 *.make
 Makefile
 compile_commands.json
-bin/*.py
-bin/implosion-hub
-bin/imgui.ini
-bin/imgui.ini
+bin/*

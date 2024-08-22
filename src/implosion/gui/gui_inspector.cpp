@@ -64,6 +64,8 @@ namespace Implosion {
                   {
                      renderer->shader.color = color;
                   }
+
+                  ImGui::DragFloat("Intensity", &renderer->shader.intensity);
                }
             }
             else

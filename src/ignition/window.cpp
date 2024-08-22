@@ -1,6 +1,5 @@
 #include "window.hpp"
 #include "stdio.h"
-#include "input/commands.hpp"
 
 #include <iostream>
 
@@ -96,7 +95,6 @@ namespace Ignition {
       glEnable(GL_DEBUG_OUTPUT);
       glDebugMessageCallback(MessageCallback, 0);
 #endif
-      SetCommandCallback(this->window);
 
       s = Rendering::Shader(quadVertex, quadFragment, Rendering::ShaderType::Unlit);
 
