@@ -1,4 +1,4 @@
-#include "cube.hpp"
+#include "shapes/cube.hpp"
 
 const Ignition::Model cube_model {
    .indices = {0,  3,  2,

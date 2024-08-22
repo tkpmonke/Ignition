@@ -7,6 +7,10 @@ namespace Ignition::Rendering {
    PPManager::PPManager(Window* window) : window(window) {
       effects.push_back({"Invert", false, PostProcess(pp_invert, this->window)});
       effects.push_back({"Vignette", false, PostProcess(pp_vignette, this->window)});
+      effects.push_back({"Tonemap", false, PostProcess(pp_tonemap, this->window)});
+      PostProcess bloom = PostProcess(pp_bloom, this->window, 2);
+      bloom.MakeExtraTexture();
+      effects.push_back({"Bloom", false, bloom});
 
       for (int i = 0; i < effects.size(); ++i)
       {

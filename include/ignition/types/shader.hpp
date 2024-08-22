@@ -29,6 +29,7 @@ namespace Ignition::Rendering {
       Texture albedo;
       Texture diffuse;
       float shininess;
+      float intensity = 1.f;
       Vector3 specular;
 
       void SetFloat(float v, std::string name);

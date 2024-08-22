@@ -1,4 +1,4 @@
-#include "square.hpp"
+#include "shapes/square.hpp"
 
 const Ignition::Model square_model {
    .indices = {0,1,3,
