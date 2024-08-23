@@ -58,5 +58,11 @@ namespace Implosion {
       uint gridVao, gridVbo, gridProgram, gridVertSize, gridXYVao, gridXYVbo, gridXYProgram;
 
       GUI() = default;
+
+#ifdef __linux__
+      uint coreCount = 0;
+      float cpuSpeed = 0;
+      std::string cpuModel = "";
+#endif 
    };
 }
