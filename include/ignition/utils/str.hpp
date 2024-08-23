@@ -13,4 +13,5 @@ namespace STR {
       return o;
    }
    static std::string tail(std::string* s, char c) { return s->substr(s->find(c),s->size()); }
+   static std::string front(std::string* s, char c) { return s->substr(0,s->find(c)); }
 }
