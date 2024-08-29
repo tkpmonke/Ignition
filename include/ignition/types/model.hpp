@@ -9,6 +9,6 @@ namespace Ignition {
       std::vector<int> indices;
       std::vector<float> vertices, normals, uv;
 
-      std::string path;
+      std::string path, name;
    };
 }

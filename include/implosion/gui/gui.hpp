@@ -7,6 +7,8 @@
 #include "object.hpp"
 #include "camera.hpp"
 
+#include <optional>
+
 #include "utils/postprocessingmanager.hpp"
 
 namespace Implosion {
@@ -16,7 +18,7 @@ namespace Implosion {
       
       void NewFrame();
 
-      void Inspector(Ignition::Object*);
+      void Inspector();
       
       void InitGrid();
       void RenderGrid();
@@ -24,7 +26,7 @@ namespace Implosion {
 
       void FileExplorer();
 
-      void SceneGraph();
+      void SceneHierarchy();
 
       void MenuBar();
 
@@ -37,6 +39,8 @@ namespace Implosion {
       void Style();
 
       void SceneView();
+
+      void RayCastMouse();
 
       void PostProcessManagerUI();
 
@@ -56,6 +60,8 @@ namespace Implosion {
       int color;
       Ignition::Camera* camera;
       uint gridVao, gridVbo, gridProgram, gridVertSize, gridXYVao, gridXYVbo, gridXYProgram;
+      Ignition::Object* selectedObject = nullptr;
+      std::optional<Ignition::Object> copiedObject;
 
       GUI() = default;
 

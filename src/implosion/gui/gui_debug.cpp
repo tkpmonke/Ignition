@@ -78,14 +78,15 @@ namespace Implosion {
             std::string line;
             while (std::getline(cpu, line))
             {
-               if (line.find("model name") != std::string::npos)
-                  this->cpuModel = STR::tail(&line,':');
+               if (line.find("model name") != std::string::npos) {
+                  std::string s = STR::tail(&line,':');
+                  this->cpuModel = s.substr(2,s.size());
+               }
                if (line.find("processor") != std::string::npos)
                   this->coreCount++;
                if (line.find("cpu MHz") != std::string::npos) {
                   std::string s = STR::tail(&line,':');
                   this->cpuSpeed += std::stof(s.substr(1,s.size()));
-                  
                }
             }
 

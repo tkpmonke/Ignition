@@ -4,7 +4,9 @@
 #include "utils/str.hpp"
 
 #include <fstream>
+#include <string>
 #include <iostream>
+#include <string.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -27,6 +29,11 @@ std::vector<Model> LoadModel(std::string path) {
     for (unsigned int i = 0; i < scene->mNumMeshes; ++i) {
       Model m;
       const aiMesh *mesh = scene->mMeshes[i];
+
+      m.vertices.clear();
+      m.uv.clear();
+      m.normals.clear();
+      m.indices.clear();
 
       for (unsigned int v = 0; v < mesh->mNumVertices; ++v) {
         m.vertices.push_back(mesh->mVertices[v].x);
@@ -61,6 +68,7 @@ std::vector<Model> LoadModel(std::string path) {
          }
       }
       m.path = path.substr(FS::GetProjectHome().size(), path.size());
+      m.name = mesh->mName.C_Str() + i == 0 ? "" : std::to_string(i);
       o.push_back(m);
     }
   }

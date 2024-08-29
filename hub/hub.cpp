@@ -518,9 +518,9 @@ int main()
                projects.open(GetHome() + "/Implosion-hub/projects", std::ios::app);
 
                projects << projectPath + ":" + n + "\n";
-
-               GetProjects();
+               projects.close();
                createProject = false;
+               GetProjects();
             }
             ImGui::End(); 
          }

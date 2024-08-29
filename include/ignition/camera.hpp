@@ -16,6 +16,9 @@ namespace Ignition {
 
       Matrix4 view_projection();
 
+      Matrix4 ViewMatrix();
+      Matrix4 ProjectionMatrix();
+
       void BeginRender();
 
       void EndRender(bool);

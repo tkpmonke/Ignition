@@ -18,6 +18,7 @@ namespace Ignition {
    public:
       std::string name;
       std::string tag;
+      unsigned int id;
       bool enabled = true;
 
       Transform transform;
