@@ -5,13 +5,9 @@
 #include "serialization/saving.hpp"
 #include "scene.hpp"
 #include "project.hpp"
-#include "modules/rendering/meshrenderer.hpp"
-#include "utils/unlit_shader.hpp"
-#include "shapes/cube.hpp"
-#include "textures/grid.hpp"
 #include "utils/model_loader.hpp"
-#include "utils/postprocess.hpp"
 #include "utils/postprocessing_shaders.hpp"
+#include "input/commands.hpp"
 
 #include <iostream>
 #include <string.h>
@@ -54,10 +50,11 @@ int main(int argc, char** argv)
    Ignition::project = Ignition::Project(0);
 
    gui.InitGrid();
-   gui.Style(); 
 
    pp_manager = PPManager(&window);
 
+  SetCommandCallback(window, &gui);
+      
    while (window.IsOpen())
    {
       window.Update();
@@ -71,13 +68,10 @@ int main(int argc, char** argv)
       Ignition::scene.Update();
       
       gui.NewFrame();
-      
-      if (Ignition::scene.GetObjects()->size() > 0)
-      {
-         gui.Inspector(&Ignition::scene.GetObjects()->at(0));
-      } else {
-         gui.Inspector(nullptr);
-      }
+
+      gui.Inspector();
+
+      gui.SceneHierarchy();
 
       gui.DebugMenu();
 

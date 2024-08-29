@@ -30,6 +30,7 @@ namespace Implosion {
          if (ImGui::MenuItem("Empty"))
          {
             Ignition::scene.CreateObject();
+            this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
          }
          if (ImGui::MenuItem("Square"))
          {
@@ -39,6 +40,7 @@ namespace Implosion {
             m.LoadShader(s);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
             Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
+            this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
          }
          if (ImGui::MenuItem("Cube"))
          {
@@ -48,12 +50,14 @@ namespace Implosion {
             m.LoadShader(s);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
             Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
+            this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
          }
          ImGui::EndMenu();
       }
       ImGui::Separator();
       if (ImGui::MenuItem("Clear All Objects"))
       {
+         this->selectedObject = nullptr;
          Ignition::scene.GetObjects()->clear();
       }
 #ifdef DEBUG

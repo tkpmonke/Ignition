@@ -13,7 +13,6 @@ namespace Ignition {
 
    Matrix4 Camera::view_projection() 
    {
-      this->transform.UpdateVectors();
 
       Matrix4 view = glm::lookAt(this->transform.position, this->transform.position + this->transform.forward, this->transform.up);
 
@@ -26,17 +25,35 @@ namespace Ignition {
 
       return projection * view;
    }
+   Matrix4 Camera::ViewMatrix() 
+   {
+      Matrix4 view = glm::lookAt(this->transform.position, this->transform.position + this->transform.forward, this->transform.up);
+      return view;
+   }
+
+   Matrix4 Camera::ProjectionMatrix() 
+   {
+      if (size == Vector2(0))
+      {
+
+         glfwGetWindowSize((GLFWwindow*)*this->window, (int*)&size.x, (int*)&size.y);
+      }
+      Matrix4 projection = glm::perspective(glm::radians(this->fov), (float)size.x/(float)size.y, this->clipping_planes.min, this->clipping_planes.max);
+
+      return projection;
+   }
 
    void Camera::BeginRender()
    {
+      this->transform.UpdateVectors();
       glEnable(GL_DEPTH_TEST);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    }
 
    void Camera::EndRender(bool gui)
    {
-      Rendering::currentProgram = 9999;
-      Rendering::currentVao = 9999;
+      Rendering::currentProgram = std::numeric_limits<int>::max();
+      Rendering::currentVao = std::numeric_limits<int>::max();
       viewProj = Matrix4(0);
 
       glBindFramebuffer(GL_FRAMEBUFFER, 0);

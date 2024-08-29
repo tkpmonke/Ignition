@@ -23,7 +23,11 @@ void cameraMovement(Ignition::Window* window, Ignition::Camera* camera)
    px = x;
    py = y;
 
+   if (glfwRawMouseMotionSupported())
+    glfwSetInputMode((GLFWwindow*)*window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
    if (glfwGetMouseButton((GLFWwindow*)*window, GLFW_MOUSE_BUTTON_RIGHT)) {
+      //glfwSetInputMode((GLFWwindow*)*window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
       glfwSetInputMode((GLFWwindow*)*window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
       camera->transform.rotation.z += offx * sensitivity;
       camera->transform.rotation.y += offy * sensitivity;

@@ -23,7 +23,7 @@ namespace Ignition::Rendering {
       
       for (auto i : models)
       {
-         if (i.first == model.path)
+         if (i.first == model.name)
          {
             this->vao = i.second;
             return;
@@ -66,7 +66,7 @@ namespace Ignition::Rendering {
       glEnableVertexAttribArray(2);
 
 
-       models[m.path] = this->vao;
+       models[m.name] = this->vao;
    }
    
    void MeshRenderer::Update() {

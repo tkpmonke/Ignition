@@ -33,6 +33,7 @@ namespace Ignition {
    void Scene::AddObject(Object object)
    {
       objects.push_back(object);
+      objects[objects.size()-1].id = objects.size()-1;
    }
 
    int Scene::CreateObject() 

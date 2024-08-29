@@ -9,13 +9,17 @@
 #include <iostream>
 
 namespace Implosion {
-   void GUI::Inspector(Ignition::Object* obj)
+   void GUI::Inspector()
    {
+      Ignition::Object* obj = selectedObject;
+
       if (ImGui::Begin("Inspector")) {
          if (obj == nullptr)
          {
             ImGui::Text("Select Something to Use This");
          } else {
+            
+            Ignition::Rendering::MeshRenderer* renderer = (Ignition::Rendering::MeshRenderer*)obj->GetModule("Mesh Renderer"); 
             ImGui::Checkbox("##Enabled", &obj->enabled);
             
             ImGui::SameLine();
@@ -53,7 +57,6 @@ namespace Implosion {
             }
             ImGui::EndChild();
             ImGui::Separator();
-            Ignition::Rendering::MeshRenderer* renderer = (Ignition::Rendering::MeshRenderer*)obj->GetModule("Mesh Renderer"); 
             ImGui::BeginChild("Material");
             if (renderer != nullptr)
             {
@@ -73,8 +76,21 @@ namespace Implosion {
                std::cout << "Object Has No Renderer\n";
             }
             ImGui::EndChild();
+            if (renderer != nullptr)
+            {
+               glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+               glLineWidth(5);
+               Ignition::Vector4 col = renderer->shader.color;
+               renderer->shader.color = {1,1,1,0.75f};
+               renderer->Update();
+               renderer->shader.color = col;
+               glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
          }
+         
       }
+         
+        
 
       ImGui::End();
    }

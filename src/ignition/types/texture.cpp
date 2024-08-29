@@ -10,12 +10,12 @@ std::unordered_map<std::string, int> textures;
 
 int i = 0;
 namespace Ignition::Rendering {
-   void Texture::LoadData(std::string file, std::string name)
+   void Texture::LoadData(std::string file)
    {
-      this->name = name;
+      this->name = file;
       for (auto [key, value] : textures)
       {
-         if (name == key)
+         if (file == key)
          {
             this->location = value;
             return;
@@ -74,7 +74,7 @@ namespace Ignition::Rendering {
          glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, d);
          glGenerateMipmap(GL_TEXTURE_2D);
 
-         textures[name] = this->location;
+         textures[file] = this->location;
       }
       else
       {
