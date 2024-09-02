@@ -7,21 +7,19 @@
 
 void getRayFromMouse(float mouseX, float mouseY, int windowWidth, int windowHeight, 
                           const glm::mat4& projectionMatrix, const Ignition::Matrix4& viewMatrix,
-                     Ignition::Vector3* rayWorld, Ignition::Vector3* rayDir) {
-   glm::vec2 ndc;
-    ndc.x = (2.0f * mouseX) / windowWidth - 1.0f;
-    ndc.y = 1.0f - (2.0f * mouseY) / windowHeight;
+                     Ignition::Vector4* rayWorld, Ignition::Vector3* rayDir) {
+   float x = (2.0f * mouseX) / windowWidth - 1.0f;
+    float y = 1.0f - (2.0f * mouseY) / windowHeight;
+    glm::vec4 rayNDC(x, y, -1.0f, 1.0f);
 
-    // Convert NDC to clip space (z=1 for the ray direction)
-    glm::vec4 rayNdc(ndc.x, ndc.y, 1.0f, 1.0f);
+    // Convert to eye space
+    glm::vec4 rayEye = glm::inverse(projectionMatrix) * rayNDC;
+    rayEye = glm::vec4(rayEye.x, rayEye.y, -1.0f, 0.0f);
 
-    // Convert clip space to eye space (inverse projection matrix)
-    glm::vec4 rayEye = glm::inverse(projectionMatrix) * rayNdc;
-    rayEye.z = -1.0f; // The direction of the ray
-    rayEye.w = 0.0f;  // We are working with direction, not position
+    // Convert to world space
+    *rayWorld = glm::inverse(viewMatrix) * rayEye;
+    *rayDir = glm::normalize(glm::vec3(*rayWorld));
 
-    // Convert eye space to world space (inverse view matrix)
-    *rayDir = glm::normalize(glm::vec3(glm::inverse(viewMatrix) * rayEye));
 }
 
 bool CheckRayCubeIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDirection,
@@ -61,16 +59,24 @@ bool CheckRayMeshIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDi
    Ignition::Vector3 cubeMax = Ignition::Vector3(std::numeric_limits<float>::min()),
                      cubeMin = Ignition::Vector3(std::numeric_limits<float>::max());
 
-   for (const float& f : model->model.vertices) {
+   Ignition::Matrix4 modelMatrix = glm::mat4_cast(glm::quat(glm::radians(model->transform->rotation)));
+   for (int i = 0; i < model->model.vertices.size(); i+=3) {
+      Ignition::Vector3 f = { model->model.vertices[i],
+                              model->model.vertices[i+1],
+                              model->model.vertices[i+2]};
+      //f = f * glm::mat3(modelMatrix);
+
       cubeMin = glm::min(cubeMin, f); 
       cubeMax = glm::max(cubeMax, f); 
    }
 
    cubeMin += model->transform->position; 
    cubeMax += model->transform->position; 
+   cubeMin *= model->transform->scale; 
+   cubeMax *= model->transform->scale; 
 
-   printf("MIN : X=%f Y=%f Z=%f\n", cubeMin.x, cubeMin.y, cubeMin.z); 
-   printf("MAX : X=%f Y=%f Z=%f\n\n", cubeMax.x, cubeMax.y, cubeMax.z); 
+   //printf("MIN : X=%f Y=%f Z=%f\n", cubeMin.x, cubeMin.y, cubeMin.z); 
+   //printf("MAX : X=%f Y=%f Z=%f\n\n", cubeMax.x, cubeMax.y, cubeMax.z); 
 
    return CheckRayCubeIntersection(rayOrigin, rayDirection, cubeMin, cubeMax);
 }
@@ -78,26 +84,26 @@ bool CheckRayMeshIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDi
 
 namespace Implosion {
    void GUI::RayCastMouse() {
-      std::cout << "CLICKED\n";
-      int w,h;
       double x,y;
 
-      glfwGetWindowSize((GLFWwindow*)*this->window, &w,&h);
       glfwGetCursorPos((GLFWwindow*)*window, &x, &y);
+      ImVec2 pos = ImGui::GetWindowPos();
+      x -= pos.x;
+      y -= pos.y;
 
-      std::cout << x << "\n\n"; 
-
-      glm::vec3 rayOrigin, rayDirection;
+      glm::vec4 rayOrigin;
+      glm::vec3 rayDirection;
       getRayFromMouse(x, y, camera->size.x, camera->size.y, this->camera->ProjectionMatrix(), this->camera->ViewMatrix(), 
             &rayOrigin, &rayDirection);
 
-      rayOrigin = this->camera->transform.position;
+      //rayOrigin = this->camera->transform.position;
     
-      printf("ORG : X=%f Y=%f Z=%f\n", rayOrigin.x, rayOrigin.y, rayOrigin.z); 
-      printf("DIR : X=%f Y=%f Z=%f\n\n", rayDirection.x, rayDirection.y, rayDirection.z); 
+      //printf("ORG : X=%f Y=%f Z=%f\n", rayOrigin.x, rayOrigin.y, rayOrigin.z); 
+      //printf("DIR : X=%f Y=%f Z=%f\n\n", rayDirection.x, rayDirection.y, rayDirection.z); 
       
       float distance;
       glm::vec3 intersectionPoint;
+      bool b = false;
 
       for (auto& obj : *Ignition::scene.GetObjects())
       {
@@ -108,8 +114,12 @@ namespace Implosion {
 
          if (CheckRayMeshIntersection(this->camera->transform.position, rayDirection,
                   mr)) {
-            std::cout << "Intersection detected at distance: " << distance << std::endl;
+            b = true;
+            this->selectedObject = &obj;
          }
       }
+
+      if (b == false)
+         this->selectedObject = nullptr;
    }
 }

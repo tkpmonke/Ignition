@@ -206,17 +206,29 @@ namespace Implosion {
    {
       int gridCount = static_cast<int>(this->gridSize / this->gridSpacing );
       std::vector<float> vertices;
+      float a;
       for (int i = -gridCount; i <= gridCount; ++i)
       {
-         vertices.push_back(i * this->gridSpacing + 0.5f);
-         vertices.push_back(this->gridSize + 0.5f); 
-         vertices.push_back(i * this->gridSpacing + 0.5f);
-         vertices.push_back(-this->gridSize + 0.5f); 
+         if (i != 0) {
+            
+            a = i % 5  == 0 ? 0.75f : 0.5f;
+            a = i % 10 == 0 ? 1 : a;
 
-         vertices.push_back(-this->gridSize + 0.5f); 
-         vertices.push_back(i * this->gridSpacing + 0.5f);
-         vertices.push_back(this->gridSize + 0.5f); 
-         vertices.push_back(i * this->gridSpacing + 0.5f);
+            vertices.push_back(i * this->gridSpacing );
+            vertices.push_back(this->gridSize ); 
+            vertices.push_back(a); 
+            vertices.push_back(i * this->gridSpacing );
+            vertices.push_back(-this->gridSize ); 
+            vertices.push_back(a); 
+
+            vertices.push_back(-this->gridSize ); 
+            vertices.push_back(i * this->gridSpacing );
+            vertices.push_back(a); 
+            vertices.push_back(this->gridSize ); 
+            vertices.push_back(i * this->gridSpacing );
+            vertices.push_back(a); 
+         }
+         
       }
       glBindBuffer(GL_ARRAY_BUFFER, this->gridVbo);
       glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);

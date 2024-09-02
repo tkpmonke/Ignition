@@ -58,8 +58,8 @@ namespace Implosion {
          if (ImGui::IsWindowHovered()) {
             bool b = glfwGetMouseButton((GLFWwindow*)*this->window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
             
-            //if (b != click && b == true)
-            if (true)
+            if (b != click && b == true)
+            //if (true)
                this->RayCastMouse();
             click = b;
          }
