@@ -96,6 +96,8 @@ int main(int argc, char** argv)
       
       gui.SceneView();
 
+      gui.RenderPopups();
+
       gui.PostProcessManagerUI();
 
       camera.EndRender(true);

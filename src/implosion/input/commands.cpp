@@ -41,6 +41,18 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
       Ignition::scene.GetObjects()->erase(Ignition::scene.GetObjects()->begin() + g->selectedObject->id);
       g->selectedObject = nullptr;
    }
+
+   if ((key == GLFW_KEY_L
+         && mods == GLFW_MOD_CONTROL)
+         && action == GLFW_PRESS)
+      g->InitAssetLoader();
+
+   if ((key == GLFW_KEY_G
+         && mods == GLFW_MOD_CONTROL)
+         && action == GLFW_PRESS)
+   {
+      std::cout << sizeof(*g) << "\n";
+   }
 }
 
 void SetCommandCallback(GLFWwindow* w, Implosion::GUI* gui)

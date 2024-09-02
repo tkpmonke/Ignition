@@ -9,6 +9,7 @@
 
 #include <optional>
 
+#include "gui/popup.hpp"
 #include "utils/postprocessingmanager.hpp"
 
 namespace Implosion {
@@ -40,6 +41,10 @@ namespace Implosion {
 
       void SceneView();
 
+      void RenderPopups();
+
+      void InitAssetLoader();
+
       void RayCastMouse();
 
       void PostProcessManagerUI();
@@ -56,14 +61,21 @@ namespace Implosion {
       bool enableGrid = true, enableDistanceFalloff = true;
       bool vsync = true;
       bool anti = true;
+
       Ignition::Window* window;
+      
       int color;
+      
       Ignition::Camera* camera;
+      
       uint gridVao, gridVbo, gridProgram, gridVertSize, gridXYVao, gridXYVbo, gridXYProgram;
+      
       Ignition::Object* selectedObject = nullptr;
       std::optional<Ignition::Object> copiedObject;
 
       GUI() = default;
+
+      std::vector<Implosion::Popup> popups;
 
 #ifdef __linux__
       uint coreCount = 0;
