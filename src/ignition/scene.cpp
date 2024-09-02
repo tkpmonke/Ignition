@@ -32,6 +32,7 @@ namespace Ignition {
 
    void Scene::AddObject(Object object)
    {
+      object.name = "Object " + std::to_string(objects.size());                                     
       objects.push_back(object);
       objects[objects.size()-1].id = objects.size()-1;
    }

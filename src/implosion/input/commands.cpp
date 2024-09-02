@@ -30,13 +30,12 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
       g->copiedObject = *g->selectedObject;
    }
 
-   
    if (key == GLFW_KEY_V && mods == GLFW_MOD_CONTROL 
          && action == GLFW_PRESS && g->copiedObject.has_value()) {
       Ignition::scene.AddObject(g->copiedObject.value());
    }
-
-   if ((key == GLFW_KEY_DELETE || key == GLFW_KEY_BACKSPACE)
+   
+   if ((key == GLFW_KEY_DELETE)
          && action == GLFW_PRESS)
    {
       Ignition::scene.GetObjects()->erase(Ignition::scene.GetObjects()->begin() + g->selectedObject->id);

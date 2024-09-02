@@ -12,7 +12,6 @@ namespace Implosion {
    void GUI::Inspector()
    {
       Ignition::Object* obj = selectedObject;
-
       if (ImGui::Begin("Inspector")) {
          if (obj == nullptr)
          {

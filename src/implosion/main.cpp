@@ -12,11 +12,19 @@
 #include <iostream>
 #include <string.h>
 
+const char* implosionHelp = 
+"Implosion Editor\n"
+"\n"
+"-h / --help      Prints This Help Message\n"
+"-f               Specify Project Directory\n"
+"-i               Prints Blank Statement\n"
+"-t               Runs Unit Tests\n"
+"-headless        Runs Headless\n";
+
 using namespace Ignition::Rendering;
 
 int main(int argc, char** argv) 
 {
-
    for (int i = 0; i < argc; ++i)
    {
       if (strcmp(argv[i], "-f") == 0)
@@ -26,6 +34,12 @@ int main(int argc, char** argv)
       if (strcmp(argv[i], "-i") == 0)
       {
          std::cout << "Ignition Engine Is Installed\n";
+         return 0;
+      }
+      if (strcmp(argv[i], "-h") == 0
+       || strcmp(argv[i], "--help") == 0)
+      {
+         std::cout << implosionHelp << "\n";
          return 0;
       }
    }
@@ -92,4 +106,5 @@ int main(int argc, char** argv)
    Ignition::scene.WriteSceneToDisk();
    gui.Shutdown();
    window.Shutdown();
+   
 }
