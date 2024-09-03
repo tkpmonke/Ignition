@@ -26,6 +26,16 @@ namespace FS {
    {
       projectName = s;
    }
+
+   std::string FileExplorer()
+   {
+      char s[1024];
+   
+      FILE* f = popen("zenity --file-selection", "r");
+      fgets(s, 1024, f);
+      return s;
+   }
+
    std::string GetProjectHome() { return projectName; }
 
    std::string ReadTextFile(std::string path) 

@@ -163,10 +163,17 @@ namespace Implosion {
                   this->camera->transform.position.x,
                   this->camera->transform.position.y,
                   this->camera->transform.position.z);
+            ImGui::Text("Camera Rotation :               %f, %f, %f", 
+                  this->camera->transform.rotation.x,
+                  this->camera->transform.rotation.y,
+                  this->camera->transform.rotation.z);
+            ImGui::Text("Camera Forward  :               %f, %f, %f", 
+                  this->camera->transform.forward.x,
+                  this->camera->transform.forward.y,
+                  this->camera->transform.forward.z);
 
          }
-   }
-   ImGui::End();
-      
+      }
+      ImGui::End();
    }
 }

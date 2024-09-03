@@ -3,8 +3,8 @@
 #include "serialization/saving.hpp"
 #include "scene.hpp"
 
-#ifdef DEBUG 
 #include <iostream>
+#ifdef DEBUG 
 #include <chrono>
 #endif
 
@@ -44,8 +44,9 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
 
    if ((key == GLFW_KEY_L
          && mods == GLFW_MOD_CONTROL)
-         && action == GLFW_PRESS)
-      g->InitAssetLoader();
+         && action == GLFW_PRESS) {
+      
+   }
 
    if ((key == GLFW_KEY_G
          && mods == GLFW_MOD_CONTROL)
