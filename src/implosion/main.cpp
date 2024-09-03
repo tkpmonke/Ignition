@@ -15,11 +15,11 @@
 const char* implosionHelp = 
 "Implosion Editor\n"
 "\n"
-"-h / --help      Prints This Help Message\n"
-"-f               Specify Project Directory\n"
-"-i               Prints Blank Statement\n"
-"-t               Runs Unit Tests\n"
-"-headless        Runs Headless\n";
+"-h  / --help     Prints This Help Message\n"
+"-f  / --project  Specify Project Directory\n"
+"-i               Prints Blank Statement (used by hub) \n"
+"-t  / --tests    Runs Unit Tests\n"
+"-hl / --headless Runs Headless\n";
 
 using namespace Ignition::Rendering;
 
@@ -27,7 +27,8 @@ int main(int argc, char** argv)
 {
    for (int i = 0; i < argc; ++i)
    {
-      if (strcmp(argv[i], "-f") == 0)
+      if (strcmp(argv[i], "-f") == 0
+       || strcmp(argv[i], "--project") == 0)
       {
          FS::SetProjectHome(argv[++i]);
       }
@@ -86,6 +87,8 @@ int main(int argc, char** argv)
       gui.Inspector();
 
       gui.SceneHierarchy();
+
+      gui.FileExplorer();
 
       gui.DebugMenu();
 

@@ -7,6 +7,7 @@
 namespace FS {
 
    std::string GetHome();
+   std::string FileExplorer();
 
    void SetProjectHome(std::string);
    std::string GetProjectHome();

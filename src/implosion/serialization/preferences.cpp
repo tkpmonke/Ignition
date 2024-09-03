@@ -41,6 +41,8 @@ void WritePreferences()
    FS::WriteFloat(gui->camera->clipping_planes.max);
    FS::WriteFloat(gui->camera->fov);
 
+   FS::WriteFloat(gui->files.size);
+
    FS::EndBinaryWrite();
 }
 
@@ -75,5 +77,7 @@ void ReadPreferences(Implosion::GUI* guis)
    guis->camera->clipping_planes.max = FS::ReadFloat();
    guis->camera->fov = FS::ReadFloat();
 
+   //WritePreferences();
+   gui->files.size = FS::ReadFloat();
    FS::EndBinaryRead();
 }

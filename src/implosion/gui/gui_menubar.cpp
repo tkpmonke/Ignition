@@ -21,5 +21,11 @@ namespace Implosion {
          }
          ImGui::EndMainMenuBar();
       }
+
+
+      if (openAssetLoader == 1) {
+         openAssetLoader = 0;
+         this->InitAssetLoader();
+      }
    }
 }  

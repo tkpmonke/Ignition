@@ -26,6 +26,7 @@ namespace Implosion {
       void RemakeGrid();
 
       void FileExplorer();
+      void RefreshFiles();
 
       void SceneHierarchy();
 
@@ -82,5 +83,14 @@ namespace Implosion {
       float cpuSpeed = 0;
       std::string cpuModel = "";
 #endif 
+   
+      struct {
+         struct FileSpec {std::string name,path; int type;};
+         std::vector<FileSpec> files;
+         std::string activeDirectory;
+         float size = 50;
+      } files;
+   private:
+      bool openAssetLoader = false;
    };
 }
