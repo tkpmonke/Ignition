@@ -75,23 +75,29 @@ namespace Implosion {
                std::cout << "Object Has No Renderer\n";
             }
             ImGui::EndChild();
-            if (renderer != nullptr)
-            {
-               glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-               glLineWidth(5);
-               Ignition::Vector4 col = renderer->shader.color;
-               renderer->shader.color = {1,1,1,0.75f};
-               renderer->Update();
-               renderer->shader.color = col;
-               glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            }
+            
          }
          
       }
-         
-        
 
       ImGui::End();
+
+      if (obj != nullptr)
+      {
+
+         Ignition::Rendering::MeshRenderer* renderer = (Ignition::Rendering::MeshRenderer*)obj->GetModule("Mesh Renderer"); 
+
+         if (renderer != nullptr)
+         {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            glLineWidth(5);
+            Ignition::Vector4 col = renderer->shader.color;
+            renderer->shader.color = {1,1,1,0.75f};
+            renderer->Update();
+            renderer->shader.color = col;
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+         }
+      }
    }
 }
 

@@ -2,9 +2,6 @@
 #include "scene.hpp"
 #include "modules/rendering/meshrenderer.hpp"
 
-#include <iostream>
-#include <stdio.h>
-
 void getRayFromMouse(float mouseX, float mouseY, int windowWidth, int windowHeight, 
                           const glm::mat4& projectionMatrix, const Ignition::Matrix4& viewMatrix,
                      Ignition::Vector4* rayWorld, Ignition::Vector3* rayDir) {
@@ -64,7 +61,6 @@ bool CheckRayMeshIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDi
       Ignition::Vector3 f = { model->model.vertices[i],
                               model->model.vertices[i+1],
                               model->model.vertices[i+2]};
-      //f = f * glm::mat3(modelMatrix);
 
       cubeMin = glm::min(cubeMin, f); 
       cubeMax = glm::max(cubeMax, f); 

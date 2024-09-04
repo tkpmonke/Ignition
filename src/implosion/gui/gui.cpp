@@ -3,6 +3,10 @@
 
 #include <iostream>
 
+#include "sprites/file.hpp"
+#include "sprites/folder.hpp"
+#include "sprites/empty_folder.hpp"
+
 namespace Implosion {
    std::string s = FS::GetHome() + "/Implosion/gui";
    GUI::GUI(Ignition::Window* window, Ignition::Camera* camera)
@@ -22,6 +26,26 @@ namespace Implosion {
       ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)*this->window, true);
       ImGui_ImplOpenGL3_Init("#version 330");
 
+      this->files.folder.SetFlags(Ignition::Rendering::Linear);
+      this->files.folder.LoadData(        FOLDER_IMAGE_PIXEL_DATA,
+                                          FOLDER_IMAGE_WIDTH,
+                                          FOLDER_IMAGE_HEIGHT,
+                                          FOLDER_IMAGE_BYTES_PER_PIXEL,
+                                          "Implosion_Folder");
+
+      this->files.empty_folder.SetFlags(Ignition::Rendering::Linear);
+      this->files.empty_folder.LoadData(  EMPTY_FOLDER_IMAGE_PIXEL_DATA,
+                                          EMPTY_FOLDER_IMAGE_WIDTH,
+                                          EMPTY_FOLDER_IMAGE_HEIGHT,
+                                          EMPTY_FOLDER_IMAGE_BYTES_PER_PIXEL,
+                                          "Implosion_Empty_Folder");
+
+      this->files.file.SetFlags(Ignition::Rendering::Linear);
+      this->files.file.LoadData(          FILE_IMAGE_PIXEL_DATA,
+                                          FILE_IMAGE_WIDTH,
+                                          FILE_IMAGE_HEIGHT,
+                                          FILE_IMAGE_BYTES_PER_PIXEL,
+                                          "Implosion_File");
 
    }
 

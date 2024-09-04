@@ -89,6 +89,8 @@ namespace Implosion {
          std::vector<FileSpec> files;
          std::string activeDirectory;
          float size = 50;
+
+         Ignition::Rendering::Texture folder, file, empty_folder;
       } files;
    private:
       bool openAssetLoader = false;

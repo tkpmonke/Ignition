@@ -1,4 +1,5 @@
 #include "gui/gui.hpp"
+#include <iostream>
 
 ImVec2 size;
 bool click;
@@ -15,7 +16,7 @@ void Implosion::GUI::SceneView() {
 
       if (ImGui::IsWindowHovered()) {
          bool b = glfwGetMouseButton((GLFWwindow*)*this->window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
-            
+
          if (b != click && b == true) { 
             this->RayCastMouse();
          }

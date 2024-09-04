@@ -9,9 +9,8 @@ float prtime;
 void cameraMovement(Ignition::Window* window, Ignition::Camera* camera)
 {
    double x, y, offx, offy;
-   auto& io = ImGui::GetIO();
-   x = io.MousePos.x;
-   y = io.MousePos.y;
+   
+   glfwGetCursorPos((GLFWwindow*)*window, &x, &y);
 
    float time = glfwGetTime();
    float dt = time-prtime;
@@ -24,7 +23,7 @@ void cameraMovement(Ignition::Window* window, Ignition::Camera* camera)
    py = y;
 
    if (glfwRawMouseMotionSupported())
-    glfwSetInputMode((GLFWwindow*)*window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+      glfwSetInputMode((GLFWwindow*)*window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
    if (glfwGetMouseButton((GLFWwindow*)*window, GLFW_MOUSE_BUTTON_RIGHT)) {
       //glfwSetInputMode((GLFWwindow*)*window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);

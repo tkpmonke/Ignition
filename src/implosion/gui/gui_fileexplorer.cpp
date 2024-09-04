@@ -21,8 +21,8 @@ namespace Implosion {
 
       for (const auto& file : std::filesystem::directory_iterator(files.activeDirectory))
       { 
-         int type;
-         if (file.is_directory())
+         int type = 0;
+         if (file.is_directory() && file.path().filename().string()[0] != '.')
             type = 1;
          if (files.activeDirectory != "/" && file.path().filename().string()[0] != '.')
             if (std::filesystem::is_empty(file) && type == 1)
@@ -59,12 +59,17 @@ namespace Implosion {
                auto& file = files.files[i];
 
                if (ImGui::BeginChild(("##CHILD_OF_EXPLORER_"+std::to_string(i)).data(),
-                        ImVec2(files.size, files.size+20)))
+                        ImVec2(files.size, files.size+25)))
                {
-                  if (ImGui::Button(("##BUTTON___"+file.name+"___"+std::to_string(i)).data(), ImVec2(files.size,files.size)))
+                  int type;
+                  if (file.type == 0) type = files.file;
+                  if (file.type == 1) type = files.folder;
+                  if (file.type == 2) type = files.empty_folder;
+                  if (ImGui::ImageButton((void*)(intptr_t)type, ImVec2((int)files.size,(int)files.size)))
                   {
                      switch (file.type) {
                         case(1):
+                        case(2):
                            files.activeDirectory = file.path;
                            RefreshFiles();
                            break;
@@ -86,7 +91,6 @@ namespace Implosion {
 
          ImGui::EndChild();
          
-         ImGui::SliderFloat("##ExplorerSize", &files.size, 10, 400);
          if (ImGui::Button("Refresh"))
             RefreshFiles();
          ImGui::SameLine();
@@ -94,6 +98,7 @@ namespace Implosion {
             files.activeDirectory = files.activeDirectory.substr(0, files.activeDirectory.find_last_of('/'));
             RefreshFiles();
          }
+         ImGui::SliderFloat("##ExplorerSize", &files.size, 10, 400);
       }
 
       
