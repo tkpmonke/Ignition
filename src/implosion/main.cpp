@@ -68,7 +68,9 @@ int main(int argc, char** argv)
 
    pp_manager = PPManager(&window);
 
-  SetCommandCallback(window, &gui);
+   SetCommandCallback(window, &gui);
+
+   gui.Style();
       
    while (window.IsOpen())
    {
