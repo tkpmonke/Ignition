@@ -4,16 +4,14 @@
 #include "utils/stb_image.h"
 
 #include <iostream>
-#include <unordered_map>
-
-std::unordered_map<std::string, int> textures;
 
 int i = 0;
 namespace Ignition::Rendering {
+   std::unordered_map<std::string, int> texture_lookup_table;
    void Texture::LoadData(std::string file)
    {
       this->name = file;
-      for (auto [key, value] : textures)
+      for (auto [key, value] : texture_lookup_table)
       {
          if (file == key)
          {
@@ -61,20 +59,18 @@ namespace Ignition::Rendering {
             case(2):
                format = GL_RG;
                break;
+            default:
             case(3):
                format = GL_RGB;
                break;
             case(4):
                format = GL_RGBA;
                break;
-            default:
-               format = GL_RGB;
-               break;
          }
          glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, d);
          glGenerateMipmap(GL_TEXTURE_2D);
 
-         textures[file] = this->location;
+         texture_lookup_table[file] = this->location;
       }
       else
       {
@@ -84,7 +80,7 @@ namespace Ignition::Rendering {
 
    void Texture::LoadData(unsigned char* data, int w, int h, int nr, std::string name)
    {
-      for (auto [key, value] : textures)
+      for (auto [key, value] : texture_lookup_table)
       {
          if (name == key)
          {
@@ -138,7 +134,7 @@ namespace Ignition::Rendering {
       glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, data);
       glGenerateMipmap(GL_TEXTURE_2D);
          
-      textures[name] = this->location;
+      texture_lookup_table[name] = this->location;
        
    }
 }

@@ -8,7 +8,7 @@ namespace Ignition {
    class Window {
    public:
       Window() = default;
-      Window(int, int, const char*);
+      Window(int, int, const char*, bool*);
       
       bool IsOpen();
 
@@ -20,6 +20,9 @@ namespace Ignition {
 
       void Resize(int w, int h);
 
+      void Restart();
+      void Close();
+
       operator GLFWwindow*() const { return this->window; };
 
       unsigned int framebuffer, color, depth;
@@ -30,5 +33,6 @@ namespace Ignition {
       unsigned int vao;
       Rendering::Shader s;
       void FramebufferCallback(GLFWwindow*, int, int);
+      bool* isopen;
    };
 }

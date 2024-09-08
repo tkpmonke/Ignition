@@ -3,16 +3,15 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include <iostream>
-#include <unordered_map>
 #include <utility>
 
-std::unordered_map<std::string, int> shaders;
 
 namespace Ignition::Rendering {
+   std::unordered_map<std::string, int> shader_lookup_table;
    Shader::Shader(std::string vert, std::string frag, ShaderType type)
    {
       this->type = type;
-      for (auto i : shaders)
+      for (auto i : shader_lookup_table)
       {
          if (vert+frag == i.first)
          {
@@ -67,15 +66,15 @@ namespace Ignition::Rendering {
       glDeleteShader(vertex);
       glDeleteShader(fragment);
 
-      shaders[vert+frag] = this->program;
+      shader_lookup_table[vert+frag] = this->program;
    }
 
    Shader::Shader(std::string data, ShaderType type)
    {
       this->type = type;
-      for (auto i : shaders)
+      for (auto i : shader_lookup_table)
       {
-         if (vert+frag == i.first)
+         if (data == i.first)
          {
             this->program = i.second;
             return;
@@ -108,6 +107,7 @@ namespace Ignition::Rendering {
          glDeleteShader(shader);
 
       }
+      shader_lookup_table[data] = shader;
    }
 
    void Shader::SetFloat(float v, std::string name)

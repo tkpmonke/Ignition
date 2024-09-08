@@ -6,22 +6,19 @@
 #include "utils/unlit_shader.hpp"
 #include "textures/grid.hpp"
 
-#include <iostream>
-#include <unordered_map>
-
 #define PI (float)3.14159265359
 
-std::unordered_map<std::string, int> models;
 namespace Ignition::Rendering {
    int currentProgram = 999;
    int currentVao = 999;
+   std::unordered_map<std::string, int> model_lookup_table;
 
    void MeshRenderer::LoadModel(Model m)
    {
 
       this->model = m;
       
-      for (auto i : models)
+      for (auto i : model_lookup_table)
       {
          if (i.first == model.name)
          {
@@ -66,7 +63,7 @@ namespace Ignition::Rendering {
       glEnableVertexAttribArray(2);
 
 
-       models[m.name] = this->vao;
+       model_lookup_table[m.name] = this->vao;
    }
    
    void MeshRenderer::Update() {

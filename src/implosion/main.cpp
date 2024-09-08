@@ -25,6 +25,8 @@ using namespace Ignition::Rendering;
 
 int main(int argc, char** argv) 
 {
+
+
    for (int i = 0; i < argc; ++i)
    {
       if (strcmp(argv[i], "-f") == 0
@@ -51,67 +53,73 @@ int main(int argc, char** argv)
       return -1;
    }
 
-   Ignition::Window window = Ignition::Window(1920, 1080, "Implosion");
-   Ignition::Camera camera = Ignition::Camera(&window);
-   camera.fov = 75;
-   camera.clipping_planes.min = 0.1f;
-   camera.clipping_planes.max = 100.f;
-   camera.transform.position = Ignition::Vector3(-5,1,0);
-   camera.MakeMainCamera();
-   
-
-   Implosion::GUI gui = Implosion::GUI(&window, &camera);
-   ReadPreferences(&gui);
-   Ignition::project = Ignition::Project(0);
-
-   gui.InitGrid();
-
-   pp_manager = PPManager(&window);
-
-   SetCommandCallback(window, &gui);
-
-   gui.Style();
+   bool applicationOpen = true;
+   while (applicationOpen) {
+      std::cout << "open\n";
+      Ignition::Window window = Ignition::Window(1920, 1080, "Implosion", &applicationOpen);
+      Ignition::Camera camera = Ignition::Camera(&window);
+      camera.fov = 75;
+      camera.clipping_planes.min = 0.1f;
+      camera.clipping_planes.max = 100.f;
+      camera.transform.position = Ignition::Vector3(-5,1,0);
+      camera.MakeMainCamera();
       
-   while (window.IsOpen())
-   {
-      window.Update();
-      window.Bind();
-      camera.BeginRender();
-       
-      cameraMovement(&window, &camera);
-      
-      gui.RenderGrid();
 
-      Ignition::scene.Update();
-      
-      gui.NewFrame();
+      Implosion::GUI gui = Implosion::GUI(&window, &camera);
+      ReadPreferences(&gui);
+      Ignition::project = Ignition::Project(0);
 
-      gui.Inspector();
+      gui.InitGrid();
 
-      gui.SceneHierarchy();
+      pp_manager = PPManager(&window);
 
-      gui.FileExplorer();
+      SetCommandCallback(window, &gui);
 
-      gui.DebugMenu();
+      gui.Style();
+         
+      while (window.IsOpen())
+      {
+         window.Update();
+         window.Bind();
+         camera.BeginRender();
+          
+         cameraMovement(&window, &camera);
+         
+         gui.RenderGrid();
 
-      gui.Preferences();
+         Ignition::scene.Update();
+         
+         gui.NewFrame();
 
-      gui.MenuBar();
-      //ImGui::ShowDemoWindow();
-      
-      gui.SceneView();
+         gui.Inspector();
 
-      gui.RenderPopups();
+         gui.SceneHierarchy();
 
-      gui.PostProcessManagerUI();
+         gui.FileExplorer();
 
-      camera.EndRender(true);
-      gui.EndFrame();
-      camera.EndGUI();
+         gui.DebugMenu();
+
+         gui.Preferences();
+
+         gui.MenuBar();
+         //ImGui::ShowDemoWindow();
+         
+         gui.SceneView();
+
+         gui.RenderPopups();
+
+         gui.PostProcessManagerUI();
+
+         camera.EndRender(true);
+         gui.EndFrame();
+         camera.EndGUI();
+      }
+
+      WritePreferences(); 
+      Ignition::scene.WriteSceneToDisk();
+
+      Ignition::scene.Shutdown();
+      gui.Shutdown();
+      window.Shutdown();
    }
-   WritePreferences(); 
-   Ignition::scene.WriteSceneToDisk();
-   gui.Shutdown();
-   window.Shutdown();
-   
 }

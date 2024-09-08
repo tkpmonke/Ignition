@@ -2,8 +2,12 @@
 
 #include "GL/glew.h"
 #include <string>
+#include <unordered_map>
 
 namespace Ignition::Rendering {
+
+   extern std::unordered_map<std::string, int> texture_lookup_table;
+
    enum TextureFlags {
       Repeat,
       Clamp,

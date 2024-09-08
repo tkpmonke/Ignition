@@ -72,6 +72,8 @@ namespace Ignition {
           
          glfwSwapBuffers((GLFWwindow*)*this->window);
       }
+
+      glfwPollEvents();
    }
 
    void Camera::EndGUI() {

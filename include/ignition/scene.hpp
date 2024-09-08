@@ -16,6 +16,8 @@ namespace Ignition {
       void WriteSceneToDisk();
       void ReadSceneFromDisk();
 
+      void Shutdown();
+
       std::string name;
       int id;
 

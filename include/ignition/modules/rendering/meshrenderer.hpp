@@ -7,9 +7,12 @@
 #include <GL/glew.h>
 #include <module.hpp>
 
+#include <unordered_map>
+
 namespace Ignition::Rendering {
    extern int currentProgram;
    extern int currentVao;
+   extern std::unordered_map<std::string, int> model_lookup_table;
 
    class MeshRenderer : public Module{
    public:

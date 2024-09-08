@@ -5,8 +5,11 @@
 #include "types/texture.hpp"
 
 #include <string>
+#include <unordered_map>
 
 namespace Ignition::Rendering {
+   extern std::unordered_map<std::string, int> shader_lookup_table;
+   
    enum ShaderType {
       Unlit = 0,
       Lit = 1,
