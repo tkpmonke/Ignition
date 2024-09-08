@@ -52,6 +52,7 @@ const char* quadFragment =
 "}\0";
 
 namespace Ignition {
+   bool windowOpen;
    void Window::Resize(int x, int y)
    {
       glViewport(0, 0, x, y);
@@ -68,8 +69,10 @@ namespace Ignition {
       glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->depth);
    }
 
-   Window::Window(int w, int h, const char* c)
+   Window::Window(int w, int h, const char* c, bool* b)
+      : isopen(b)
    {
+      windowOpen = true;
       glfwInit();
       glfwWindowHint(GLFW_SAMPLES, 8);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -136,7 +139,13 @@ namespace Ignition {
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
    }
 
-   bool Window::IsOpen() { return !glfwWindowShouldClose(this->window); }
+   bool Window::IsOpen() { 
+      if (glfwWindowShouldClose(this->window)) { 
+         Close();
+         return false;
+      }
+      return windowOpen; 
+   }
 
    void Window::Update() { glfwPollEvents(); }
 
@@ -148,5 +157,18 @@ namespace Ignition {
    {
       glfwDestroyWindow(this->window);
       glfwTerminate();
+   }
+
+   void Window::Close()
+   {
+      *isopen = false;
+      windowOpen = false;
+      glfwWindowShouldClose(window);
+   }
+
+   void Window::Restart()
+   {
+      windowOpen = false;
+      glfwWindowShouldClose(window);
    }
 }

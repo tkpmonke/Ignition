@@ -24,6 +24,7 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
       std::cout << "Saving Took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " Milliseconds\n";
 #endif 
    }
+
    
    /* Removed due to seg faults :(
    if (key == GLFW_KEY_C && mods == GLFW_MOD_CONTROL 
@@ -36,6 +37,13 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
       Ignition::scene.AddObject(g->copiedObject.value());
    }
    */
+
+
+   if ((key == GLFW_KEY_R)
+         && action == GLFW_PRESS)
+   {
+      g->window->Restart();
+   }
    
    if ((key == GLFW_KEY_DELETE)
          && action == GLFW_PRESS)

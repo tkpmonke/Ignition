@@ -133,5 +133,12 @@ namespace Ignition {
       FS::EndBinaryRead();
    }
 
+   void Scene::Shutdown() {
+      texture_lookup_table.clear();
+      model_lookup_table.clear();
+      shader_lookup_table.clear();
+      objects.clear();
+   }
+
    Scene scene;
 }
