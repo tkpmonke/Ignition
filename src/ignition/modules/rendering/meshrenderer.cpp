@@ -46,6 +46,7 @@ namespace Ignition::Rendering {
          buffer.push_back(this->model.uv[i]);
          buffer.push_back(this->model.uv[i+1]);
       }
+            
 
       glBindBuffer(GL_ARRAY_BUFFER, VBO);
       glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), &buffer[0], GL_STATIC_DRAW);
@@ -64,6 +65,10 @@ namespace Ignition::Rendering {
 
 
        model_lookup_table[m.name] = this->vao;
+   }
+
+   void MeshRenderer::Start() {
+      camera = Ignition::MainCamera::camera;
    }
    
    void MeshRenderer::Update() {

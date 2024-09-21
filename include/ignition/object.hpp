@@ -9,7 +9,8 @@
 
 #define UPDATE_OBJECT() this->transform.UpdateVectors();                                  \
                         for (std::shared_ptr<Module> m : modules)  {                      \
-                           m->transform = &this->transform;\
+                           m->transform = &this->transform;                               \
+                           if (!m->enabled || !this->enabled) continue;                    \
                            m->Update();                                                   \
                         }
 
@@ -28,7 +29,14 @@ namespace Ignition {
       Object* parent;
       
       void AddModule(std::shared_ptr<Module>);
-     Module* GetModule(std::string);
+
+      // GetModule with mod_name
+      Module* GetModule(std::string);
+      
+      // GetModule with templates
+      template<typename T>
+      T* GetModule();
+
       std::vector<std::shared_ptr<Module>> GetModules() { return modules; }
 
       std::vector<Object*> GetChildren() { return children; };

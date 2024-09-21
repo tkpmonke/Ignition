@@ -3,6 +3,9 @@
 #include "object.hpp"
 
 namespace Ignition {
+
+   
+
    class Scene {
    public:
       void Update();

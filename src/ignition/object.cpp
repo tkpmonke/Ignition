@@ -19,7 +19,19 @@ namespace Ignition {
    {
       for (auto i : this->modules)
       {
-         if (i->type() == mod)
+         if (i->mod_type() == mod)
+            return i.get();
+      }
+
+      return nullptr;
+   }
+
+   template<typename T>
+   T* Object::GetModule()
+   {
+      for (auto i : this->modules)
+      {
+         if (typeid(i) == typeid(T))
             return i.get();
       }
 

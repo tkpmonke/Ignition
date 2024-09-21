@@ -38,7 +38,7 @@ namespace Implosion {
          if (ImGui::MenuItem("Square"))
          {
             CREATE_SHADER(); 
-            MeshRenderer m = MeshRenderer(this->camera);
+            MeshRenderer m;
             m.LoadModel(square_model);
             m.LoadShader(s);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
@@ -48,7 +48,7 @@ namespace Implosion {
          if (ImGui::MenuItem("Cube"))
          {
             CREATE_SHADER(); 
-            MeshRenderer m = MeshRenderer(this->camera);
+            MeshRenderer m;
             m.LoadModel(cube_model);
             m.LoadShader(s);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
@@ -71,7 +71,7 @@ namespace Implosion {
             for (int i = 0; i < 1000; ++i)
             {
                CREATE_SHADER(); 
-               MeshRenderer m = MeshRenderer(this->camera);
+               MeshRenderer m;
                m.LoadModel(cube_model);
                m.LoadShader(s);
                std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
