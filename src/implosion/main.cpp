@@ -53,7 +53,6 @@ int main(int argc, char** argv)
       return -1;
    }
 
-<<<<<<< Updated upstream
    bool applicationOpen = true;
    while (applicationOpen) {
       std::cout << "open\n";
@@ -64,29 +63,6 @@ int main(int argc, char** argv)
       camera.clipping_planes.max = 100.f;
       camera.transform.position = Ignition::Vector3(-5,1,0);
       camera.MakeMainCamera();
-=======
-   Ignition::Window window = Ignition::Window(1920, 1080, "Implosion");
-   Ignition::Camera camera = Ignition::Camera(&window);
-   camera.fov = 75;
-   camera.clipping_planes.min = 0.1f;
-   camera.clipping_planes.max = 100.f;
-   camera.transform.position = Ignition::Vector3(-5,1,0);
-   camera.MakeMainCamera();
-   
-
-   Implosion::GUI gui = Implosion::GUI(&window, &camera);
-   ReadPreferences(&gui);
-   Ignition::project = Ignition::Project(0);
-   SetCommandCallback(window, &gui);
-
-   gui.InitGrid();
-
-   pp_manager = PPManager(&window);
-
-
-   gui.Style();
->>>>>>> Stashed changes
-      
 
       Implosion::GUI gui = Implosion::GUI(&window, &camera);
       ReadPreferences(&gui);
