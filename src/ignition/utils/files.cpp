@@ -132,15 +132,20 @@ namespace FS {
       
       if (read.i + 4 > read.size)
       {
-         //std::cerr << "reading too far float\n";
+#ifdef DEBUG
+         std::cerr << "reading too far float\n";
+#endif
          return 0;
       }
       a = read.data[read.i++];
       b = read.data[read.i++];
       c = read.data[read.i++];
       d = read.data[read.i++];
+      
+      // some narley conversion from char[4] to float
       char e[4] = {a, b, c, d}; 
-      memcpy(&o, &e, sizeof(o));
+      o = *(float*)&e;
+      
       return o;
    }
 
@@ -181,8 +186,9 @@ namespace FS {
 
    void WriteFloat(float data)
    {  
-      char b[4];  
-      memcpy(&b, &data, sizeof(b));
+      char* b;  
+      // some conversion from float to char[4]
+      b = (char*)&data;
       write.data.push_back(b[0]);
       write.data.push_back(b[1]);
       write.data.push_back(b[2]);

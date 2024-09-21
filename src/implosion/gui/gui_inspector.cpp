@@ -6,7 +6,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <cstring>
-#include <iostream>
+
+#define GUI_BEGIN_DROP_TARGET if (ImGui::BeginDragDropTarget()) { \
+                                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("__FILE_EXPLORER_")) { 
+
+#define GUI_END_DROP_TARGET                                                  \
+                           }                                                                                      \
+                           ImGui::EndDragDropTarget();                                                            \
+                        }
 
 namespace Implosion {
    void GUI::Inspector()
@@ -24,6 +31,8 @@ namespace Implosion {
             ImGui::SameLine();
             
             ImGui::InputText("Name", &obj->name);
+            
+
             ImGui::InputText("Tag", &obj->tag);
             
             ImGui::Separator();
@@ -61,6 +70,7 @@ namespace Implosion {
             {
                if (ImGui::CollapsingHeader("Mesh Renderer", ImGuiTreeNodeFlags_DefaultOpen))
                {
+                  ImGui::Checkbox("Enabled", &renderer->enabled);
                   Ignition::Vector4 color = renderer->shader.color;
                   if (ImGui::ColorEdit4("Color", glm::value_ptr(color)))
                   {
@@ -70,10 +80,7 @@ namespace Implosion {
                   ImGui::DragFloat("Intensity", &renderer->shader.intensity);
                }
             }
-            else
-            {
-               std::cout << "Object Has No Renderer\n";
-            }
+            
             ImGui::EndChild();
             
          }
@@ -92,7 +99,7 @@ namespace Implosion {
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glLineWidth(5);
             Ignition::Vector4 col = renderer->shader.color;
-            renderer->shader.color = {1,1,1,0.75f};
+            renderer->shader.color = (Ignition::Vector4){1,1,1,0.75f}*.5f+.5f;
             renderer->Update();
             renderer->shader.color = col;
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

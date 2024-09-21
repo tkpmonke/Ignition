@@ -2,6 +2,9 @@ workspace "implosion"
    architecture "x86_64"
    configurations { "Debug", "Release"}
 
+-- LIBRARYS (eg imgui) --
+dofile("libs/premake5.lua")
+
 project "ignition"
    kind "StaticLib"
    language "C++"
@@ -27,11 +30,11 @@ project "implosion"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "imgui" }
-   files { "src/implosion/**.cpp", "include/**.hpp", "imgui/**.h", "imgui/**.cpp" }
+   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui" }
+   files { "src/implosion/**.cpp", "include/**.hpp", "libs/imgui/**.h" }
    removefiles "hub/*"
    
-   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp" }
+   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
@@ -48,10 +51,9 @@ project "implosion-hub"
    cppdialect "gnu++17"
    targetdir "bin"
 
-   includedirs { "imgui" }
-   files { "hub/**.h", "hub/**.cpp", "hub/**.hpp", "imgui/**.cpp", "imgui/**.hpp"}
-   
-   links { "glfw", "GL" }
+   includedirs { "libs/imgui" }
+   files { "hub/**.h", "hub/**.cpp", "hub/**.hpp", "libs/imgui/**.hpp"}
+   links { "glfw", "GL", "ig-imgui" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }

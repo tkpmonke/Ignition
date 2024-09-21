@@ -22,7 +22,7 @@ namespace Implosion {
       for (const auto& file : std::filesystem::directory_iterator(files.activeDirectory))
       { 
          int type = 0;
-         if (file.is_directory() && file.path().filename().string()[0] != '.')
+        if (file.is_directory() && file.path().filename().string()[0] != '.')
             type = 1;
          if (files.activeDirectory != "/" && file.path().filename().string()[0] != '.')
             if (std::filesystem::is_empty(file) && type == 1)
@@ -75,9 +75,18 @@ namespace Implosion {
                            break;
                      }
                   }
+
+                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+                  {
+                     ImGui::SetDragDropPayload("__FILE_EXPLORER_", file.path.data(), file.path.size() +1);
+                     ImGui::Text("Dragging");
+                     ImGui::EndDragDropSource();
+                  } 
+
                   ImGui::Text("%s",(file.name).data());
                }
                ImGui::EndChild();
+               
                if (!(b*files.size + ImGui::GetStyle().ItemSpacing.x
                      >= ImGui::GetWindowWidth() /1.2f))
                {

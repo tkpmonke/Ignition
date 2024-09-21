@@ -22,10 +22,11 @@ namespace Ignition::Rendering {
       Model model;     
 
       MeshRenderer() = default;
-      MeshRenderer(Camera* camera) : camera(camera) {}      
       
       void LoadShader(Shader s) {this->shader = s; }
       void LoadModel(Model m); 
+
+      void Start() override;
       
       void Update() override;
 

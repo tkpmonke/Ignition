@@ -5,7 +5,7 @@ Fast, Lightweight, and easy-to-use general purpose game engine
 nothing for games yet, but the editor has a customizeable grid, can create objects, and thats it (for now)
 
 ## Compile From Source
-requires the following
+ignition uses the following
 - GLEW
 - GLFW
 - GLM
@@ -14,6 +14,8 @@ requires the following
 - python (for hub)
 - stb_image.h (included)
 - IMGUI (included)
+
+all of which can be installed using most linux package managers (only pacman/AUR tested) (excluding `stb_image.h` and `IMGUI`, but those are preinstalled and compiled by default
 
 run `premake5 gmake2 && make -j` for unix-like systems. `-j` adds multithreading to make, if you don't want/have multithreading, remove that<br/><br/>
 or<br/><br/>

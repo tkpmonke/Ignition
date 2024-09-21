@@ -74,7 +74,8 @@ namespace Ignition {
 
          for (std::shared_ptr<Module> m : objects[i].GetModules())
          {
-            FS::WriteString(m->type()); 
+            FS::WriteString(m->mod_type()); 
+            FS::Write8(m->enabled);
             m->Serialize();
          }  
       }
@@ -116,10 +117,12 @@ namespace Ignition {
          for (int m = 0; m < mCount; ++m)
          {
             std::string type = FS::ReadString();
+            bool enabled = FS::Read8();
 
             if (type == "Mesh Renderer")
             {
-               MeshRenderer m = MeshRenderer(Ignition::MainCamera::camera);
+               MeshRenderer m;
+               m.enabled = enabled;
 
                m.Deserialize();
 

@@ -5,3 +5,5 @@ video/*
 Makefile
 compile_commands.json
 bin/*
+*.o
+*.d
