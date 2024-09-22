@@ -26,7 +26,7 @@ namespace Ignition {
       return nullptr;
    }
 
-   template<typename T>
+   template<class T>
    T* Object::GetModule()
    {
       for (auto i : this->modules)

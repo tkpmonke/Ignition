@@ -70,3 +70,5 @@ void preglsl_add_file_define(const char* filename);
 
 void preglsl_process_defines(std::string* data);
 
+bool preglsl_is_whitespace(unsigned char c);
+

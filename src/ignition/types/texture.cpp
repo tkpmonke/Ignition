@@ -10,76 +10,26 @@ namespace Ignition::Rendering {
    std::unordered_map<std::string, int> texture_lookup_table;
    void Texture::LoadData(std::string file)
    {
-      this->name = file;
-      for (auto [key, value] : texture_lookup_table)
-      {
-         if (file == key)
-         {
-            this->location = value;
-            return;
-         }
-      }
-
-
-      glGenTextures(1, &this->location);
-      glBindTexture(GL_TEXTURE_2D, this->location);
-
-      if (flags & TextureFlags::Repeat) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      }
-      if (flags & TextureFlags::Clamp) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-      }
-      if (flags & TextureFlags::Mirrored_Repeat) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-      }
-      
-      if (flags & TextureFlags::Linear) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      }
-      if (flags & TextureFlags::Nearest) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      }
-
       int w, h, nr;
       stbi_set_flip_vertically_on_load(true);
       unsigned char* d = stbi_load(file.data(), &w, &h, &nr, 0);
-      if (d)
-      {
-         GLenum format;
-         switch (nr) {
-            case(1):
-               format = GL_RED;
-               break;
-            case(2):
-               format = GL_RG;
-               break;
-            default:
-            case(3):
-               format = GL_RGB;
-               break;
-            case(4):
-               format = GL_RGBA;
-               break;
-         }
-         glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, d);
-         glGenerateMipmap(GL_TEXTURE_2D);
+      LoadData(d, w, h, nr, file); 
+   }
 
-         texture_lookup_table[file] = this->location;
+   void Texture::LoadData(std::vector<std::string> files) {
+         glGenTextures(1, &this->location);
+         glBindTexture(GL_TEXTURE_CUBE_MAP, this->location);
+      for (int i = 0; i < files.size(); ++i) {
+         int w, h, nr;
+         stbi_set_flip_vertically_on_load(false);
+         unsigned char* d = stbi_load(files[i].data(), &w, &h, &nr, 0);
+         LoadData(d, w, h, nr, files[i], i+1);
       }
-      else
-      {
-         std::cerr << "texture can't be loaded\n";
-      }  
    }
 
    void Texture::LoadData(unsigned char* data, int w, int h, int nr, std::string name)
    {
+      this->name = name;
       for (auto [key, value] : texture_lookup_table)
       {
          if (name == key)
@@ -88,29 +38,53 @@ namespace Ignition::Rendering {
             return;
          }
       }
-      glGenTextures(1, &this->location);
-      glBindTexture(GL_TEXTURE_2D, this->location);
 
+
+      LoadData(data, w, h, nr, name, 0);
+         
+      texture_lookup_table[name] = this->location;
+       
+   }
+   
+   void Texture::LoadData(unsigned char* data, int w, int h, int nr, std::string name, int i) {
+
+      GLenum texType;
+      switch (this->type) {
+         case(IGNITION_2D):
+            texType = GL_TEXTURE_2D;
+            break;
+         case(IGNITION_CUBE_MAP):
+            texType = GL_TEXTURE_CUBE_MAP;
+            break;
+      }
+
+      if (i == 0) {
+         glGenTextures(1, &this->location);
+         glBindTexture(texType, this->location);
+      }
       if (flags & TextureFlags::Repeat) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_R, GL_REPEAT);
       }
       if (flags & TextureFlags::Clamp) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
       }
       if (flags & TextureFlags::Mirrored_Repeat) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+         glTexParameteri(texType, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
       }
       
       if (flags & TextureFlags::Linear) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+         glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+         glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       }
       if (flags & TextureFlags::Nearest) {
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+         glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+         glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       }
 
       GLenum format;
@@ -131,10 +105,11 @@ namespace Ignition::Rendering {
             format = GL_RGB;
             break;
       }
-      glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, data);
-      glGenerateMipmap(GL_TEXTURE_2D);
-         
-      texture_lookup_table[name] = this->location;
-       
+      if (i != 0) {
+         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+(i-1), 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, data);
+      } else {
+         glTexImage2D(texType, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, data);
+         glGenerateMipmap(texType);
+      }
    }
 }

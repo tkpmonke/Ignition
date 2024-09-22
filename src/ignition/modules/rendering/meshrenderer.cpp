@@ -88,16 +88,18 @@ namespace Ignition::Rendering {
       }
 
 
-      Matrix4 model;
+      Matrix4 model = Matrix4(1.f);
 
-      model = glm::translate(Matrix4(1.f), this->transform->position);
+      model = glm::translate(model, this->transform->position);
       model *= glm::mat4_cast(glm::quat(glm::radians(this->transform->rotation)));
       model = glm::scale(model, this->transform->scale);
 
       this->shader.SetMatrix4(model, "model");
       glActiveTexture(GL_TEXTURE0 ); 
-      glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
-      this->shader.SetInt(0, "material.albedo");
+      if (shader.albedo.type == 2) {
+         glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
+         this->shader.SetInt(0, "material.albedo");
+      }
       this->shader.SetVec4(this->shader.color*this->shader.intensity, "material.color");
       
       if (this->shader.type == ShaderType::Lit)

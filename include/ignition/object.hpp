@@ -34,7 +34,7 @@ namespace Ignition {
       Module* GetModule(std::string);
       
       // GetModule with templates
-      template<typename T>
+      template<class T>
       T* GetModule();
 
       std::vector<std::shared_ptr<Module>> GetModules() { return modules; }

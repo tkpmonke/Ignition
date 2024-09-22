@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #include <GL/gl.h>
 
@@ -62,6 +63,15 @@ void preglsl_add_file_define(const char* filename) {
    preglsl_add_define("__FILE__", filename);
 }
 
+bool preglsl_is_whitespace(unsigned char c) {
+   if (c == ' ' || c == '\t' || c == '\n' ||
+       c == '\r' || c == '\f' || c == '\v') {
+       return true;
+   } else {
+       return false;
+   }
+}
+
 void preglsl_process_defines(std::string* data) {
    /* This function is split up between two chunks    */
    /* One for getting defines, one for applying them */
@@ -72,5 +82,19 @@ void preglsl_process_defines(std::string* data) {
          continue;
 
       line = line.substr(8, line.size());
+
+      int f = line.find(' ');
+
+      if (f != std::string::npos) {
+         std::string s1 = line.substr(0, f);
+         std::string s2 = line.substr(f, line.size());
+         
+         s1.erase(std::remove_if(s1.begin(), s1.end(), preglsl_is_whitespace), s1.end());
+         s2.erase(std::remove_if(s2.begin(), s2.end(), preglsl_is_whitespace), s2.end());
+
+         preglsl_add_define(s1.c_str(), s2);
+      } else {
+         preglsl_add_define(line.c_str());
+      }
    }
 }
