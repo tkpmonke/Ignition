@@ -5,7 +5,7 @@
 
 namespace Ignition {
    Project project;
-   Project::Project(int i)
+   void Project::LoadProject()
    {
       if (FS::BeginBinaryRead(FS::GetProjectHome() + "/project") == false)
       {

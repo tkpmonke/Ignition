@@ -55,7 +55,6 @@ int main(int argc, char** argv)
 
    bool applicationOpen = true;
    while (applicationOpen) {
-      std::cout << "open\n";
       Ignition::Window window = Ignition::Window(1920, 1080, "Implosion", &applicationOpen);
       Ignition::Camera camera = Ignition::Camera(&window);
       camera.fov = 75;
@@ -64,9 +63,21 @@ int main(int argc, char** argv)
       camera.transform.position = Ignition::Vector3(-5,1,0);
       camera.MakeMainCamera();
 
+      Ignition::project.LoadProject();
+
       Implosion::GUI gui = Implosion::GUI(&window, &camera);
       ReadPreferences(&gui);
-      Ignition::project = Ignition::Project(0);
+
+      std::vector<std::string> skyboxImages = 
+      {
+               "/home/turdle/Downloads/test/skyboxTest5/px.png",
+               "/home/turdle/Downloads/test/skyboxTest5/nx.png",
+               "/home/turdle/Downloads/test/skyboxTest5/py.png",
+               "/home/turdle/Downloads/test/skyboxTest5/ny.png",
+               "/home/turdle/Downloads/test/skyboxTest5/pz.png",
+               "/home/turdle/Downloads/test/skyboxTest5/nz.png",
+      };
+      Ignition::scene.skybox = Ignition::Skybox(skyboxImages);
 
       gui.InitGrid();
 
@@ -84,6 +95,8 @@ int main(int argc, char** argv)
           
          cameraMovement(&window, &camera);
          
+         Ignition::scene.skybox.Render();
+
          gui.RenderGrid();
 
          Ignition::scene.Update();

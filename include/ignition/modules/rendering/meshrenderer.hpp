@@ -33,8 +33,8 @@ namespace Ignition::Rendering {
       void Serialize() override;
       void Deserialize() override;
 
-   private:
       uint vao;
+   private:
       Camera* camera;
 
    };

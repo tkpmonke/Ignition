@@ -37,6 +37,8 @@ const char* gridFragmentShader =
 "}"
 "void main() {"
 "  float a = color.a;"
+"  if (a <= 0)"
+"     discard;"
 "  if (enableDistanceFalloff == 1) {"
 "     a = -expo(distance(vec3(camera.x, opos.y, camera.z), opos)/dist, 5.7, distanceFalloff)+1*color.a;"
 "  }"

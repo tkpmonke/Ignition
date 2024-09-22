@@ -11,8 +11,8 @@ namespace Ignition {
       int currentScene;
       std::string name;
 
-      Project(int);
       Project() = default;
+      void LoadProject();
    };
    extern Project project; 
 }

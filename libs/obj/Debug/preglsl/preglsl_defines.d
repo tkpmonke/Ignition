@@ -144,7 +144,20 @@ obj/Debug/preglsl/preglsl_defines.o: preglsl/preglsl_defines.cpp \
  /usr/include/c++/14.2.1/bits/locale_facets.tcc \
  /usr/include/c++/14.2.1/bits/basic_ios.tcc \
  /usr/include/c++/14.2.1/bits/ostream.tcc /usr/include/c++/14.2.1/istream \
- /usr/include/c++/14.2.1/bits/istream.tcc
+ /usr/include/c++/14.2.1/bits/istream.tcc /usr/include/c++/14.2.1/sstream \
+ /usr/include/c++/14.2.1/bits/sstream.tcc \
+ /usr/include/c++/14.2.1/algorithm \
+ /usr/include/c++/14.2.1/bits/stl_algo.h \
+ /usr/include/c++/14.2.1/bits/algorithmfwd.h \
+ /usr/include/c++/14.2.1/bits/stl_heap.h \
+ /usr/include/c++/14.2.1/bits/uniform_int_dist.h \
+ /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
+ /usr/include/c++/14.2.1/pstl/glue_algorithm_defs.h \
+ /usr/include/c++/14.2.1/pstl/execution_defs.h /usr/include/GL/gl.h \
+ /usr/include/GL/glext.h /usr/include/KHR/khrplatform.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdint.h \
+ /usr/include/stdint.h /usr/include/bits/stdint-uintn.h \
+ /usr/include/bits/stdint-least.h
 /usr/include/stdc-predef.h:
 preglsl/preglsl.hpp:
 /usr/include/c++/14.2.1/vector:
@@ -340,3 +353,20 @@ preglsl/preglsl.hpp:
 /usr/include/c++/14.2.1/bits/ostream.tcc:
 /usr/include/c++/14.2.1/istream:
 /usr/include/c++/14.2.1/bits/istream.tcc:
+/usr/include/c++/14.2.1/sstream:
+/usr/include/c++/14.2.1/bits/sstream.tcc:
+/usr/include/c++/14.2.1/algorithm:
+/usr/include/c++/14.2.1/bits/stl_algo.h:
+/usr/include/c++/14.2.1/bits/algorithmfwd.h:
+/usr/include/c++/14.2.1/bits/stl_heap.h:
+/usr/include/c++/14.2.1/bits/uniform_int_dist.h:
+/usr/include/c++/14.2.1/bits/stl_tempbuf.h:
+/usr/include/c++/14.2.1/pstl/glue_algorithm_defs.h:
+/usr/include/c++/14.2.1/pstl/execution_defs.h:
+/usr/include/GL/gl.h:
+/usr/include/GL/glext.h:
+/usr/include/KHR/khrplatform.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdint.h:
+/usr/include/stdint.h:
+/usr/include/bits/stdint-uintn.h:
+/usr/include/bits/stdint-least.h:

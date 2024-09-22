@@ -1,6 +1,7 @@
 #pragma once
 
 #include "object.hpp"
+#include "skybox.hpp"
 
 namespace Ignition {
 
@@ -23,6 +24,8 @@ namespace Ignition {
 
       std::string name;
       int id;
+
+      Skybox skybox;
 
    private:
       std::vector<Object> objects;

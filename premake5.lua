@@ -33,7 +33,6 @@ project "implosion"
    includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui" }
    files { "src/implosion/**.cpp", "include/**.hpp", "libs/imgui/**.h" }
    removefiles "hub/*"
-   
    links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui" }
 
    filter "configurations:Debug"
