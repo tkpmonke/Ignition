@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene.hpp"
+#include "window.hpp"
 
 #include <vector>
 
@@ -12,7 +13,7 @@ namespace Ignition {
       std::string name;
 
       Project() = default;
-      void LoadProject();
+      void LoadProject(Window* win);
    };
    extern Project project; 
 }

@@ -6,8 +6,9 @@
 #include "scene.hpp"
 #include "project.hpp"
 #include "utils/model_loader.hpp"
-#include "utils/postprocessing_shaders.hpp"
 #include "input/commands.hpp"
+#include "sprites/skybox_top.h"
+#include "sprites/skybox_sides.h"
 
 #include <iostream>
 #include <string.h>
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
       if (strcmp(argv[i], "-f") == 0
        || strcmp(argv[i], "--project") == 0)
       {
-         FS::SetProjectHome(argv[++i]);
+         Ignition::IO::SetProjectHome(argv[++i]);
       }
       if (strcmp(argv[i], "-i") == 0)
       {
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
       }
    }
    
-   if (FS::GetProjectHome() == "")
+   if (Ignition::IO::GetProjectHome() == "")
    {
       std::cerr << "No Project Provided\n";
       return -1;
@@ -63,21 +64,21 @@ int main(int argc, char** argv)
       camera.transform.position = Ignition::Vector3(-5,1,0);
       camera.MakeMainCamera();
 
-      Ignition::project.LoadProject();
+      Ignition::project.LoadProject(&window);
 
       Implosion::GUI gui = Implosion::GUI(&window, &camera);
       ReadPreferences(&gui);
 
-      std::vector<std::string> skyboxImages = 
+      std::vector<const char*> skyboxImages = 
       {
-               "/home/turdle/Downloads/test/skyboxTest5/px.png",
-               "/home/turdle/Downloads/test/skyboxTest5/nx.png",
-               "/home/turdle/Downloads/test/skyboxTest5/py.png",
-               "/home/turdle/Downloads/test/skyboxTest5/ny.png",
-               "/home/turdle/Downloads/test/skyboxTest5/pz.png",
-               "/home/turdle/Downloads/test/skyboxTest5/nz.png",
+               skybox_sides.pixel_data,
+               skybox_sides.pixel_data,
+                 skybox_top.pixel_data,
+                 skybox_top.pixel_data,
+               skybox_sides.pixel_data,
+               skybox_sides.pixel_data,
       };
-      Ignition::scene.skybox = Ignition::Skybox(skyboxImages);
+      Ignition::scene.skybox = Ignition::Skybox(skyboxImages, 64, 64, 3, "IMPLOSION_SKYBOX");
 
       gui.InitGrid();
 
@@ -103,8 +104,6 @@ int main(int argc, char** argv)
          
          gui.NewFrame();
 
-         gui.Inspector();
-
          gui.SceneHierarchy();
 
          gui.FileExplorer();
@@ -121,6 +120,8 @@ int main(int argc, char** argv)
          gui.RenderPopups();
 
          gui.PostProcessManagerUI();
+
+         gui.Inspector();
 
          camera.EndRender(true);
          gui.EndFrame();

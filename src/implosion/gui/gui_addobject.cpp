@@ -1,7 +1,7 @@
 #include "gui/gui.hpp"
 #include "modules/rendering/meshrenderer.hpp"
 #include "types/shader.hpp"
-#include "utils/unlit_shader.hpp"
+#include "utils/default_shaders.hpp"
 #include "types/texture.hpp"
 
 #include "shapes/square.hpp"
@@ -12,6 +12,7 @@
 #include "scene.hpp"
 
 #include <memory>
+#include <iostream>
 
 using namespace Ignition::Rendering;
 
@@ -74,6 +75,12 @@ namespace Implosion {
                MeshRenderer m;
                m.LoadModel(cube_model);
                m.LoadShader(s);
+               float r = rand() / double(RAND_MAX);
+               float g = rand() / double(RAND_MAX);
+               float b = rand() / double(RAND_MAX);
+
+               m.shader.color = Ignition::Vector4(r,g,b,1);
+
                std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
                Ignition::Object* o = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
                int x = -50 + rand() % 100;
@@ -88,6 +95,7 @@ namespace Implosion {
                float sy = .5f + rand() % 2;
                float sz = .5f + rand() % 2;
 
+               
                o->AddModule(ptr);
                o->transform.position = Ignition::Vector3(x,y,z);
                o->transform.rotation = Ignition::Vector3(rx,ry,rz);

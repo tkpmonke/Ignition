@@ -29,6 +29,7 @@ namespace Ignition::Rendering {
       void SetType(int type) { this->type = type; }
       void LoadData(std::string file);
       void LoadData(std::vector<std::string> file);
+      void LoadData(std::vector<const char*> data, int w, int h, int nr, std::string name);
       void LoadData(unsigned char* data, int w, int h, int nr, std::string name);
       unsigned int location = 0;
       std::string name;

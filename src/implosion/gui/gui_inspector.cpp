@@ -100,8 +100,11 @@ namespace Implosion {
             glLineWidth(5);
             Ignition::Vector4 col = renderer->shader.color;
             renderer->shader.color = (Ignition::Vector4){1,1,1,0.75f}*.5f+.5f;
+            float intensity = renderer->shader.intensity;
+            renderer->shader.intensity = 1;
             renderer->Update();
             renderer->shader.color = col;
+            renderer->shader.intensity = intensity;
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
          }
       }

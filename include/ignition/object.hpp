@@ -24,7 +24,7 @@ namespace Ignition {
 
       Transform transform;
 
-      virtual void Update();
+      virtual void Update() {UPDATE_OBJECT();}
 
       Object* parent;
       
@@ -41,6 +41,8 @@ namespace Ignition {
 
       std::vector<Object*> GetChildren() { return children; };
       std::vector<Object*> GetChildrenWithModule(std::string);
+
+      void AddChild(Object* o) { this->children.push_back(o); }
 
       int GetModuleCount() {return modules.size();}
       

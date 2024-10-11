@@ -2,31 +2,48 @@
 #include "utils/files.hpp"
 
 #include <iostream>
+#include <filesystem>
+
+#include "utils/stb_image.h"
 
 namespace Ignition {
    Project project;
-   void Project::LoadProject()
+   void Project::LoadProject(Window* window)
    {
-      if (FS::BeginBinaryRead(FS::GetProjectHome() + "/project") == false)
+      if (Ignition::IO::BeginBinaryRead(Ignition::IO::GetProjectHome() + "/project") == false)
       {
          std::cerr << "can't find project file\n";
          return;
       }
-      this->name = FS::ReadString();
-      int sCount = FS::Read16();
-      this->currentScene = FS::Read16();
+      this->name = Ignition::IO::ReadString();
+      int sCount = Ignition::IO::Read16();
+      this->currentScene = Ignition::IO::Read16();
 
       for (int i = 0; i < sCount; ++i)
       {
          Scene s;
-         s.id = FS::Read16();
-         s.name = FS::ReadString(); 
+         s.id = Ignition::IO::Read16();
+         s.name = Ignition::IO::ReadString(); 
          s.ReadSceneFromDisk();
          scenes.push_back(s);
       }
       
       Ignition::scene = scenes[currentScene];
 
-      FS::EndBinaryRead();
+      Ignition::IO::EndBinaryRead();
+
+      // load icon
+      std::string s;
+      if (std::filesystem::exists(Ignition::IO::GetProjectHome() + "/icon.png"))
+         s = Ignition::IO::GetProjectHome() + "/icon.png";
+      else if (std::filesystem::exists("/usr/share/ignition/icon.png"))
+         s = "/usr/share/ignition/icon.png";
+      else
+         return;
+
+      GLFWimage image[1];
+      image[0].pixels = stbi_load(s.data(), &image[0].width, &image[0].height, 0, 4);
+      glfwSetWindowIcon((GLFWwindow*)*window, 1, image);
+      stbi_image_free(image[0].pixels);
    }
 }

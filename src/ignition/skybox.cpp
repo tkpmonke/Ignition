@@ -40,6 +40,23 @@ namespace Ignition {
       o.AddModule(ptr);
    }
 
+   Skybox::Skybox(std::vector<const char*> textures, int w, int h, int nr, std::string name) {
+      o = Object();
+      tex.SetType(IGNITION_CUBE_MAP);
+      tex.SetFlags(Rendering::Linear);
+      tex.LoadData(textures, w, h, nr, name);
+
+      Rendering::Shader s = Rendering::Shader(skybox_vert, skybox_frag, Rendering::Unlit);
+      s.albedo = tex;
+
+      Rendering::MeshRenderer m;
+      m.LoadShader(s);
+      m.LoadModel(cube_model);
+      
+     std::shared_ptr<Rendering::MeshRenderer> ptr = std::make_shared<Rendering::MeshRenderer>(m);
+      o.AddModule(ptr);
+   }
+
    void Skybox::Render() {
       glDisable(GL_DEPTH_TEST);
       glDisable(GL_CULL_FACE);

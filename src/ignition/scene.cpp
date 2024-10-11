@@ -42,54 +42,55 @@ namespace Ignition {
       Ignition::Object o = Ignition::Object();                                                  
       o.name = "Object " + std::to_string(objects.size());                                     
       o.tag = "Default";                                                      
+      o.id = objects.size()-1;
       objects.push_back(o);
       return objects.size()-1;
    }
 
    void Scene::WriteSceneToDisk()
    {
-      FS::BeginBinaryWrite(FS::GetProjectHome() + "/" + name + ".igscn"); 
-      FS::Write32(objects.size());
+      Ignition::IO::BeginBinaryWrite(Ignition::IO::GetProjectHome() + "/" + name + ".igscn"); 
+      Ignition::IO::Write32(objects.size());
 
       for (int i = 0; i < objects.size(); ++i)
       {
-         FS::WriteString(objects[i].name);
-         FS::WriteString(objects[i].tag);
+         Ignition::IO::WriteString(objects[i].name);
+         Ignition::IO::WriteString(objects[i].tag);
 
-         FS::WriteFloat(objects[i].transform.position.x);
-         FS::WriteFloat(objects[i].transform.position.y);
-         FS::WriteFloat(objects[i].transform.position.z);
+         Ignition::IO::WriteFloat(objects[i].transform.position.x);
+         Ignition::IO::WriteFloat(objects[i].transform.position.y);
+         Ignition::IO::WriteFloat(objects[i].transform.position.z);
 
-         FS::WriteFloat(objects[i].transform.rotation.x);
-         FS::WriteFloat(objects[i].transform.rotation.y);
-         FS::WriteFloat(objects[i].transform.rotation.z);
+         Ignition::IO::WriteFloat(objects[i].transform.rotation.x);
+         Ignition::IO::WriteFloat(objects[i].transform.rotation.y);
+         Ignition::IO::WriteFloat(objects[i].transform.rotation.z);
 
-         FS::WriteFloat(objects[i].transform.scale.x);
-         FS::WriteFloat(objects[i].transform.scale.y);
-         FS::WriteFloat(objects[i].transform.scale.z);
+         Ignition::IO::WriteFloat(objects[i].transform.scale.x);
+         Ignition::IO::WriteFloat(objects[i].transform.scale.y);
+         Ignition::IO::WriteFloat(objects[i].transform.scale.z);
 
-         FS::Write8(objects[i].enabled);
+         Ignition::IO::Write8(objects[i].enabled);
 
-         FS::Write16(objects[i].GetModuleCount());
+         Ignition::IO::Write16(objects[i].GetModuleCount());
 
          for (std::shared_ptr<Module> m : objects[i].GetModules())
          {
-            FS::WriteString(m->mod_type()); 
-            FS::Write8(m->enabled);
+            Ignition::IO::WriteString(m->mod_type()); 
+            Ignition::IO::Write8(m->enabled);
             m->Serialize();
          }  
       }
 
-      FS::EndBinaryWrite();
+      Ignition::IO::EndBinaryWrite();
    }
 
    void Scene::ReadSceneFromDisk()
    {
-      if (!FS::BeginBinaryRead(FS::GetProjectHome() + "/" + name + ".igscn")) {
+      if (!Ignition::IO::BeginBinaryRead(Ignition::IO::GetProjectHome() + "/" + name + ".igscn")) {
          std::cerr << "can't open scene\n";
          return;
       }
-      uint32_t count = FS::Read32();
+      uint32_t count = Ignition::IO::Read32();
 
       for (int i = 0; i < count; ++i)
       {
@@ -97,27 +98,27 @@ namespace Ignition {
 
          Object o;
 
-         o.name = FS::ReadString();
-         o.tag = FS::ReadString();
+         o.name = Ignition::IO::ReadString();
+         o.tag = Ignition::IO::ReadString();
 
-         o.transform.position.x = FS::ReadFloat();
-         o.transform.position.y = FS::ReadFloat();
-         o.transform.position.z = FS::ReadFloat();
-         o.transform.rotation.x = FS::ReadFloat();
-         o.transform.rotation.y = FS::ReadFloat();
-         o.transform.rotation.z = FS::ReadFloat();
-         o.transform.scale.x = FS::ReadFloat();
-         o.transform.scale.y = FS::ReadFloat();
-         o.transform.scale.z = FS::ReadFloat();
+         o.transform.position.x = Ignition::IO::ReadFloat();
+         o.transform.position.y = Ignition::IO::ReadFloat();
+         o.transform.position.z = Ignition::IO::ReadFloat();
+         o.transform.rotation.x = Ignition::IO::ReadFloat();
+         o.transform.rotation.y = Ignition::IO::ReadFloat();
+         o.transform.rotation.z = Ignition::IO::ReadFloat();
+         o.transform.scale.x = Ignition::IO::ReadFloat();
+         o.transform.scale.y = Ignition::IO::ReadFloat();
+         o.transform.scale.z = Ignition::IO::ReadFloat();
 
-         o.enabled = FS::Read8();
+         o.enabled = Ignition::IO::Read8();
 
-         int mCount = FS::Read16();
+         int mCount = Ignition::IO::Read16();
 
          for (int m = 0; m < mCount; ++m)
          {
-            std::string type = FS::ReadString();
-            bool enabled = FS::Read8();
+            std::string type = Ignition::IO::ReadString();
+            bool enabled = Ignition::IO::Read8();
 
             if (type == "Mesh Renderer")
             {
@@ -133,7 +134,7 @@ namespace Ignition {
          AddObject(o);
       }
 
-      FS::EndBinaryRead();
+      Ignition::IO::EndBinaryRead();
    }
 
    void Scene::Shutdown() {

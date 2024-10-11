@@ -3,7 +3,7 @@
 #include "shapes/cube.hpp"
 #include "shapes/square.hpp"
 #include "utils/model_loader.hpp"
-#include "utils/unlit_shader.hpp"
+#include "utils/default_shaders.hpp"
 #include "textures/grid.hpp"
 
 #define PI (float)3.14159265359
@@ -115,44 +115,48 @@ namespace Ignition::Rendering {
    }
 
    void MeshRenderer::Serialize() {
-      FS::WriteString(model.path);
+      Ignition::IO::WriteString(model.path);
 
       // for testing, the only shader that works is the default unlit
-      FS::WriteString("");
+      Ignition::IO::WriteString("");
 
-      FS::Write8((int)shader.type);
+      Ignition::IO::Write8((int)shader.type);
 
-      FS::WriteFloat(shader.color.r);
-      FS::WriteFloat(shader.color.g);
-      FS::WriteFloat(shader.color.b);
-      FS::WriteFloat(shader.color.a);
+      Ignition::IO::WriteFloat(shader.color.r);
+      Ignition::IO::WriteFloat(shader.color.g);
+      Ignition::IO::WriteFloat(shader.color.b);
+      Ignition::IO::WriteFloat(shader.color.a);
 
-      FS::WriteString(shader.albedo.name);
+      Ignition::IO::WriteFloat(shader.intensity);
+
+      Ignition::IO::WriteString(shader.albedo.name);
    }
 
    void MeshRenderer::Deserialize() {
-      std::string modelName = FS::ReadString();
+      std::string modelName = Ignition::IO::ReadString();
       if (modelName == "cube")
          LoadModel(cube_model);
       else if (modelName == "square")
          LoadModel(square_model);
-      else 
-         LoadModel(Ignition::ModelLoader::LoadModel(FS::GetProjectHome() + "/" + modelName)[0]);
+      //else 
+        // LoadModel(Ignition::ModelLoader::LoadModel(Ignition::IO::GetProjectHome() + "/" + modelName)[0]);
 
-      std::string shaderName = FS::ReadString();
-      bool isLit = FS::Read8(); 
+      std::string shaderName = Ignition::IO::ReadString();
+      bool isLit = Ignition::IO::Read8(); 
       if (shaderName.empty())
       {
          Shader s = Shader(unlit_vertex, unlit_fragment, (ShaderType)isLit);
          LoadShader(s);
       }
 
-      shader.color.r = FS::ReadFloat();
-      shader.color.g = FS::ReadFloat();
-      shader.color.b = FS::ReadFloat();
-      shader.color.a = FS::ReadFloat();
+      shader.color.r = Ignition::IO::ReadFloat();
+      shader.color.g = Ignition::IO::ReadFloat();
+      shader.color.b = Ignition::IO::ReadFloat();
+      shader.color.a = Ignition::IO::ReadFloat();
 
-      std::string s = FS::ReadString();
+      shader.intensity = Ignition::IO::ReadFloat();
+
+      std::string s = Ignition::IO::ReadString();
       shader.albedo = Texture(); 
       shader.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);
       shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "ignition_grid_texture");              
