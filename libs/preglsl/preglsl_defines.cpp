@@ -78,23 +78,34 @@ void preglsl_process_defines(std::string* data) {
    std::string line;
    std::istringstream iss(*data);
    while (std::getline(iss, line)) {
-      if (line[0] != '#' || line[1] != 'd' || line[2] != 'e')
-         continue;
+      {
+         if (line[0] != '#' || line[1] != 'd' || line[2] != 'e')
+            continue;
 
-      line = line.substr(8, line.size());
+         line = line.substr(8, line.size());
 
-      int f = line.find(' ');
+         int f = line.find(' ');
 
-      if (f != std::string::npos) {
-         std::string s1 = line.substr(0, f);
-         std::string s2 = line.substr(f, line.size());
-         
-         s1.erase(std::remove_if(s1.begin(), s1.end(), preglsl_is_whitespace), s1.end());
-         s2.erase(std::remove_if(s2.begin(), s2.end(), preglsl_is_whitespace), s2.end());
+         if (f != std::string::npos) {
+            std::string s1 = line.substr(0, f);
+            std::string s2 = line.substr(f, line.size());
+            
+            s1.erase(std::remove_if(s1.begin(), s1.end(), preglsl_is_whitespace), s1.end());
+            s2.erase(std::remove_if(s2.begin(), s2.end(), preglsl_is_whitespace), s2.end());
 
-         preglsl_add_define(s1.c_str(), s2);
-      } else {
-         preglsl_add_define(line.c_str());
+            preglsl_add_define(s1.c_str(), s2);
+         } else {
+            preglsl_add_define(line.c_str());
+         }
+      }
+
+      {
+         for (auto s : constDefines) {
+            std::string g;
+            //while ((g = line.find(s)) != std::string::npos) {}
+         }
       }
    }
+
+
 }

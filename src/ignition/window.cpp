@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-
-
 void GLAPIENTRY
 MessageCallback( GLenum source,
                  GLenum type,
@@ -48,18 +46,19 @@ const char* quadFragment =
 "in vec2 UV;"
 "uniform sampler2D tex;"
 "void main() {"
-"  fragColor = vec4(1-texture(tex, UV).rgb, 1);"
+"  fragColor = vec4(texture(tex, UV).rgb, 1);"
 "}\0";
 
 namespace Ignition {
    bool windowOpen;
    void Window::Resize(int x, int y)
    {
+      glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
       glViewport(0, 0, x, y);
    
       glBindTexture(GL_TEXTURE_2D, this->color);
       glBindTexture(GL_TEXTURE_2D, color);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, color, 0);
@@ -67,6 +66,7 @@ namespace Ignition {
       glBindRenderbuffer(GL_RENDERBUFFER, depth); 
       glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, x, y);  
       glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->depth);
+
    }
 
    Window::Window(int w, int h, const char* c, bool* b)

@@ -27,7 +27,7 @@ namespace Implosion {
       }
 
       if (ImGui::Button("Explore")) {
-         fileLocation = FS::FileExplorer();
+         fileLocation = Ignition::IO::FileExplorer();
       }
       ImGui::SameLine();
       ImGui::InputText("Location", &fileLocation);

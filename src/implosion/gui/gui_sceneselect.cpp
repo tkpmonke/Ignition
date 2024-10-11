@@ -43,7 +43,7 @@ bool CheckRayCubeIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDi
     float tzmin = (boxMin.z - rayOrigin.z) / rayDirection.z;
     float tzmax = (boxMax.z - rayOrigin.z) / rayDirection.z;
 
-    if (tzmin > tzmax) std::swap(tzmin, tzmax);
+   if (tzmin > tzmax) std::swap(tzmin, tzmax);
 
     if ((tmin > tzmax) || (tzmin > tmax))
         return false;

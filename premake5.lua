@@ -14,7 +14,7 @@ project "ignition"
    files { "src/ignition/**.cpp", "include/ignition/**.hpp", "include/ignition/**.cpp", "include/ignition/**.h" }
    removefiles "hub/*"
    
-   links { "glfw", "GL", "GLEW", "m", "assimp" }
+   links { "glfw", "GL", "GLEW", "m", "assimp"}
 
    filter "configurations:Debug"
       defines { "DEBUG" }
@@ -63,3 +63,23 @@ project "implosion-hub"
       defines { "NDEBUG" }
       optimize "On"
 
+project "ignition-runtime"
+   kind "ConsoleApp"
+   language "C++"
+   cppdialect "gnu++17"
+   targetdir "bin"
+   includedirs { "include/ignition", "include/ignition/components", "include/runtime" }
+   files { "src/runtime/**.cpp", "include/runtime/**.hpp" }
+   removefiles "hub/*"
+   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "lua" }
+
+   defines { "__INCLUDE_LUA_RUNTIME" }
+
+   filter "configurations:Debug"
+      defines { "DEBUG" }
+      optimize "On"
+      symbols "On"
+
+   filter "configurations:Release"
+      defines { "NDEBUG" }
+      optimize "On"

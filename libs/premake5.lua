@@ -1,3 +1,7 @@
+-- librarys not originally made by/for ignition have "ig-" added on to 
+-- ensure they don't clash with system librarys
+
+-- ImGui 
 project "ig-imgui"
    kind           "StaticLib"
    language       "C++"
@@ -16,6 +20,7 @@ project "ig-imgui"
       defines { "NDEBUG" }
       optimize "On"
 
+-- GLSL preprocessor
 project "preglsl"
    kind           "StaticLib"
    language       "C++"
@@ -32,3 +37,4 @@ project "preglsl"
    filter "configurations:Release"
       defines { "NDEBUG" }
       optimize "On"
+

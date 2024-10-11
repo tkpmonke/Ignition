@@ -5,7 +5,11 @@ Fast, Lightweight, and easy-to-use general purpose game engine
 nothing for games yet, but the editor has a customizeable grid, can create objects, and thats it (for now)
 
 ## Compile From Source
+<details>
+    <summary>Details On Building</summary>
+
 ignition uses the following
+
 - GLEW
 - GLFW
 - GLM
@@ -15,11 +19,17 @@ ignition uses the following
 - stb_image.h (included)
 - IMGUI (included)
 
-all of which can be installed using most linux package managers (only pacman/AUR tested) (excluding `stb_image.h` and `IMGUI`, but those are preinstalled and compiled by default
+ignition runtime uses the following 
 
-run `premake5 gmake2 && make -j` for unix-like systems. `-j` adds multithreading to make, if you don't want/have multithreading, remove that<br/><br/>
+- lua
+  
+all of which can be installed using most linux package managers (only pacman/AUR tested) (excluding `stb_image.h` and `IMGUI`, but those are preinstalled and compiled by default
+    
+run `premake5 gmake2 && make` for unix-like systems. A optimization you can use is to pass the `-j` flag into make, running it with multiple threads (doesn't work on all systems)<br/><br/>
 or<br/><br/>
 run `premake5 vs2022` and open the .sln file for windows devices. Windows isn't fully supported yet, don't be surprised if it doesn't work (it doesn't)
+
+</details>
 
 ## More Info
 if your gonna make a game in this engine (when it's ready for real games to be made in it), then please feel free to contact me whenever if you have a question about the engine or would like to suggest a feature to be implemented :D

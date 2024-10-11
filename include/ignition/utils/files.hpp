@@ -1,10 +1,9 @@
 #pragma once
 
-#include "types/texture.hpp"
-
 #include <string>
-#include <memory>
-namespace FS {
+#include <cstdint>
+
+namespace Ignition::IO {
 
    std::string GetHome();
    std::string FileExplorer();

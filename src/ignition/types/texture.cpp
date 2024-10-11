@@ -17,14 +17,31 @@ namespace Ignition::Rendering {
    }
 
    void Texture::LoadData(std::vector<std::string> files) {
+      this->name = files[0];
+
+      if (location == 0) 
          glGenTextures(1, &this->location);
-         glBindTexture(GL_TEXTURE_CUBE_MAP, this->location);
+
+      glBindTexture(GL_TEXTURE_CUBE_MAP, this->location);
       for (int i = 0; i < files.size(); ++i) {
          int w, h, nr;
          stbi_set_flip_vertically_on_load(false);
          unsigned char* d = stbi_load(files[i].data(), &w, &h, &nr, 0);
          LoadData(d, w, h, nr, files[i], i+1);
       }
+   }
+
+   void Texture::LoadData(std::vector<const char*> data, int w, int h, int nr, std::string name) {
+      this->name = name;
+
+      if (location == 0) 
+         glGenTextures(1, &this->location);
+
+      glBindTexture(GL_TEXTURE_CUBE_MAP, this->location);
+      for (int i = 0; i < data.size(); ++i) {
+         LoadData((unsigned char*)data[i], w, h, nr, name, i+1);
+      }
+
    }
 
    void Texture::LoadData(unsigned char* data, int w, int h, int nr, std::string name)
@@ -95,14 +112,12 @@ namespace Ignition::Rendering {
          case(2):
             format = GL_RG;
             break;
+         default:
          case(3):
             format = GL_RGB;
             break;
          case(4):
             format = GL_RGBA;
-            break;
-         default:
-            format = GL_RGB;
             break;
       }
       if (i != 0) {

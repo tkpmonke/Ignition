@@ -8,7 +8,7 @@
 #include "sprites/empty_folder.hpp"
 
 namespace Implosion {
-   std::string s = FS::GetHome() + "/Implosion/gui";
+   std::string s = Ignition::IO::GetHome() + "/Implosion/gui";
    GUI::GUI(Ignition::Window* window, Ignition::Camera* camera)
    {
       IMGUI_CHECKVERSION();
@@ -63,10 +63,8 @@ namespace Implosion {
    {
       ImGui::Render();
       ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-      glBindFramebuffer(GL_FRAMEBUFFER, window->framebuffer);
       window->Resize(camera->size.x, camera->size.y);
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
    }
 
    void GUI::Shutdown()

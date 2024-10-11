@@ -1,7 +1,7 @@
 #include "utils/files.hpp"
-#include "GLFW/glfw3.h"
 #include "serialization/saving.hpp"
 #include "scene.hpp"
+#include "GLFW/glfw3.h"
 
 #include <iostream>
 #ifdef DEBUG 

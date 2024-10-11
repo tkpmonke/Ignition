@@ -5,10 +5,10 @@ namespace Ignition::Rendering {
    void PostProcess::Render() {
       
       glUseProgram(this->shader.program);
-      glBindImageTexture(0, this->window->color, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+      glBindImageTexture(0, this->window->color, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 
       for (int i = 1; i <= extraTextures.size(); ++i)
-         glBindImageTexture(i, extraTextures[i-1], 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+         glBindImageTexture(i, extraTextures[i-1], 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
       
       int w,h;
       glfwGetFramebufferSize((GLFWwindow*)*this->window, &w, &h);
@@ -27,7 +27,7 @@ namespace Ignition::Rendering {
       glfwGetFramebufferSize((GLFWwindow*)*window, &width, &height);
       glGenTextures(1, &tex);
       glBindTexture(GL_TEXTURE_2D, tex);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       extraTextures.push_back(tex);

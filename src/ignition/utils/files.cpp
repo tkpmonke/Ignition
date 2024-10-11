@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <filesystem>
 #include <string.h>
 
 #ifdef __linux__
@@ -19,7 +18,7 @@
 #error your out of luck ig (for now)
 #endif 
 
-namespace FS {
+namespace Ignition::IO {
    
    std::string projectName;
    void SetProjectHome(std::string s)
