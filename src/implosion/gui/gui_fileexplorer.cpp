@@ -11,7 +11,7 @@ namespace Implosion {
    void GUI::RefreshFiles() {
       if (files.activeDirectory == "") {
          if (b == 0)
-            files.activeDirectory = FS::GetProjectHome();
+            files.activeDirectory = Ignition::IO::GetProjectHome();
          else 
             files.activeDirectory = "/";
          b = 1;
