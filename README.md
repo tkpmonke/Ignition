@@ -33,3 +33,7 @@ run `premake5 vs2022` and open the .sln file for windows devices. Windows isn't 
 
 ## More Info
 if your gonna make a game in this engine (when it's ready for real games to be made in it), then please feel free to contact me whenever if you have a question about the engine or would like to suggest a feature to be implemented :D
+
+## Support
+
+You can join [The Discord Server](https://discord.gg/ZPuBZ6VFVn) to support :D
