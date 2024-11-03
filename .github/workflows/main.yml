@@ -42,5 +42,3 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
-        with:
-          args: 'Automatic Build has been deployed. {{ EVENT_PAYLOAD.repository.full_name}}/{{ GITHUB_ACTION }}'
