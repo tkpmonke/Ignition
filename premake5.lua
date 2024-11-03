@@ -73,7 +73,7 @@ project "ignition-runtime"
    includedirs { "include/ignition", "include/ignition/components", "include/runtime", "libs" }
    files { "src/runtime/**.cpp", "include/runtime/**.hpp" }
    removefiles "hub/*"
-   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "lua" }
+   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "lua5.4" }
 
    defines { "__INCLUDE_LUA_RUNTIME" }
 
