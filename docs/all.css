@@ -1,4 +1,11 @@
+@keyframes fadein {
+   from { opacity: 0; }
+   to {opacity: 1; }
+}
+
 body {
+   animation-name: fadein;
+   animation-duration: 1s;
    background-color:black;
    color: white;
    font-family:monospace;

@@ -78,7 +78,7 @@ namespace Ignition::ModelLoader {
          Ignition::Rendering::MeshRenderer mr;
          mr.model = m;
 
-         std::shared_ptr<Rendering::MeshRenderer> ptr = std::make_shared<Rendering::MeshRenderer>(m);
+         std::shared_ptr<Rendering::MeshRenderer> ptr = std::make_shared<Rendering::MeshRenderer>(mr);
          obj.AddModule(ptr);
 
          Ignition::scene.GetObjects()->at(parent).AddChild(&obj);

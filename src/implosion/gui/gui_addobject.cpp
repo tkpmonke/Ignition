@@ -12,7 +12,6 @@
 #include "scene.hpp"
 
 #include <memory>
-#include <iostream>
 
 using namespace Ignition::Rendering;
 
@@ -20,7 +19,7 @@ using namespace Ignition::Rendering;
          Shader s = Shader(unlit_vertex, unlit_fragment, ShaderType::Unlit);                       \
          s.albedo = Texture();                                                                           \
          s.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);                                \
-         s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "ignition_grid_texture");              
+         s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");              
 
 namespace Implosion {
    void GUI::AddObjectMenu()
@@ -44,7 +43,6 @@ namespace Implosion {
             m.LoadShader(s);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
             Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
-            this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
          }
          if (ImGui::MenuItem("Cube"))
          {
@@ -53,8 +51,8 @@ namespace Implosion {
             m.LoadModel(cube_model);
             m.LoadShader(s);
             std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
-            Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
-            this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
+            Ignition::Object* o = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
+            o->AddModule(ptr);
          }
          ImGui::EndMenu();
       }

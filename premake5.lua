@@ -10,11 +10,13 @@ project "ignition"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/ignition" }
+   includedirs { "include/ignition", "include/ignition/components", "include/ignition", "libs/assetpacker" }
    files { "src/ignition/**.cpp", "include/ignition/**.hpp", "include/ignition/**.cpp", "include/ignition/**.h" }
    removefiles "hub/*"
    
    links { "glfw", "GL", "GLEW", "m", "assimp"}
+
+   defines { "__INCLUDE_LUA_RUNTIME" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
@@ -30,7 +32,7 @@ project "implosion"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui" }
+   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker" }
    files { "src/implosion/**.cpp", "include/**.hpp", "libs/imgui/**.h" }
    removefiles "hub/*"
    links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui" }
@@ -51,7 +53,7 @@ project "implosion-hub"
    targetdir "bin"
 
    includedirs { "libs/imgui" }
-   files { "hub/**.h", "hub/**.cpp", "hub/**.hpp", "libs/imgui/**.hpp"}
+   files {"utils/hub/hub.cpp", "libs/imgui/**.hpp"}
    links { "glfw", "GL", "ig-imgui" }
 
    filter "configurations:Debug"

@@ -3,20 +3,23 @@
 #include "modules/rendering/meshrenderer.hpp"
 
 void getRayFromMouse(float mouseX, float mouseY, int windowWidth, int windowHeight, 
-                          const glm::mat4& projectionMatrix, const Ignition::Matrix4& viewMatrix,
-                     Ignition::Vector4* rayWorld, Ignition::Vector3* rayDir) {
-   float x = (2.0f * mouseX) / windowWidth - 1.0f;
+                     const glm::mat4& projectionMatrix, const Ignition::Matrix4& viewMatrix,
+                     Ignition::Vector3* rayDir) {
+    
+    // Convert mouse position from screen space to NDC
+    float x = (2.0f * mouseX) / windowWidth - 1.0f;
     float y = 1.0f - (2.0f * mouseY) / windowHeight;
     glm::vec4 rayNDC(x, y, -1.0f, 1.0f);
 
-    // Convert to eye space
+    // Convert NDC to eye space (inverse projection)
     glm::vec4 rayEye = glm::inverse(projectionMatrix) * rayNDC;
-    rayEye = glm::vec4(rayEye.x, rayEye.y, -1.0f, 0.0f);
+    rayEye = glm::vec4(rayEye.x, rayEye.y, -1.0f, 0.0f); // Z set to -1 for a forward direction ray, W set to 0 for direction
 
-    // Convert to world space
-    *rayWorld = glm::inverse(viewMatrix) * rayEye;
-    *rayDir = glm::normalize(glm::vec3(*rayWorld));
+    // Convert to world space (inverse view matrix)
+    glm::vec4 rayWorld4D = glm::inverse((glm::mat4)viewMatrix) * rayEye;
 
+    // Extract the direction by normalizing the 3D component of the world ray
+    *rayDir = -glm::normalize(glm::vec3(rayWorld4D));
 }
 
 bool CheckRayCubeIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDirection,
@@ -56,7 +59,6 @@ bool CheckRayMeshIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDi
    Ignition::Vector3 cubeMax = Ignition::Vector3(std::numeric_limits<float>::min()),
                      cubeMin = Ignition::Vector3(std::numeric_limits<float>::max());
 
-   Ignition::Matrix4 modelMatrix = glm::mat4_cast(glm::quat(glm::radians(model->transform->rotation)));
    for (int i = 0; i < model->model.vertices.size(); i+=3) {
       Ignition::Vector3 f = { model->model.vertices[i],
                               model->model.vertices[i+1],
@@ -87,13 +89,10 @@ namespace Implosion {
       x -= pos.x;
       y -= pos.y;
 
-      glm::vec4 rayOrigin;
       glm::vec3 rayDirection;
       getRayFromMouse(x, y, camera->size.x, camera->size.y, this->camera->ProjectionMatrix(), this->camera->ViewMatrix(), 
-            &rayOrigin, &rayDirection);
+            &rayDirection);
 
-      //rayOrigin = this->camera->transform.position;
-    
       //printf("ORG : X=%f Y=%f Z=%f\n", rayOrigin.x, rayOrigin.y, rayOrigin.z); 
       //printf("DIR : X=%f Y=%f Z=%f\n\n", rayDirection.x, rayDirection.y, rayDirection.z); 
       

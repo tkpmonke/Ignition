@@ -22,11 +22,12 @@ namespace Implosion {
       for (const auto& file : std::filesystem::directory_iterator(files.activeDirectory))
       { 
          int type = 0;
-        if (file.is_directory() && file.path().filename().string()[0] != '.')
+        if (file.is_directory() && file.path().filename().string()[0] != '.') 
             type = 1;
-         if (files.activeDirectory != "/" && file.path().filename().string()[0] != '.')
+         if (files.activeDirectory != "/" && file.path().filename().string()[0] != '.') 
             if (std::filesystem::is_empty(file) && type == 1)
-               type = 2;
+             type = 2;
+   
          files.files.push_back({file.path().filename().string(), file.path().string(), type});
       }
    }
@@ -62,9 +63,19 @@ namespace Implosion {
                         ImVec2(files.size, files.size+25)))
                {
                   int type;
-                  if (file.type == 0) type = files.file;
+
+                  if (file.type == 0) {
+                     type = files.file;
+                     auto s = std::filesystem::path(file.path).extension();
+
+                     if (s == ".igscn") {
+                        type = files.additionalTextures.igscn;
+                     }
+                  }
+
                   if (file.type == 1) type = files.folder;
                   if (file.type == 2) type = files.empty_folder;
+
                   if (ImGui::ImageButton((void*)(intptr_t)type, ImVec2((int)files.size,(int)files.size)))
                   {
                      switch (file.type) {

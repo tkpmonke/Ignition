@@ -1,9 +1,14 @@
 #include "gui/gui.hpp"
-#include "modules/rendering/meshrenderer.hpp"
-
 #include "imgui_stdlib.h"
-
 #include <glm/gtc/type_ptr.hpp>
+
+#include "modules/rendering/meshrenderer.hpp"
+#include "types/shader.hpp"
+#include "utils/default_shaders.hpp"
+#include "types/texture.hpp"
+#include "shapes/square.hpp"
+#include "shapes/cube.hpp"
+#include "textures/grid.hpp"
 
 #include <cstring>
 
@@ -25,7 +30,6 @@ namespace Implosion {
             ImGui::Text("Select Something to Use This");
          } else {
             
-            Ignition::Rendering::MeshRenderer* renderer = (Ignition::Rendering::MeshRenderer*)obj->GetModule("Mesh Renderer"); 
             ImGui::Checkbox("##Enabled", &obj->enabled);
             
             ImGui::SameLine();
@@ -37,7 +41,7 @@ namespace Implosion {
             
             ImGui::Separator();
 
-            ImGui::BeginChild("Transform", ImVec2(0, 100));
+            ImGui::BeginChild("Transform", ImVec2(0, 75));
             {
                Ignition::Vector3 pos = obj->transform.position;
                Ignition::Vector3 rot = obj->transform.rotation;
@@ -54,34 +58,55 @@ namespace Implosion {
                {
                   obj->transform.scale = sca;
                }
-               
-               if (ImGui::CollapsingHeader("Vectors"))
-               {
-                  ImGui::Text("Forward : %f, %f, %f", obj->transform.forward.x, obj->transform.forward.y, obj->transform.forward.z);
-                  ImGui::Text("Right : %f, %f, %f", obj->transform.right.x, obj->transform.right.y, obj->transform.right.z);
-                  ImGui::Text("Up : %f, %f, %f", obj->transform.up.x, obj->transform.up.y, obj->transform.up.z);
-               }
-            
             }
             ImGui::EndChild();
             ImGui::Separator();
-            ImGui::BeginChild("Material");
-            if (renderer != nullptr)
-            {
-               if (ImGui::CollapsingHeader("Mesh Renderer", ImGuiTreeNodeFlags_DefaultOpen))
-               {
-                  ImGui::Checkbox("Enabled", &renderer->enabled);
-                  Ignition::Vector4 color = renderer->shader.color;
-                  if (ImGui::ColorEdit4("Color", glm::value_ptr(color)))
-                  {
-                     renderer->shader.color = color;
-                  }
 
-                  ImGui::DragFloat("Intensity", &renderer->shader.intensity);
+            for (std::shared_ptr<Ignition::Module> mod : obj->GetModules()) {
+               if (mod->mod_type() == "Mesh Renderer") {
+                  if (ImGui::CollapsingHeader("Mesh Renderer")) {
+                     auto m = std::dynamic_pointer_cast<Ignition::Rendering::MeshRenderer>(mod);
+                     ImGui::BeginChild("##Mesh_Renderer", ImVec2(0, 400));
+
+                     if (ImGui::BeginCombo("Mesh", "Mesh")) {
+                        if (ImGui::Button("None")) {
+                           m->LoadModel(Ignition::Model());
+                        }
+
+                        if (ImGui::Button("Square")) {
+                           m->LoadModel(square_model);
+                        }
+                        
+                        if (ImGui::Button("Cube")) {
+                           m->LoadModel(cube_model);
+                        }
+                        ImGui::EndCombo();
+                     }
+
+                     ImGui::DragFloat("Intensity", &m->shader.intensity);
+                     ImGui::EndChild();
+                  }
                }
             }
-            
-            ImGui::EndChild();
+
+            if (ImGui::BeginCombo("##Add_Component", "Add Component")) {
+               if (ImGui::Button("Mesh Renderer")) {
+                  Ignition::Rendering::MeshRenderer m;
+                  Ignition::Rendering::Shader s = 
+                     Ignition::Rendering::Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::ShaderType::Unlit);
+                  s.albedo = Ignition::Rendering::Texture();
+                  s.albedo.SetFlags(Ignition::Rendering::TextureFlags::Repeat | Ignition::Rendering::TextureFlags::Nearest);
+                  s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");
+
+                  m.LoadShader(s);
+                  m.LoadModel(cube_model);
+                  auto ptr = std::make_shared<Ignition::Rendering::MeshRenderer>(m);
+                  obj->AddModule(ptr);
+               }
+
+               ImGui::Button("Script");
+               ImGui::EndCombo();
+            }
             
          }
          

@@ -159,7 +159,7 @@ namespace Ignition::Rendering {
       std::string s = Ignition::IO::ReadString();
       shader.albedo = Texture(); 
       shader.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);
-      shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "ignition_grid_texture");              
+      shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");              
       
    }
 }

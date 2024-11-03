@@ -37,7 +37,7 @@ namespace Ignition {
       template<class T>
       T* GetModule();
 
-      std::vector<std::shared_ptr<Module>> GetModules() { return modules; }
+      std::vector<std::shared_ptr<Module>>& GetModules() { return modules; }
 
       std::vector<Object*> GetChildren() { return children; };
       std::vector<Object*> GetChildrenWithModule(std::string);
@@ -45,6 +45,11 @@ namespace Ignition {
       void AddChild(Object* o) { this->children.push_back(o); }
 
       int GetModuleCount() {return modules.size();}
+
+      Transform* GetTransform() {
+         return &transform;
+      }
+      void SetTransform(const Transform* t) { transform = *t; }
       
    private:
       std::vector<std::shared_ptr<Module>> modules;

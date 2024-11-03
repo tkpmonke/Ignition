@@ -91,6 +91,10 @@ namespace Implosion {
          float size = 50;
 
          Ignition::Rendering::Texture folder, file, empty_folder;
+
+         struct {
+            Ignition::Rendering::Texture igscn;
+         } additionalTextures;
       } files;
    private:
       bool openAssetLoader = false;

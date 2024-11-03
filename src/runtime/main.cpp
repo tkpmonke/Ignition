@@ -1,6 +1,5 @@
-#include "app.hpp"
-#include "lib.hpp"
-#include "scripts.hpp"
+#include "modules/script.hpp"
+#include "lua/lualib.hpp"
 
 #include "window.hpp"
 #include "camera.hpp"
@@ -8,13 +7,10 @@
 
 #include "utils/files.hpp"
 
-int main() {
-   lua_State* L = luaL_newstate();
-   luaL_openlibs(L);
-   open_lib(L);
+#include <iostream>
 
-   //std::cout << "App Name : " << appInfo.appName << "\n";
-   //std::cout << "Version : " << appInfo.version << "\n";
+int main() {
+   Ignition::Scripting::Lua::LoadIgnitionLibrary();
 
    Ignition::IO::SetProjectHome("/home/turdle/Projects/implosion-test/game");
 
@@ -25,24 +21,26 @@ int main() {
       camera.fov = 75;
       camera.clipping_planes.min = 0.1f;
       camera.clipping_planes.max = 100.f;
+      camera.transform.position.y = 5;
       camera.MakeMainCamera();
 
       Ignition::project.LoadProject(&window);
+      
+      if (luaL_dofile(Ignition::Scripting::Lua::state, (Ignition::IO::GetProjectHome()+"/settings/app.lua").data()) != LUA_OK) {
+        std::cerr << "Error: " << lua_tostring(Ignition::Scripting::Lua::state, -1) << std::endl;
+        lua_close(Ignition::Scripting::Lua::state);
+        return -1;
+      }
          
       int i = 0;
       while (window.IsOpen())
       {
-         if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) loadAppInfo(L);
-         
          window.Update();
          window.Bind();
          camera.BeginRender();
           
          Ignition::scene.Update();
 
-         setPerFrameVariables(L);
-         callUpdate(L);
-         
          camera.EndRender(false);
          int w,h;
          glfwGetWindowSize(window, &w, &h);
@@ -54,7 +52,4 @@ int main() {
       Ignition::scene.Shutdown();
       window.Shutdown();
    }
-
-
-   lua_close(L);
 }
