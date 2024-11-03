@@ -37,3 +37,10 @@ jobs:
         with:
           name: Auto-Build
           path: bin/
+
+      - name: Notify Server
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DESCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: 'Automatic Build has been deployed. {{ EVENT_PAYLOAD.repository.full_name}}/{{ GITHUB_ACTION }}
