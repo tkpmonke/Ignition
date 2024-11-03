@@ -31,3 +31,9 @@ jobs:
 
       - name: Build Project
         run: make -j
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: Auto-Build
+          path: bin/
