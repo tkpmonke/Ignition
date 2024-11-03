@@ -6,9 +6,10 @@
 #include "scene.hpp"
 #include "project.hpp"
 #include "utils/model_loader.hpp"
-#include "input/commands.hpp"
 #include "sprites/skybox_top.h"
 #include "sprites/skybox_sides.h"
+
+#include "packer.hpp"
 
 #include <iostream>
 #include <string.h>
@@ -26,8 +27,6 @@ using namespace Ignition::Rendering;
 
 int main(int argc, char** argv) 
 {
-
-
    for (int i = 0; i < argc; ++i)
    {
       if (strcmp(argv[i], "-f") == 0
@@ -50,10 +49,17 @@ int main(int argc, char** argv)
    
    if (Ignition::IO::GetProjectHome() == "")
    {
-      std::cerr << "No Project Provided\n";
+      std::cerr << "No Project Provided\n\n" << implosionHelp;
       return -1;
    }
-
+/*
+   pack(Ignition::IO::GetProjectHome().data(), (Ignition::IO::GetProjectHome() + "/bin").data(), 1);
+   auto fs = unpack((Ignition::IO::GetProjectHome()+"/bin/assets.pad").data());
+   std::cout << "done\n";
+   if (fs == Filesystem(0)) {
+      std::cerr << "nuh uh\n";
+   }
+  */ 
    bool applicationOpen = true;
    while (applicationOpen) {
       Ignition::Window window = Ignition::Window(1920, 1080, "Implosion", &applicationOpen);
@@ -83,8 +89,6 @@ int main(int argc, char** argv)
       gui.InitGrid();
 
       pp_manager = PPManager(&window);
-
-      SetCommandCallback(window, &gui);
 
       gui.Style();
          

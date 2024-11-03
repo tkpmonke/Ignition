@@ -1,11 +1,13 @@
 #include "gui/gui.hpp"
 #include "utils/files.hpp"
+#include "input/commands.hpp"
 
 #include <iostream>
 
 #include "sprites/file.hpp"
 #include "sprites/folder.hpp"
 #include "sprites/empty_folder.hpp"
+#include "sprites/igscn.hpp"
 
 namespace Implosion {
    std::string s = Ignition::IO::GetHome() + "/Implosion/gui";
@@ -23,6 +25,7 @@ namespace Implosion {
       this->camera = camera;
       color = window->color;
 
+      SetCommandCallback((GLFWwindow*)*window, this);
       ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)*this->window, true);
       ImGui_ImplOpenGL3_Init("#version 330");
 
@@ -47,6 +50,12 @@ namespace Implosion {
                                           FILE_IMAGE_BYTES_PER_PIXEL,
                                           "Implosion_File");
 
+      this->files.additionalTextures.igscn.SetFlags(Ignition::Rendering::Linear);
+      this->files.additionalTextures.igscn.LoadData(  igscn_PIXEL_DATA,
+                                                      igscn_WIDTH,
+                                                      igscn_HEIGHT,
+                                                      igscn_BYTES_PER_PIXEL,
+                                                      "Implosion_IGSCN");
    }
 
    void GUI::NewFrame()

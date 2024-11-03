@@ -2,11 +2,8 @@
 
 #ifdef __INCLUDE_LUA_RUNTIME
 namespace Ignition {
-   void Script::lua_run() {
-
-   }
-
-   std::vector<script_data_types> Script::lua_getvariables() {
+   /*
+   std::vector<script_data_types> lua_getvariables() {
       std::vector<script_data_types> o;
       int a = lua_gettop(this->state);
       lua_pushnil(this->state);
@@ -38,5 +35,6 @@ namespace Ignition {
 
       return o;
    }
+   */
 }
 #endif

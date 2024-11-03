@@ -13,7 +13,7 @@ namespace Ignition::Rendering {
       PostProcess bloom = PostProcess(pp_bloom, this->window, 3);
       bloom.MakeExtraTexture();
       bloom.MakeExtraTexture();
-      effects.push_back({"Bloom", true, bloom});
+      effects.push_back({"Bloom", false, bloom});
 
       for (int i = 0; i < effects.size(); ++i)
       {

@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "scene.hpp"
-
+#include "types/texture.hpp"
 
 #define LERP(x,y,z) x*(1-z)+y*z
 
@@ -173,6 +173,49 @@ namespace Implosion {
                   this->camera->transform.forward.z);
 
          }
+      }
+      ImGui::End();
+      
+      if (ImGui::Begin("Texture Inspector")) {
+         ImGui::BeginChild("Texture List", ImVec2(0, 300));
+
+         static std::string selected;
+         if (ImGui::Selectable("Ignition_Window_Color", selected == "Ignition_Window_Color")) {
+            selected = "Ignition_Window_Color";
+         }
+         if (ImGui::Selectable("Ignition_Window_Depth", selected == "Ignition_Window_Depth")) {
+            selected = "Ignition_Window_Depth";
+         }
+         ImGui::Separator();
+         for (auto i : Ignition::Rendering::texture_lookup_table)
+         {
+            if (ImGui::Selectable(i.first.data(), (selected == i.first))) {
+               selected = i.first;
+            }
+         }
+
+         ImGui::EndChild();
+
+         //ImGui::SameLine();
+         ImGui::Separator();
+         ImGui::Spacing();
+
+         ImGui::BeginChild("Texture Display");
+
+         if (selected != "") {
+            int w = ImGui::GetWindowWidth();
+            ImVec2 currentPos = ImGui::GetCursorPos();
+            ImGui::SetCursorPos(ImVec2(currentPos.x + 20, currentPos.y + 20));
+            if (selected == "Ignition_Window_Depth") {
+               ImGui::Image((void*)(intptr_t)this->window->depth, ImVec2(this->camera->size.x,this->camera->size.y));
+            } else if (selected == "Ignition_Window_Color") {
+               ImGui::Image((void*)(intptr_t)this->window->color, ImVec2(this->camera->size.x,this->camera->size.y));
+            } else {
+               ImGui::Image((void*)(intptr_t)Ignition::Rendering::texture_lookup_table[selected], ImVec2(w-40,w-40));
+            }
+         }
+
+         ImGui::EndChild();
       }
       ImGui::End();
    }
