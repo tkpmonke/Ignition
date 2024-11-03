@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - main
+        indev
+  
+jobs:
+  build:
+    name: Build 
+    runs-on: ubuntu-22.04
+
+    steps: 
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+      - name: Install Dependincies
+        run: sudo apt update && sudo apt install -y build-essential premake5 libglfw3-dev libglew-dev libglm-dev libassimp-dev python p7zip-full liblua5.4-dev
+
+      - name: Generate Premake Files
+        run: premake5 gmake2
+
+      - name: Build Project
+        run: make
