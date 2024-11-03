@@ -41,6 +41,6 @@ jobs:
       - name: Notify Server
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: ${{ env.DISCORD_USERNAME }}
-          DISCORD_AVATAR: ${{ env.DISCORD_AVATAR }} 
+          DISCORD_USERNAME: Dumb Bot
+          DISCORD_AVATAR: https://github.com/tkpmonke/Ignition/blob/indev/icon.png
         uses: Ilshidur/action-discord@master
