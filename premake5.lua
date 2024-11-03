@@ -10,7 +10,7 @@ project "ignition"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/ignition", "libs/assetpacker" }
+   includedirs { "include/ignition", "include/ignition/components", "include/ignition", "libs/assetpacker", "libs" }
    files { "src/ignition/**.cpp", "include/ignition/**.hpp", "include/ignition/**.cpp", "include/ignition/**.h" }
    removefiles "hub/*"
    
@@ -32,7 +32,7 @@ project "implosion"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker" }
+   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker", "libs" }
    files { "src/implosion/**.cpp", "include/**.hpp", "libs/imgui/**.h" }
    removefiles "hub/*"
    links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui" }
@@ -52,7 +52,7 @@ project "implosion-hub"
    cppdialect "gnu++17"
    targetdir "bin"
 
-   includedirs { "libs/imgui" }
+   includedirs { "libs/imgui", "libs" }
    files {"utils/hub/hub.cpp", "libs/imgui/**.hpp"}
    links { "glfw", "GL", "ig-imgui" }
 
@@ -70,7 +70,7 @@ project "ignition-runtime"
    language "C++"
    cppdialect "gnu++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/runtime" }
+   includedirs { "include/ignition", "include/ignition/components", "include/runtime", "libs" }
    files { "src/runtime/**.cpp", "include/runtime/**.hpp" }
    removefiles "hub/*"
    links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "lua" }
