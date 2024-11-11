@@ -5,12 +5,11 @@
 #include "utils/model_loader.hpp"
 #include "utils/default_shaders.hpp"
 #include "textures/grid.hpp"
-
-#define PI (float)3.14159265359
+#include "utils/io.hpp"
 
 namespace Ignition::Rendering {
-   int currentProgram = 999;
-   int currentVao = 999;
+   int currentProgram = std::numeric_limits<int>::max();
+   int currentVao = std::numeric_limits<int>::max();
    std::unordered_map<std::string, int> model_lookup_table;
 
    void MeshRenderer::LoadModel(Model m)
@@ -95,8 +94,8 @@ namespace Ignition::Rendering {
       model = glm::scale(model, this->transform->scale);
 
       this->shader.SetMatrix4(model, "model");
-      glActiveTexture(GL_TEXTURE0 ); 
-      if (shader.albedo.type == 2) {
+      if (shader.albedo.type == IGNITION_2D) {
+         glActiveTexture(GL_TEXTURE0 ); 
          glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
          this->shader.SetInt(0, "material.albedo");
       }
@@ -129,7 +128,8 @@ namespace Ignition::Rendering {
 
       Ignition::IO::WriteFloat(shader.intensity);
 
-      Ignition::IO::WriteString(shader.albedo.name);
+      Ignition::IO::WriteString(
+            shader.albedo.name);
    }
 
    void MeshRenderer::Deserialize() {
@@ -138,9 +138,8 @@ namespace Ignition::Rendering {
          LoadModel(cube_model);
       else if (modelName == "square")
          LoadModel(square_model);
-      //else 
-        // LoadModel(Ignition::ModelLoader::LoadModel(Ignition::IO::GetProjectHome() + "/" + modelName)[0]);
-
+      else 
+         LoadModel(Ignition::ModelLoader::LoadModel(Ignition::IO::GetProjectHome() + modelName));
       std::string shaderName = Ignition::IO::ReadString();
       bool isLit = Ignition::IO::Read8(); 
       if (shaderName.empty())
@@ -159,7 +158,11 @@ namespace Ignition::Rendering {
       std::string s = Ignition::IO::ReadString();
       shader.albedo = Texture(); 
       shader.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);
-      shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");              
+      if (s == "Ignition_Grid")
+         shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, s);              
+      else 
+         //shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, s);              
+         shader.albedo.LoadData(s);
       
    }
 }

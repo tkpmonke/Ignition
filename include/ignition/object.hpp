@@ -30,6 +30,9 @@ namespace Ignition {
       
       void AddModule(std::shared_ptr<Module>);
 
+      template<class T>
+      T* AddModule();
+
       // GetModule with mod_name
       Module* GetModule(std::string);
       

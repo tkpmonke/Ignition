@@ -91,5 +91,6 @@ const Ignition::Model cube_model {
            1,0,0,
            1,1,0,
            0,1,0},
-   .path = "cube"
+   .path = "cube",
+   .name = "cube"
 };

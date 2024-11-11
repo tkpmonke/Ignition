@@ -37,13 +37,6 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
       Ignition::scene.AddObject(g->copiedObject.value());
    }
    */
-
-
-   if ((key == GLFW_KEY_R)
-         && action == GLFW_PRESS)
-   {
-      g->window->Restart();
-   }
    
    if ((key == GLFW_KEY_DELETE)
          && action == GLFW_PRESS)

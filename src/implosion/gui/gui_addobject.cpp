@@ -26,10 +26,6 @@ namespace Implosion {
    {
       if (ImGui::BeginMenu("Create Object"))
       {
-         if (ImGui::MenuItem("Asset Loader"))
-         {
-            openAssetLoader = 1;
-         }
          if (ImGui::MenuItem("Empty"))
          {
             Ignition::scene.CreateObject();

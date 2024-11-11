@@ -1,12 +1,14 @@
 #pragma once
 
 #include "module.hpp"
-
+#include "lua/lualib.hpp"
 
 #include <vector>
 
+using namespace Ignition::Scripting::Lua;
+
 namespace Ignition {
-   class Script : Module {
+   class Script : public Module {
    public:
       CREATE_MODULE("Script")
 
@@ -18,16 +20,19 @@ namespace Ignition {
 //         Python = 2
       } language = Lua;
 
-      const char* script = nullptr;
-      char* scriptLocation = nullptr;
+      std::string path;
+      std::vector<LuaData> variables;
 
-      Script();
+      Script() : state(luaL_newstate()), module(state) {}
 
       void Start() override;
       void Update() override;
       void Shutdown() override;
-      void Serialize() override;
-      void Deserialize() override; 
+
    private:
+      void GetLuaScriptVariables();
+      lua_State* state;
+      bool init = false;
+      luabridge::LuaRef module;
    };
 }

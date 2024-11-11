@@ -69,7 +69,6 @@ namespace Ignition {
       glActiveTexture(GL_TEXTURE0 ); 
       glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
       ptr->shader.SetInt(0, "tex");
-
       ptr->transform = &o.transform;
       //ptr->Update();
 
@@ -82,6 +81,7 @@ namespace Ignition {
       glBindVertexArray(ptr->vao);
       glDrawElements(GL_TRIANGLES, ptr->model.indices.size(), GL_UNSIGNED_INT, 0);
 
+      //o.Update();
       glEnable(GL_DEPTH_TEST);
       glEnable(GL_CULL_FACE);
    }

@@ -13,17 +13,7 @@ namespace Ignition {
 
    Matrix4 Camera::view_projection() 
    {
-
-      Matrix4 view = glm::lookAt(this->transform.position, this->transform.position + this->transform.forward, this->transform.up);
-
-      if (size == Vector2(0))
-      {
-
-         glfwGetWindowSize((GLFWwindow*)*this->window, (int*)&size.x, (int*)&size.y);
-      }
-      Matrix4 projection = glm::perspective(glm::radians(this->fov), (float)size.x/(float)size.y, this->clipping_planes.min, this->clipping_planes.max);
-
-      return projection * view;
+      return ProjectionMatrix() * ViewMatrix();
    }
    Matrix4 Camera::ViewMatrix() 
    {
@@ -47,6 +37,7 @@ namespace Ignition {
    {
       this->transform.UpdateVectors();
       glEnable(GL_DEPTH_TEST);
+      glClearColor(0.f, 0.f, 0.f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    }
 

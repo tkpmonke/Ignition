@@ -35,14 +35,16 @@ static void pack_compress(std::string& str) {
 }
 
 static void pack(const char* directory, const char* outdir, bool compression) {
+   const char* tmpdir = "/tmp/ignition_cpy_loc";
    if (std::filesystem::exists(outdir))
       std::filesystem::remove_all(outdir);
 
-   auto dir = std::filesystem::recursive_directory_iterator{directory};
-   int i = std::count_if(dir, {}, [](auto& x) { return !std::filesystem::is_directory(x)
-                                                && x.path().extension() != ".igscn"; });
-   std::string s;
-
+   std::filesystem::copy(directory, tmpdir, std::filesystem::copy_options::recursive);
+   std::filesystem::copy(tmpdir, outdir, std::filesystem::copy_options::recursive);
+   std::filesystem::remove_all(tmpdir);
+   
+   /* SCRAPPED DUE TO UNPACKER NOT WORKING AND I DONT WANNA WORK ON IT
+    * DW WILL COME BACK
    dir = std::filesystem::recursive_directory_iterator{directory};
    for (auto& p : dir) {
 
@@ -70,12 +72,14 @@ static void pack(const char* directory, const char* outdir, bool compression) {
    out << char(i<<8);
    out << char(i);
    out << s;
+   */ 
 }
 
 using Filesystem = std::unordered_map<std::string, std::string>;
 
-[[nodiscard]] 
-static Filesystem unpack(const char* file) {
+[[nodiscard]] [[deprecated]] 
+static Filesystem unpack(const char* directory) {
+   /* SCRAPPED DUE TO NOT WORKING
    std::string s = Ignition::IO::ReadTextFile(file);
    if (s.substr(0, 10) != FILE_DEF_TXT) {
       std::cout << s.substr(0, 10) << "\n";
@@ -106,6 +110,9 @@ static Filesystem unpack(const char* file) {
       //std::cout << filepath << "\n";
       //std::cout << contents.substr(0, 50) << "\n";
    }
+   */
+
+   Filesystem f;
 
    return f;
 }

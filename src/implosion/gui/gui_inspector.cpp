@@ -9,6 +9,9 @@
 #include "shapes/square.hpp"
 #include "shapes/cube.hpp"
 #include "textures/grid.hpp"
+#include "utils/model_loader.hpp"
+#include "utils/files.hpp"
+#include "modules/script.hpp"
 
 #include <cstring>
 
@@ -66,9 +69,9 @@ namespace Implosion {
                if (mod->mod_type() == "Mesh Renderer") {
                   if (ImGui::CollapsingHeader("Mesh Renderer")) {
                      auto m = std::dynamic_pointer_cast<Ignition::Rendering::MeshRenderer>(mod);
-                     ImGui::BeginChild("##Mesh_Renderer", ImVec2(0, 400));
+                     ImGui::BeginChild("##Mesh_Renderer", ImVec2(0, 100));
 
-                     if (ImGui::BeginCombo("Mesh", "Mesh")) {
+                     if (ImGui::BeginCombo("Mesh", m->model.name == "" ? "Mesh" : m->model.name.data())) {
                         if (ImGui::Button("None")) {
                            m->LoadModel(Ignition::Model());
                         }
@@ -80,13 +83,38 @@ namespace Implosion {
                         if (ImGui::Button("Cube")) {
                            m->LoadModel(cube_model);
                         }
+
                         ImGui::EndCombo();
                      }
+                     GUI_BEGIN_DROP_TARGET
+                        m->LoadModel(Ignition::ModelLoader::LoadModel((const char*)payload->Data));
+                        selectedObject = nullptr;
+                     GUI_END_DROP_TARGET
+
+                     ImGui::InputText("Texture", &m->shader.albedo.name);
+                     GUI_BEGIN_DROP_TARGET
+                        std::string s = (const char*)payload->Data;
+                        m->shader.albedo.LoadData(s.substr(Ignition::IO::GetProjectHome().size(), s.size()));
+                     GUI_END_DROP_TARGET
 
                      ImGui::DragFloat("Intensity", &m->shader.intensity);
                      ImGui::EndChild();
                   }
                }
+
+               if (mod->mod_type() == "Script") {
+                  if (ImGui::CollapsingHeader("Script")) {
+                     auto m = std::dynamic_pointer_cast<Ignition::Script>(mod);
+                     ImGui::BeginChild("##Script_Component", ImVec2(0, 100));
+                     ImGui::InputText("Path", &m->path);
+
+                     GUI_BEGIN_DROP_TARGET
+                        m->path = (const char*)payload->Data;
+                     GUI_END_DROP_TARGET
+                     ImGui::EndChild();
+                  }
+               }
+
             }
 
             if (ImGui::BeginCombo("##Add_Component", "Add Component")) {
@@ -99,12 +127,20 @@ namespace Implosion {
                   s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");
 
                   m.LoadShader(s);
-                  m.LoadModel(cube_model);
+                  m.LoadModel(Ignition::Model());
                   auto ptr = std::make_shared<Ignition::Rendering::MeshRenderer>(m);
                   obj->AddModule(ptr);
                }
 
-               ImGui::Button("Script");
+               if (ImGui::Button("Script")) {
+                  std::cout << "hey\n";
+                  Ignition::Script s;
+                  std::cout << "hey\n";
+                  auto ptr = std::make_shared<Ignition::Script>(s);
+                  std::cout << "hey\n";
+                  obj->AddModule(ptr);
+                  std::cout << "hey\n";
+               }
                ImGui::EndCombo();
             }
             

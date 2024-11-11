@@ -41,7 +41,7 @@ namespace Ignition {
       Ignition::Object o = Ignition::Object();                                                  
       o.name = "Object " + std::to_string(objects.size());                                     
       o.tag = "Default";                                                      
-      o.id = objects.size()-1;
+      o.id = objects.size() > 0 ? objects.at(objects.size()-1).id+1 : 0;
       objects.push_back(o);
       return objects.size()-1;
    }
