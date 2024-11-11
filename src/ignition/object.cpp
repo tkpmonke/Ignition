@@ -9,6 +9,16 @@ namespace Ignition {
       mod->Start();
    }
 
+   template <class T>
+   T* Object::AddModule() {
+      T mod = new T();
+      auto sp = std::make_shared<T>(mod);
+      this->modules.push_back(mod);
+      delete mod;
+
+      return this->modules.at(modules.size()-1);
+   }
+
    Module* Object::GetModule(std::string mod)
    {
       for (auto i : this->modules)

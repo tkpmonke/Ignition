@@ -8,11 +8,10 @@
 #include "utils/files.hpp"
 
 #include <iostream>
+#include <filesystem>
 
 int main() {
-   Ignition::Scripting::Lua::LoadIgnitionLibrary();
-
-   Ignition::IO::SetProjectHome("/home/turdle/Projects/implosion-test/game");
+   Ignition::IO::SetProjectHome(std::filesystem::canonical(std::filesystem::path("./")));
 
    bool applicationOpen = true;
    while (applicationOpen) {
@@ -21,16 +20,11 @@ int main() {
       camera.fov = 75;
       camera.clipping_planes.min = 0.1f;
       camera.clipping_planes.max = 100.f;
-      camera.transform.position.y = 5;
+
+      camera.transform.position.x = -30;
       camera.MakeMainCamera();
 
       Ignition::project.LoadProject(&window);
-      
-      if (luaL_dofile(Ignition::Scripting::Lua::state, (Ignition::IO::GetProjectHome()+"/settings/app.lua").data()) != LUA_OK) {
-        std::cerr << "Error: " << lua_tostring(Ignition::Scripting::Lua::state, -1) << std::endl;
-        lua_close(Ignition::Scripting::Lua::state);
-        return -1;
-      }
          
       int i = 0;
       while (window.IsOpen())

@@ -2,6 +2,7 @@ workspace "implosion"
    architecture "x86_64"
    configurations { "Debug", "Release"}
 
+
 -- LIBRARYS (eg imgui) --
 dofile("libs/premake5.lua")
 
@@ -35,7 +36,7 @@ project "implosion"
    includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker", "libs" }
    files { "src/implosion/**.cpp", "include/**.hpp", "libs/imgui/**.h" }
    removefiles "hub/*"
-   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui" }
+   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui", "zip", "lua5.4" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
@@ -75,8 +76,8 @@ project "ignition-runtime"
    removefiles "hub/*"
    links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "lua5.4" }
 
-   defines { "__INCLUDE_LUA_RUNTIME" }
-
+   postbuildcommands { "sudo cp bin/ignition-runtime /usr/bin/" }
+   
    filter "configurations:Debug"
       defines { "DEBUG" }
       optimize "On"
@@ -85,3 +86,4 @@ project "ignition-runtime"
    filter "configurations:Release"
       defines { "NDEBUG" }
       optimize "On"
+

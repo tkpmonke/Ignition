@@ -8,8 +8,7 @@
 #include "utils/model_loader.hpp"
 #include "sprites/skybox_top.h"
 #include "sprites/skybox_sides.h"
-
-#include "packer.hpp"
+#include "utils/io.hpp"
 
 #include <iostream>
 #include <string.h>
@@ -33,33 +32,27 @@ int main(int argc, char** argv)
        || strcmp(argv[i], "--project") == 0)
       {
          Ignition::IO::SetProjectHome(argv[++i]);
+         Ignition::IO::Print("Project Directory Set To : " + (std::string)argv[i]);
       }
       if (strcmp(argv[i], "-i") == 0)
       {
-         std::cout << "Ignition Engine Is Installed\n";
+         Ignition::IO::Print("Ignition Engine Is Installed");
          return 0;
       }
       if (strcmp(argv[i], "-h") == 0
        || strcmp(argv[i], "--help") == 0)
       {
-         std::cout << implosionHelp << "\n";
+         Ignition::IO::Print(implosionHelp);
          return 0;
       }
    }
    
    if (Ignition::IO::GetProjectHome() == "")
    {
-      std::cerr << "No Project Provided\n\n" << implosionHelp;
-      return -1;
+      Ignition::IO::FatalError("No Project Provided\n\n\033[0m" + (std::string)implosionHelp);
    }
-/*
-   pack(Ignition::IO::GetProjectHome().data(), (Ignition::IO::GetProjectHome() + "/bin").data(), 1);
-   auto fs = unpack((Ignition::IO::GetProjectHome()+"/bin/assets.pad").data());
-   std::cout << "done\n";
-   if (fs == Filesystem(0)) {
-      std::cerr << "nuh uh\n";
-   }
-  */ 
+
+
    bool applicationOpen = true;
    while (applicationOpen) {
       Ignition::Window window = Ignition::Window(1920, 1080, "Implosion", &applicationOpen);
@@ -126,6 +119,7 @@ int main(int argc, char** argv)
          gui.PostProcessManagerUI();
 
          gui.Inspector();
+
 
          camera.EndRender(true);
          gui.EndFrame();

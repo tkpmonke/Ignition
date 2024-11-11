@@ -90,7 +90,7 @@ namespace Implosion {
                  if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
                   {
                      ImGui::SetDragDropPayload("__FILE_EXPLORER_", file.path.data(), file.path.size() +1);
-                     ImGui::Text("Dragging");
+                     ImGui::Text("%s", file.path.substr(Ignition::IO::GetProjectHome().size(),file.path.size()).data());
                      ImGui::EndDragDropSource();
                   } 
 

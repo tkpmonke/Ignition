@@ -5,11 +5,10 @@
 namespace Ignition::Scripting::Lua {
    lua_State* state;
 
-   void LoadIgnitionLibrary() {
-      state = luaL_newstate();
+   void LoadIgnitionLibrary(lua_State* state) {
       luaL_openlibs(state);
 
-      RegisterFunctionsAndClasses();
+      RegisterFunctionsAndClasses(state);
    }
 
    void Functions::Shutdown() {
@@ -23,7 +22,7 @@ namespace Ignition::Scripting::Lua {
    Ignition::Camera* Functions::GetCamera() { return Ignition::MainCamera::camera;}
    int Functions::CreateObject() { return 0; }
 
-   void RegisterFunctionsAndClasses() {
+   void RegisterFunctionsAndClasses(lua_State* state) {
       luabridge::getGlobalNamespace(state)
 
          .beginClass<Ignition::Vector3>("Vector3")

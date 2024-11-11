@@ -3,42 +3,32 @@
 #include "types/model.hpp"
 #include "modules/rendering/meshrenderer.hpp"
 #include "scene.hpp"
+#include "utils/io.hpp"
 
 #include <string>
-#include <iostream>
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
 namespace Ignition::ModelLoader {
-   int LoadModel(std::string path) {
+   Model LoadModel(std::string path) {
 
      
-     std::vector<Object> o;
-     Assimp::Importer importer;
-     const aiScene *scene = importer.ReadFile(
+      Model m;
+      Assimp::Importer importer;
+      const aiScene *scene = importer.ReadFile(
          path.data(),
-         aiProcess_Triangulate | aiProcess_GenNormals |
-         aiProcess_FlipUVs);
+         aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_GenUVCoords 
+         );
    
-     if (!scene) {
-       std::cerr << importer.GetErrorString() << "\n";
+      if (!scene) {
+         Ignition::IO::Error(importer.GetErrorString());
      }
 
-     int parent = Ignition::scene.CreateObject();
-     Ignition::scene.GetObjects()->at(parent).name = scene->mName.data;
-   
      if (scene->HasMeshes()) {
        for (unsigned int i = 0; i < scene->mNumMeshes; ++i) {
-         Object obj;
-         Model m;
          const aiMesh *mesh = scene->mMeshes[i];
-   
-         m.vertices.clear();
-         m.uv.clear();
-         m.normals.clear();
-         m.indices.clear();
    
          for (unsigned int v = 0; v < mesh->mNumVertices; ++v) {
            m.vertices.push_back(mesh->mVertices[v].x);
@@ -74,17 +64,9 @@ namespace Ignition::ModelLoader {
          }
          m.path = path.substr(Ignition::IO::GetProjectHome().size(), path.size());
          m.name = mesh->mName.C_Str() + i == 0 ? "" : std::to_string(i);
-
-         Ignition::Rendering::MeshRenderer mr;
-         mr.model = m;
-
-         std::shared_ptr<Rendering::MeshRenderer> ptr = std::make_shared<Rendering::MeshRenderer>(mr);
-         obj.AddModule(ptr);
-
-         Ignition::scene.GetObjects()->at(parent).AddChild(&obj);
        }
      }
    
-     return 0;
+     return m;
    }
 } // namespace Ignition::ModelLoader

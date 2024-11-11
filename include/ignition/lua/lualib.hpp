@@ -4,11 +4,8 @@
 #include <LuaBridge/LuaBridge.h>
 
 #include "camera.hpp"
-#include "modules/script.hpp"
 
 namespace Ignition::Scripting::Lua {
-   extern lua_State* state;
-   
    struct LuaData { 
       union {
          float f;
@@ -25,11 +22,9 @@ namespace Ignition::Scripting::Lua {
       const char* name;
    };
    
-   void LoadIgnitionLibrary();
-   void RegisterFunctionsAndClasses();
+   void LoadIgnitionLibrary(lua_State* state);
+   void RegisterFunctionsAndClasses(lua_State* state);
 
-   std::vector<LuaData> GetScriptVariables(Script*);
-   void RunScript(Script*);
 
    namespace Functions {
       void Shutdown();

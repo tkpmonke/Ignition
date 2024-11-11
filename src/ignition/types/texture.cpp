@@ -1,9 +1,8 @@
 #include "types/texture.hpp"
+#include "utils/files.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "utils/stb_image.h"
-
-#include <iostream>
 
 int i = 0;
 namespace Ignition::Rendering {
@@ -12,7 +11,7 @@ namespace Ignition::Rendering {
    {
       int w, h, nr;
       stbi_set_flip_vertically_on_load(true);
-      unsigned char* d = stbi_load(file.data(), &w, &h, &nr, 0);
+      unsigned char* d = stbi_load((Ignition::IO::GetProjectHome()+file).data(), &w, &h, &nr, 0);
       LoadData(d, w, h, nr, file); 
    }
 

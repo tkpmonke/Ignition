@@ -1,5 +1,6 @@
 #include <object.hpp>
+#include <types/model.hpp>
 
 namespace Ignition::ModelLoader {
-   int LoadModel(std::string path);
+   Model LoadModel(std::string path);
 }

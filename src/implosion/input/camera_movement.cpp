@@ -42,6 +42,10 @@ void cameraMovement(Ignition::Window* window, Ignition::Camera* camera)
          camera->transform.position += movespeed * -camera->transform.forward * dt;
       if (glfwGetKey((GLFWwindow*)*window, GLFW_KEY_D) == GLFW_PRESS)
          camera->transform.position += movespeed * camera->transform.right * dt;
+      if (glfwGetKey((GLFWwindow*)*window, GLFW_KEY_E) == GLFW_PRESS)
+         camera->transform.position += movespeed * camera->transform.up * ((float)dt/1.5f);
+      if (glfwGetKey((GLFWwindow*)*window, GLFW_KEY_Q) == GLFW_PRESS)
+         camera->transform.position += movespeed * -camera->transform.up * ((float)dt/1.5f);
 
    } else {
       glfwSetInputMode((GLFWwindow*)*window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

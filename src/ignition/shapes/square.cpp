@@ -12,5 +12,6 @@ const Ignition::Model square_model {
           1,0,0,
           0,0,0,
           0,1,0},
-   .path = "square"
+   .path = "square",
+   .name = "square"
 };
