@@ -48,3 +48,4 @@ jobs:
           webhook_id: ${{ secrets.DISCORD_ID }}
           color: "#eb3464"
           file: "build.7z"
+
