@@ -1,17 +1,15 @@
-#include "modules/script.hpp"
-#include "lua/lualib.hpp"
-
 #include "window.hpp"
 #include "camera.hpp"
 #include "project.hpp"
 
 #include "utils/files.hpp"
 
-#include <iostream>
 #include <filesystem>
 
 int main() {
-   Ignition::IO::SetProjectHome(std::filesystem::canonical(std::filesystem::path("./")));
+   std::filesystem::path exePath = Ignition::IO::ReadTextFile("/proc/self/exe");
+   Ignition::IO::SetProjectHome(exePath.parent_path().string());
+
 
    bool applicationOpen = true;
    while (applicationOpen) {
@@ -21,7 +19,6 @@ int main() {
       camera.clipping_planes.min = 0.1f;
       camera.clipping_planes.max = 100.f;
 
-      camera.transform.position.x = -30;
       camera.MakeMainCamera();
 
       Ignition::project.LoadProject(&window);

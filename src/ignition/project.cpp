@@ -1,7 +1,7 @@
 #include "project.hpp"
 #include "utils/files.hpp"
+#include "utils/io.hpp"
 
-#include <iostream>
 #include <filesystem>
 
 #include "utils/stb_image.h"
@@ -12,7 +12,8 @@ namespace Ignition {
    {
       if (Ignition::IO::BeginBinaryRead(Ignition::IO::GetProjectHome() + "/project") == false)
       {
-         std::cerr << "can't find project file\n";
+         Ignition::IO::Error("Cannot find project file in directory " + Ignition::IO::GetProjectHome());
+         Ignition::IO::FatalError("can't find project file, possibly ran from wrong directory?");
          return;
       }
       this->name = Ignition::IO::ReadString();

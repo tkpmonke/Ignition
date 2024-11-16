@@ -1,21 +1,29 @@
 #include "modules/script.hpp"
 #include "utils/io.hpp"
+#include "utils/files.hpp"
+
 #include <filesystem>
 namespace Ignition {
+   bool allowScripting = true;
    void Script::Start() {
-      if (std::filesystem::exists(path) && !std::filesystem::is_directory(path)) {
+      if (std::filesystem::exists(Ignition::IO::GetProjectHome()+path) && !std::filesystem::is_directory(Ignition::IO::GetProjectHome()+path) && allowScripting) {
          state = luaL_newstate();
          LoadIgnitionLibrary(state);
 
          luabridge::setGlobal(state, this->transform, "transform");
          
-         luaL_dofile(state, path.data());
+         if (luaL_dofile(state, (Ignition::IO::GetProjectHome()+path).data()) != LUA_OK) {
+            Ignition::IO::Error("Error Loading Lua Script");
+            Ignition::IO::Error(lua_tostring(state, -1));
+            lua_pop(state, 1);
+            return;
+         }
 
          if (lua_gettop(state)>0) {
             if (lua_istable(state, -1)) {
                module = luabridge::LuaRef::fromStack(state, -1);
                lua_pop(state, 1);
-               if (module["Start"].isFunction()) 
+               if (module["Start"].isFunction() && allowScripting) 
                   module["Start"]();
                init = true;
             } else {
@@ -27,20 +35,36 @@ namespace Ignition {
       }
    }
 
+   float ptime = 0;
    void Script::Update() {
+      float time = glfwGetTime();
+      float dt = time-ptime;
       if (init) {
-         luabridge::setGlobal(state, glfwGetTime(), "time");
-         module["Update"]();
-      } else if (std::filesystem::exists(path) && !std::filesystem::is_directory(path)) {
+         luabridge::setGlobal(state, time, "time");
+         luabridge::setGlobal(state, dt, "deltaTime");
+         luabridge::setGlobal(state, this->transform, "transform");
+         if (module["Update"].isFunction() && allowScripting) 
+            module["Update"]();
+      } else if (std::filesystem::exists(Ignition::IO::GetProjectHome()+path)
+         && !std::filesystem::is_directory(Ignition::IO::GetProjectHome()+path)) {
          Start();
       }
    }
 
    void Script::Shutdown() {
-      module["Shutdown"]();
+      if (module["Shutdown"].isFunction() && allowScripting) 
+         module["Shutdown"]();
 
       lua_close(state);
       state = nullptr;
+   }
+
+   void Script::Serialize() {
+      Ignition::IO::WriteString(path);
+   }
+
+   void Script::Deserialize() {
+      this->path = Ignition::IO::ReadString();
    }
 
    void Script::GetLuaScriptVariables() {

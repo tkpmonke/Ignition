@@ -97,7 +97,13 @@ namespace Implosion {
                         m->shader.albedo.LoadData(s.substr(Ignition::IO::GetProjectHome().size(), s.size()));
                      GUI_END_DROP_TARGET
 
+                     for (int i = 0; i < 4; ++i)
+                        ImGui::Spacing();
+
+
+                     ImGui::ColorEdit4("Color", glm::value_ptr(m->shader.color));
                      ImGui::DragFloat("Intensity", &m->shader.intensity);
+
                      ImGui::EndChild();
                   }
                }
@@ -109,7 +115,8 @@ namespace Implosion {
                      ImGui::InputText("Path", &m->path);
 
                      GUI_BEGIN_DROP_TARGET
-                        m->path = (const char*)payload->Data;
+                        std::string s = (const char*)payload->Data;
+                        m->path = s.substr(Ignition::IO::GetProjectHome().size(), s.size());
                      GUI_END_DROP_TARGET
                      ImGui::EndChild();
                   }
@@ -133,13 +140,9 @@ namespace Implosion {
                }
 
                if (ImGui::Button("Script")) {
-                  std::cout << "hey\n";
                   Ignition::Script s;
-                  std::cout << "hey\n";
                   auto ptr = std::make_shared<Ignition::Script>(s);
-                  std::cout << "hey\n";
                   obj->AddModule(ptr);
-                  std::cout << "hey\n";
                }
                ImGui::EndCombo();
             }

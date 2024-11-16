@@ -2,6 +2,7 @@
 #include "utils/files.hpp"
 
 #include "modules/rendering/meshrenderer.hpp"
+#include "modules/script.hpp"
 
 #include <iostream>
 
@@ -33,7 +34,7 @@ namespace Ignition {
    void Scene::AddObject(Object object)
    {
       objects.push_back(object);
-      objects[objects.size()-1].id = objects.size()-1;
+      objects[objects.size()-1].id = objects.size() > 0 ? objects.at(objects.size()-1).id+1 : 0;
    }
 
    int Scene::CreateObject() 
@@ -93,12 +94,11 @@ namespace Ignition {
 
       for (int i = 0; i < count; ++i)
       {
-         //std::cout << i << "\n";
-
          Object o;
 
          o.name = Ignition::IO::ReadString();
          o.tag = Ignition::IO::ReadString();
+         o.id = objects.size() > 0 ? objects.at(objects.size()-1).id+1 : 0;
 
          o.transform.position.x = Ignition::IO::ReadFloat();
          o.transform.position.y = Ignition::IO::ReadFloat();
@@ -127,6 +127,16 @@ namespace Ignition {
                m.Deserialize();
 
                o.AddModule(std::make_shared<MeshRenderer>(m));
+            }
+
+            if (type == "Script")
+            {
+               Ignition::Script m;
+               m.enabled = enabled;
+
+               m.Deserialize();
+
+               o.AddModule(std::make_shared<Ignition::Script>(m));
             }
          }
 

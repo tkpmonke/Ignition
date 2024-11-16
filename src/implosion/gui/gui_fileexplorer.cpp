@@ -79,6 +79,10 @@ namespace Implosion {
                   if (ImGui::ImageButton((void*)(intptr_t)type, ImVec2((int)files.size,(int)files.size)))
                   {
                      switch (file.type) {
+                        default:
+                        case(0):
+                           Ignition::IO::EditFile(file.path);
+                           break;
                         case(1):
                         case(2):
                            files.activeDirectory = file.path;
