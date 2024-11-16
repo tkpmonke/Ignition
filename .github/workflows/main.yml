@@ -45,9 +45,12 @@ jobs:
           DISCORD_AVATAR: https://github.com/tkpmonke/Ignition/blob/indev/icon.png
         uses: Ilshidur/action-discord@master
 
+      - name: Zip Binary
+        run: 7z a build bin/
+
       - name: Send File
         uses: sinshutu/upload-to-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: bin/
+          args: build.7z
