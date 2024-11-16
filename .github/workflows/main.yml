@@ -48,6 +48,6 @@ jobs:
       - name: Send File
         uses: sinshutu/upload-to-discord@master
         env:
-          DISCORD_WEBHOOK: ${P secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
           args: bin/
