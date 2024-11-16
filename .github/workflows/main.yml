@@ -48,4 +48,5 @@ jobs:
           webhook_id: ${{ secrets.DISCORD_ID }}
           color: "#eb3464"
           file: "build.7z"
+          message: "the all mighty bill has detected that a new commit has been published"
 
