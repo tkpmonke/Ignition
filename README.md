@@ -1,8 +1,14 @@
 # Ignition
 Fast, Lightweight, and easy-to-use general purpose game engine
 
-## Features
-nothing for games yet, but the editor has a customizeable grid, can create objects, and thats it (for now)
+## Installation
+Right now Ignition is only avalible on the AUR, with APT planned in the near future
+
+```
+# for arch based distros
+# you can use your favorite pacman wrapper (mine is yay)
+yay -S implosion
+```
 
 ## Compile From Source
 <details>
