@@ -38,19 +38,13 @@ jobs:
           name: Auto-Build
           path: bin/
 
-      - name: Notify Server
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: Dumb Bot
-          DISCORD_AVATAR: https://github.com/tkpmonke/Ignition/blob/indev/icon.png
-        uses: Ilshidur/action-discord@master
-
-      - name: Zip Binary
+      - name: Zip Binarys
         run: 7z a build bin/
 
-      - name: Send File
-        uses: sinshutu/upload-to-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Notify Server
+        uses: appleboy/discord-action@master
         with:
-          args: build.7z
+          webhook_token: ${{ secrets.DISCORD_TOKEN }}
+          webhook_id: ${{ secrets.DISCORD_ID }}
+          color: "#eb3464"
+          file: "build.7z"
