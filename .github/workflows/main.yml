@@ -44,3 +44,10 @@ jobs:
           DISCORD_USERNAME: Dumb Bot
           DISCORD_AVATAR: https://github.com/tkpmonke/Ignition/blob/indev/icon.png
         uses: Ilshidur/action-discord@master
+
+      - name: Send File
+        uses: sinshutu/upload-to-discord@master
+        env:
+          DISCORD_WEBHOOK: ${P secrets.DISCORD_WEBHOOK }}
+        with:
+          args: bin/
