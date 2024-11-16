@@ -36,7 +36,7 @@ project "implosion"
    includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker", "libs" }
    files { "src/implosion/**.cpp", "include/**.hpp", "libs/imgui/**.h" }
    removefiles "hub/*"
-   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui", "zip", "lua5.4" }
+   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui", "lua5.4" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
