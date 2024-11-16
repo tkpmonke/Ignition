@@ -9,8 +9,8 @@
 #include "sprites/skybox_top.h"
 #include "sprites/skybox_sides.h"
 #include "utils/io.hpp"
+#include "modules/script.hpp"
 
-#include <iostream>
 #include <string.h>
 
 const char* implosionHelp = 
@@ -52,6 +52,7 @@ int main(int argc, char** argv)
       Ignition::IO::FatalError("No Project Provided\n\n\033[0m" + (std::string)implosionHelp);
    }
 
+   Ignition::DisableScripting();
 
    bool applicationOpen = true;
    while (applicationOpen) {

@@ -42,7 +42,7 @@ namespace Ignition {
 
       std::vector<std::shared_ptr<Module>>& GetModules() { return modules; }
 
-      std::vector<Object*> GetChildren() { return children; };
+      std::vector<Object*>* GetChildren() { return &children; };
       std::vector<Object*> GetChildrenWithModule(std::string);
 
       void AddChild(Object* o) { this->children.push_back(o); }

@@ -8,6 +8,9 @@
 using namespace Ignition::Scripting::Lua;
 
 namespace Ignition {
+   extern bool allowScripting;
+   static void DisableScripting() { allowScripting = false;}
+
    class Script : public Module {
    public:
       CREATE_MODULE("Script")
@@ -28,6 +31,8 @@ namespace Ignition {
       void Start() override;
       void Update() override;
       void Shutdown() override;
+      void Serialize() override;
+      void Deserialize() override;
 
    private:
       void GetLuaScriptVariables();

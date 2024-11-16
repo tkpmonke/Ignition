@@ -7,6 +7,8 @@ namespace Ignition::IO {
 
    std::string GetHome();
    std::string FileExplorer();
+   void EditFile(std::string);
+   std::string GetDateTime();
 
    void SetProjectHome(std::string);
    std::string GetProjectHome();

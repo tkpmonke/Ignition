@@ -1,6 +1,8 @@
 #include "gui/gui.hpp"
 #include "scene.hpp"
 
+#include <algorithm>
+
 void ProcessNode(Ignition::Object* obj, Implosion::GUI* gui)
 {
    bool b = false;
@@ -23,12 +25,37 @@ void ProcessNode(Ignition::Object* obj, Implosion::GUI* gui)
          gui->selectedObject = obj;
       }
 
-      for (auto& o : obj->GetChildren())
+      for (auto& o : *obj->GetChildren())
       {
          ProcessNode(o, gui);
       }
+
       ImGui::TreePop();
    }
+
+   if (ImGui::BeginDragDropSource()) {
+      ImGui::SetDragDropPayload("SCENE_OBJECT", obj, sizeof(Ignition::Object*));
+      ImGui::Text("%s", obj->name.data());
+      ImGui::EndDragDropSource();
+   }
+
+   if (ImGui::BeginDragDropTarget()) {
+      if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCENE_OBJECT")) {
+         Ignition::Object* object = static_cast<Ignition::Object*>(payload->Data);
+
+         if (object != obj && object->parent != obj) {
+            if (object->parent) {
+               std::vector<Ignition::Object*>* siblings = object->parent->GetChildren();
+               auto pos = std::find(siblings->begin(), siblings->end(), object);
+               if (pos != siblings->end())
+                  siblings->erase(pos);
+            }
+
+            obj->AddChild(object);
+         }
+      }
+   }
+
 
 
    if (b) 

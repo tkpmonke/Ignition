@@ -1,9 +1,13 @@
 #include "utils/files.hpp"
+#include "utils/io.hpp"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string.h>
+#include <filesystem>
+#include <ctime>
+#include <iomanip>
 
 #ifdef __linux__
 #include <unistd.h>
@@ -14,6 +18,7 @@
 #include <shlobj.h>
 #include <locale>
 #include <codecvt>
+#pragma message "fyi, windows support is an after thought, best used with linux (arch support is the best cause arch is the best)"
 #else
 #error your out of luck ig (for now)
 #endif 
@@ -35,10 +40,54 @@ namespace Ignition::IO {
       return s;
    }
 
+   std::string GetDateTime() {
+      std::time_t time = std::time(nullptr);
+      std::tm localTime;
+      
+#ifdef __linux
+      localtime_r(&time, &localTime);
+#elif defined(_WIN32)
+
+      localtime_s(&localTime, &time);
+#endif
+
+      std::ostringstream oss;
+      oss << std::put_time(&localTime, "%Y-%m-%d %I:%M:%S");
+
+      return oss.str();
+   }
+
+   void EditFile(std::string file) {
+#ifdef __linux
+      const char* editor;
+      if ((editor = getenv("EDITOR")) == NULL)
+         if ((editor = getenv("VISUAL")) == NULL)
+            if ((editor = getenv("SELECTED_EDITOR")) == NULL)
+               if ((editor = "vim") && !std::filesystem::exists("/usr/bin/vim"))
+                  if ((editor = "nvim") && !std::filesystem::exists("/usr/bin/nvim"))
+                     if ((editor = "nano") && !std::filesystem::exists("/usr/bin/nano"))
+                        editor = "vi"; // after all these tests, default to vi cause vi is :fire:
+                                       //
+      const char* term;
+      if ((term = getenv("TERM")) == NULL) {
+         Ignition::IO::Error("Cannot open file in new terminal window, consider setting $TERM");
+      }
+
+      if (system(((std::string)term + " -e " + editor + (std::string)" " + file + " &").data()) != 0)
+         Ignition::IO::Error("Could not find a text editor, try setting the env variable EDITOR to your prefered text editor or install vim,nvim,nano, or vi");
+#elif defined(_WIN32)
+      ShellExecute(NULL, "open", file.data(), NULL, NULL, SW_SHOWNORMAL);
+#endif
+   }
+
    std::string GetProjectHome() { return projectName; }
 
    std::string ReadTextFile(std::string path) 
    {
+      if (std::filesystem::is_symlink(path)) {
+         path = std::filesystem::read_symlink(path);
+         return path;
+      }
       std::ifstream f(path);
       std::stringstream s;
       s << f.rdbuf();

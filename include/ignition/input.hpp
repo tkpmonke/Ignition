@@ -1,14 +1,6 @@
 #include "camera.hpp"
 
 namespace Ignition::IO {
-   static bool GetInput(int key)    { return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key); };
-   static bool GetInputDown(int key){ return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS; };
-   static bool GetInputUp(int key)  { return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_RELEASE; }
-
-   static bool GetMouse(int key)    { return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key); }
-   static bool GetMouseDown(int key){ return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS; }
-   static bool GetMouseUp(int key) { return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_RELEASE; }
-
    namespace Keys {
       const int space         = ' ';
       const int apostrophe    = '\'';
@@ -31,31 +23,68 @@ namespace Ignition::IO {
       const int semicolon     = ';';
       const int equal         = '=';
 
-      const int a             = 'a';
-      const int b             = 'b';
-      const int c             = 'c';
-      const int d             = 'd';
-      const int e             = 'e';
-      const int f             = 'f';
-      const int g             = 'g';
-      const int h             = 'h';
-      const int i             = 'i';
-      const int j             = 'j';
-      const int k             = 'k';
-      const int l             = 'l';
-      const int m             = 'm';
-      const int n             = 'n';
-      const int o             = 'o';
-      const int p             = 'p';
-      const int q             = 'q';
-      const int r             = 'r';
-      const int s             = 's';
-      const int t             = 't';
-      const int u             = 'u';
-      const int v             = 'v';
-      const int w             = 'w';
-      const int x             = 'x';
-      const int y             = 'y';
-      const int z             = 'z'; 
+      const int a             = 'A';
+      const int b             = 'B';
+      const int c             = 'C';
+      const int d             = 'D';
+      const int e             = 'E';
+      const int f             = 'F';
+      const int g             = 'G';
+      const int h             = 'H';
+      const int i             = 'I';
+      const int j             = 'J';
+      const int k             = 'K';
+      const int l             = 'L';
+      const int m             = 'M';
+      const int n             = 'N';
+      const int o             = 'O';
+      const int p             = 'P';
+      const int q             = 'Q';
+      const int r             = 'R';
+      const int s             = 'S';
+      const int t             = 'T';
+      const int u             = 'U';
+      const int v             = 'V';
+      const int w             = 'W';
+      const int x             = 'X';
+      const int y             = 'Y';
+      const int z             = 'Z'; 
+
+      const int up            = '\265';
+      const int down          = '\264';
+      const int left          = '\263';
+      const int right         = '\262';
+
+      const int enter         = '\n';
+      const int tab           = '\t';
+      const int lshift        = '\340';
+      const int rshift        = '\344';
+
+      const int esc          = '\256';
+   }
+
+   static bool GetInput(int key)    { return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key); };
+   static bool GetInputDown(int key){ return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS; };
+   static bool GetInputUp(int key)  { return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_RELEASE; }
+
+   static bool GetMouse(int key)    { return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key); }
+   static bool GetMouseDown(int key){ return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS; }
+   static bool GetMouseUp(int key) { return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_RELEASE; }
+
+   static Ignition::Vector2 GetMousePosition() { double a,b; glfwGetCursorPos((GLFWwindow*)*Ignition::MainCamera::camera->window, &a, &b); return {a,b}; }
+
+   static float GetAxisHorizontal() {
+      float f = 0;
+      f += GetInput(Keys::a);
+      f -= GetInput(Keys::d);
+      return f;
+   }
+
+   static float GetAxisVertical() {
+      float f = 0;
+      f += GetInput(Keys::w);
+      f -= GetInput(Keys::s);
+      return f;
    }
 }
+

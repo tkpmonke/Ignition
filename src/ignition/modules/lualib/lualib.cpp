@@ -1,6 +1,7 @@
 #include "lua/lualib.hpp"
-
+#include "utils/io.hpp"
 #include "camera.hpp"
+#include "input.hpp"
 
 namespace Ignition::Scripting::Lua {
    lua_State* state;
@@ -24,6 +25,11 @@ namespace Ignition::Scripting::Lua {
 
    void RegisterFunctionsAndClasses(lua_State* state) {
       luabridge::getGlobalNamespace(state)
+         .beginClass<Ignition::Vector2>("Vector2")
+            .addConstructor<void(*)(float, float)>()
+            .addProperty("x", &Ignition::Vector2::x)
+            .addProperty("y", &Ignition::Vector2::y)
+         .endClass()
 
          .beginClass<Ignition::Vector3>("Vector3")
             .addConstructor<void(*)(float, float, float)>()
@@ -67,7 +73,80 @@ namespace Ignition::Scripting::Lua {
          .addFunction("Poweroff", Functions::Shutdown)
          .addFunction("Reboot", Functions::Reboot)
          .addFunction("CreateObject", Functions::CreateObject)
-         .addFunction("GetCamera", Functions::GetCamera); 
+         .addFunction("GetCamera", Functions::GetCamera)
+
+         .addFunction("Warning", Ignition::IO::Warning)
+         .addFunction("Error", Ignition::IO::Error)
+         .addFunction("FatalError", Ignition::IO::FatalError)
+         
+         .addFunction("GetMouse", Ignition::IO::GetMouse)
+         .addFunction("GetMouseUp", Ignition::IO::GetMouseUp)
+         .addFunction("GetMouseDown", Ignition::IO::GetMouseDown)
+         .addFunction("GetInput", Ignition::IO::GetInput)
+         .addFunction("GetInputUp", Ignition::IO::GetInputUp)
+         .addFunction("GetInputDown", Ignition::IO::GetInputDown)
+         .addFunction("GetAxisHorizontal", Ignition::IO::GetAxisHorizontal)
+         .addFunction("GetAxisVertical", Ignition::IO::GetAxisVertical)
+         .addFunction("GetMousePosition", Ignition::IO::GetMousePosition)
+         
+         ;
+
+      luabridge::getGlobalNamespace(state).beginNamespace("Keys")
+         .addConstant("a", Ignition::IO::Keys::a)
+         .addConstant("b", Ignition::IO::Keys::b)
+         .addConstant("c", Ignition::IO::Keys::c)
+         .addConstant("d", Ignition::IO::Keys::d)
+         .addConstant("e", Ignition::IO::Keys::e)
+         .addConstant("f", Ignition::IO::Keys::f)
+         .addConstant("g", Ignition::IO::Keys::g)
+         .addConstant("h", Ignition::IO::Keys::h)
+         .addConstant("i", Ignition::IO::Keys::i)
+         .addConstant("j", Ignition::IO::Keys::j)
+         .addConstant("k", Ignition::IO::Keys::k)
+         .addConstant("l", Ignition::IO::Keys::l)
+         .addConstant("m", Ignition::IO::Keys::m)
+         .addConstant("n", Ignition::IO::Keys::n)
+         .addConstant("o", Ignition::IO::Keys::o)
+         .addConstant("p", Ignition::IO::Keys::p)
+         .addConstant("q", Ignition::IO::Keys::q)
+         .addConstant("r", Ignition::IO::Keys::r)
+         .addConstant("s", Ignition::IO::Keys::s)
+         .addConstant("t", Ignition::IO::Keys::t)
+         .addConstant("u", Ignition::IO::Keys::u)
+         .addConstant("v", Ignition::IO::Keys::v)
+         .addConstant("w", Ignition::IO::Keys::w)
+         .addConstant("x", Ignition::IO::Keys::x)
+         .addConstant("y", Ignition::IO::Keys::y)
+         .addConstant("z", Ignition::IO::Keys::y)
+         .addConstant("one", Ignition::IO::Keys::one)
+         .addConstant("two", Ignition::IO::Keys::two)
+         .addConstant("three", Ignition::IO::Keys::three)
+         .addConstant("four", Ignition::IO::Keys::four)
+         .addConstant("five", Ignition::IO::Keys::five)
+         .addConstant("six", Ignition::IO::Keys::six)
+         .addConstant("seven", Ignition::IO::Keys::seven)
+         .addConstant("eight", Ignition::IO::Keys::eight)
+         .addConstant("nine", Ignition::IO::Keys::nine)
+         .addConstant("zero", Ignition::IO::Keys::zero)
+         .addConstant("comma", Ignition::IO::Keys::comma)
+         .addConstant("minus", Ignition::IO::Keys::minus)
+         .addConstant("space", Ignition::IO::Keys::space)
+         .addConstant("period", Ignition::IO::Keys::period)
+         .addConstant("semicolon", Ignition::IO::Keys::semicolon)
+         .addConstant("apostrophe", Ignition::IO::Keys::apostrophe)
+         .addConstant("slash", Ignition::IO::Keys::slash)
+         .addConstant("equal", Ignition::IO::Keys::equal)
+         .addConstant("up", Ignition::IO::Keys::up)
+         .addConstant("down", Ignition::IO::Keys::down)
+         .addConstant("left", Ignition::IO::Keys::left)
+         .addConstant("right", Ignition::IO::Keys::right)
+         .addConstant("enter", Ignition::IO::Keys::enter)
+         .addConstant("tab", Ignition::IO::Keys::tab)
+         .addConstant("lshift", Ignition::IO::Keys::lshift)
+         .addConstant("rshift", Ignition::IO::Keys::rshift)
+         .addConstant("esc", Ignition::IO::Keys::esc)
+         
+         ;
    }
 
 }

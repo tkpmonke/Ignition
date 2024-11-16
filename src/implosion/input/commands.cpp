@@ -26,7 +26,7 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
    }
 
    
-   /* Removed due to seg faults :(
+   ///* Removed due to seg faults :(
    if (key == GLFW_KEY_C && mods == GLFW_MOD_CONTROL 
          && action == GLFW_PRESS && g->selectedObject != nullptr) {
       g->copiedObject = *g->selectedObject;
@@ -36,7 +36,7 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
          && action == GLFW_PRESS && g->copiedObject.has_value()) {
       Ignition::scene.AddObject(g->copiedObject.value());
    }
-   */
+   //*/
    
    if ((key == GLFW_KEY_DELETE)
          && action == GLFW_PRESS)
