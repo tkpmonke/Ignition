@@ -34,16 +34,19 @@ namespace Ignition::Rendering {
       
       std::vector<float> buffer;
 
-      for (int i = 0; i < this->model.vertices.size(); i+=3)
-      {
-         buffer.push_back(this->model.vertices[i]);
-         buffer.push_back(this->model.vertices[i+1]);
-         buffer.push_back(this->model.vertices[i+2]);
-         buffer.push_back(this->model.normals[i]);
-         buffer.push_back(this->model.normals[i+1]);
-         buffer.push_back(this->model.normals[i+2]);
-         buffer.push_back(this->model.uv[i]);
-         buffer.push_back(this->model.uv[i+1]);
+      if (/*this->model.vertices.size() % 3 == 0 &&
+          this->model.normals.size() % 3 == 0*/ true) {
+         for (int i = 0; i < this->model.vertices.size(); i+=3)
+         {
+            buffer.push_back(this->model.vertices[i]);
+            buffer.push_back(this->model.vertices[i+1]);
+            buffer.push_back(this->model.vertices[i+2]);
+            buffer.push_back(this->model.normals[i]);
+            buffer.push_back(this->model.normals[i+1]);
+            buffer.push_back(this->model.normals[i+2]);
+            buffer.push_back(this->model.uv[i]);
+            buffer.push_back(this->model.uv[i+1]);
+         }
       }
             
 
