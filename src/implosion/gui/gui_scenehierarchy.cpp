@@ -32,7 +32,7 @@ void ProcessNode(Ignition::Object* obj, Implosion::GUI* gui)
 
       ImGui::TreePop();
    }
-
+/* Removed Due To Seg Faults :(
    if (ImGui::BeginDragDropSource()) {
       ImGui::SetDragDropPayload("SCENE_OBJECT", obj, sizeof(Ignition::Object*));
       ImGui::Text("%s", obj->name.data());
@@ -55,7 +55,7 @@ void ProcessNode(Ignition::Object* obj, Implosion::GUI* gui)
          }
       }
    }
-
+*/
 
 
    if (b) 
