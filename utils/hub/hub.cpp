@@ -519,6 +519,22 @@ int main()
 
                projects << projectPath + ":" + n + "\n";
                projects.close();
+               
+               std::filesystem::create_directory(projectPath / (std::filesystem::path)"settings");
+               std::ofstream app_lua(projectPath / (std::filesystem::path)"settings/app.lua");
+
+               app_lua << 
+                        "-- PUT ALL OF YOUR APPLICATION SPECIFIC SETTINGS HERE\n"
+                        "local M = {\n"
+                        "   appName = \"Game\",\n"
+                        "   version = \"1.0.0\",\n"
+                        "   devName = \"Developer\",\n"
+                        "   graphicsAPI = \"opengl\" -- useless atm\n"
+                        "}\n"
+                        "return M";
+
+               app_lua.close();
+
                createProject = false;
                GetProjects();
             }
