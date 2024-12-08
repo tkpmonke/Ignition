@@ -2,8 +2,8 @@
 
 #include "glm/gtc/type_ptr.hpp"
 
-#include <iostream>
 #include <utility>
+#include "utils/io.hpp"
 
 
 namespace Ignition::Rendering {
@@ -37,7 +37,7 @@ namespace Ignition::Rendering {
       if(!success)
       {
          glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+         Ignition::IO::Error("SHADER > VERTEX > " + (std::string)infoLog);
       }
       fragment = glCreateShader(GL_FRAGMENT_SHADER);
       glShaderSource(fragment, 1, &fShaderCode, NULL);
@@ -47,7 +47,7 @@ namespace Ignition::Rendering {
       if(!success)
       {
          glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+         Ignition::IO::Error("SHADER > FRAGMENT > " + (std::string)infoLog);
       }  
 
       this->program = glCreateProgram();
@@ -59,7 +59,7 @@ namespace Ignition::Rendering {
       if (!success)
       {
          glGetProgramInfoLog(this->program, 512, NULL, infoLog);
-         std::cout << "error in shader \n" << infoLog << std::endl;
+         Ignition::IO::Error("SHADER > COMPUTE > " + (std::string)infoLog);
       }
 
       

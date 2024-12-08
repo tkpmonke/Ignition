@@ -4,15 +4,19 @@
 #include <vector>
 #include <memory>
 
+
 #include "module.hpp"
 #include "types/transform.hpp"
+#include "utils/io.hpp"
 
 #define UPDATE_OBJECT() this->transform.UpdateVectors();                                  \
                         for (std::shared_ptr<Module> m : modules)  {                      \
                            m->transform = &this->transform;                               \
-                           if (!m->enabled || !this->enabled) continue;                    \
+                           m->object = this;                                              \
+                           if (!m->enabled || !this->enabled) continue;                   \
+                           if (!Ignition::IO::InEditor() || m->runs_in_editor()) {        \
                            m->Update();                                                   \
-                        }
+                        }}
 
 namespace Ignition {
    class Object {
@@ -24,7 +28,7 @@ namespace Ignition {
 
       Transform transform;
 
-      virtual void Update() {UPDATE_OBJECT();}
+      virtual void Update() { UPDATE_OBJECT();}
 
       Object* parent;
       

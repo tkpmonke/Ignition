@@ -64,10 +64,12 @@ namespace Implosion {
             }
             ImGui::EndChild();
             ImGui::Separator();
-
+            
+            int i;
             for (std::shared_ptr<Ignition::Module> mod : obj->GetModules()) {
-               if (mod->mod_type() == "Mesh Renderer") {
-                  if (ImGui::CollapsingHeader("Mesh Renderer")) {
+               i++;
+               if (ImGui::CollapsingHeader(mod->mod_type().data())) {
+                  if (mod->mod_type() == "Mesh Renderer") {
                      auto m = std::dynamic_pointer_cast<Ignition::Rendering::MeshRenderer>(mod);
                      ImGui::BeginChild("##Mesh_Renderer", ImVec2(0, 100));
 
@@ -106,10 +108,7 @@ namespace Implosion {
 
                      ImGui::EndChild();
                   }
-               }
-
-               if (mod->mod_type() == "Script") {
-                  if (ImGui::CollapsingHeader("Script")) {
+                  if (mod->mod_type() == "Script") {
                      auto m = std::dynamic_pointer_cast<Ignition::Script>(mod);
                      ImGui::BeginChild("##Script_Component", ImVec2(0, 100));
                      ImGui::InputText("Path", &m->path);
@@ -120,35 +119,32 @@ namespace Implosion {
                      GUI_END_DROP_TARGET
                      ImGui::EndChild();
                   }
-               }
-
+               }   
             }
 
             if (ImGui::BeginCombo("##Add_Component", "Add Component")) {
-               if (ImGui::Button("Mesh Renderer")) {
-                  Ignition::Rendering::MeshRenderer m;
-                  Ignition::Rendering::Shader s = 
-                     Ignition::Rendering::Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::ShaderType::Unlit);
-                  s.albedo = Ignition::Rendering::Texture();
-                  s.albedo.SetFlags(Ignition::Rendering::TextureFlags::Repeat | Ignition::Rendering::TextureFlags::Nearest);
-                  s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");
+                  if (ImGui::Button("Mesh Renderer")) {
+                     Ignition::Rendering::MeshRenderer m;
+                     Ignition::Rendering::Shader s = 
+                        Ignition::Rendering::Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::ShaderType::Unlit);
+                     s.albedo = Ignition::Rendering::Texture();
+                     s.albedo.SetFlags(Ignition::Rendering::TextureFlags::Repeat | Ignition::Rendering::TextureFlags::Nearest);
+                     s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");
 
-                  m.LoadShader(s);
-                  m.LoadModel(Ignition::Model());
-                  auto ptr = std::make_shared<Ignition::Rendering::MeshRenderer>(m);
-                  obj->AddModule(ptr);
-               }
+                     m.LoadShader(s);
+                     m.LoadModel(Ignition::Model());
+                     auto ptr = std::make_shared<Ignition::Rendering::MeshRenderer>(m);
+                     obj->AddModule(ptr);
+                  }
 
-               if (ImGui::Button("Script")) {
-                  Ignition::Script s;
-                  auto ptr = std::make_shared<Ignition::Script>(s);
-                  obj->AddModule(ptr);
+                  if (ImGui::Button("Script")) {
+                     Ignition::Script s;
+                     auto ptr = std::make_shared<Ignition::Script>(s);
+                     obj->AddModule(ptr);
+                  }
+                  ImGui::EndCombo();
                }
-               ImGui::EndCombo();
-            }
-            
          }
-         
       }
 
       ImGui::End();

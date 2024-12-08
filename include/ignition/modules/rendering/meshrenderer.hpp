@@ -17,6 +17,7 @@ namespace Ignition::Rendering {
    class MeshRenderer : public Module{
    public:
       CREATE_MODULE("Mesh Renderer");
+      bool runs_in_editor() override { return true; }
 
       Shader shader;
       Model model;     

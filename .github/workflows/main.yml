@@ -47,6 +47,6 @@ jobs:
           webhook_token: ${{ secrets.DISCORD_TOKEN }}
           webhook_id: ${{ secrets.DISCORD_ID }}
           color: "#eb3464"
-          message: "the all mighty bill has detected that a new commit has been published"
+          message: "the all mighty bill has detected that a new commit (${{github.event.head_commit.message}}) has been published"
           file: "linux_build.7z"
 

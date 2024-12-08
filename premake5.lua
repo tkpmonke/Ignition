@@ -9,10 +9,10 @@ dofile("libs/premake5.lua")
 project "ignition"
    kind "StaticLib"
    language "C++"
-   cppdialect "gnu++17"
+   cppdialect "c++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/ignition", "libs/assetpacker", "libs" }
-   files { "src/ignition/**.cpp", "include/ignition/**.hpp", "include/ignition/**.cpp", "include/ignition/**.h" }
+   includedirs { "include/ignition", "include/ignition/components", "include/ignition", "libs/assetpacker", "libs", "/usr/include/bullet" }
+   files { "src/ignition/**.cpp", "include/ignition/**.hpp", "include/ignition/**.cpp", "include/ignition/**.h", "ig-jolt" }
    removefiles "hub/*"
    
    links { "glfw", "GL", "GLEW", "m", "assimp"}
@@ -31,12 +31,14 @@ project "ignition"
 project "implosion"
    kind "ConsoleApp"
    language "C++"
-   cppdialect "gnu++17"
+   cppdialect "c++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker", "libs" }
+   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker", "libs", "/usr/include/bullet" }
    files { "src/implosion/**.cpp", "include/**.hpp", "libs/imgui/**.h" }
    removefiles "hub/*"
-   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui", "lua5.4" }
+   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "ig-imgui", "lua5.4", "ig-jolt"}
+
+   defines { "EDITOR" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
@@ -50,7 +52,7 @@ project "implosion"
 project "implosion-hub"
    kind "ConsoleApp"
    language "C++"
-   cppdialect "gnu++17"
+   cppdialect "c++17"
    targetdir "bin"
 
    includedirs { "libs/imgui", "libs" }
@@ -69,12 +71,12 @@ project "implosion-hub"
 project "ignition-runtime"
    kind "ConsoleApp"
    language "C++"
-   cppdialect "gnu++17"
+   cppdialect "c++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/runtime", "libs" }
+   includedirs { "include/ignition", "include/ignition/components", "include/runtime", "libs", "/usr/include/bullet" }
    files { "src/runtime/**.cpp", "include/runtime/**.hpp" }
    removefiles "hub/*"
-   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "lua5.4" }
+   links { "glfw", "GL", "GLEW", "m", "ignition", "assimp", "lua5.4", "ig-jolt"}
 
    postbuildcommands { "sudo cp bin/ignition-runtime /usr/bin/" }
    

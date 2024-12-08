@@ -21,7 +21,7 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
       Ignition::scene.WriteSceneToDisk();
 #ifdef DEBUG
       auto end = std::chrono::high_resolution_clock::now();  
-      std::cout << "Saving Took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " Milliseconds\n";
+      Ignition::IO::DebugPrint(std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " Milliseconds");
 #endif 
    }
 
@@ -45,12 +45,14 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
       g->selectedObject = nullptr;
    }
 
+#ifdef DEBUG
    if ((key == GLFW_KEY_G
          && mods == GLFW_MOD_CONTROL)
          && action == GLFW_PRESS)
    {
-      std::cout << sizeof(*g) << "\n";
+      Ignition::IO::DebugPrint(std::to_string(sizeof(*g)));
    }
+#endif
 }
 
 void SetCommandCallback(GLFWwindow* w, Implosion::GUI* gui)
