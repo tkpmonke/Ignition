@@ -14,7 +14,6 @@ namespace Ignition {
       T mod = new T();
       auto sp = std::make_shared<T>(mod);
       this->modules.push_back(mod);
-      delete mod;
 
       return this->modules.at(modules.size()-1);
    }

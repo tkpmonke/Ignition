@@ -9,7 +9,7 @@
 #include "sprites/skybox_top.h"
 #include "sprites/skybox_sides.h"
 #include "utils/io.hpp"
-#include "modules/script.hpp"
+#include "modules/physics/rigidbody.hpp"
 
 #include <string.h>
 
@@ -24,15 +24,21 @@ const char* implosionHelp =
 
 using namespace Ignition::Rendering;
 
+bool Ignition::IO::editor = true;
 int main(int argc, char** argv) 
 {
+#ifdef EDITOR
+   Ignition::IO::DebugPrint("Loading Implosion Editor");
+   
+#endif
+
    for (int i = 0; i < argc; ++i)
    {
       if (strcmp(argv[i], "-f") == 0
        || strcmp(argv[i], "--project") == 0)
       {
          Ignition::IO::SetProjectHome(argv[++i]);
-         Ignition::IO::Print("Project Directory Set To : " + (std::string)argv[i]);
+         Ignition::IO::DebugPrint("Project Directory Set To : " + (std::string)argv[i]);
       }
       if (strcmp(argv[i], "-i") == 0)
       {
@@ -51,8 +57,6 @@ int main(int argc, char** argv)
    {
       Ignition::IO::FatalError("No Project Provided\n\n\033[0m" + (std::string)implosionHelp);
    }
-
-   Ignition::DisableScripting();
 
    bool applicationOpen = true;
    while (applicationOpen) {

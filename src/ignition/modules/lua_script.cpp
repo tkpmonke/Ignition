@@ -6,7 +6,7 @@
 namespace Ignition {
    bool allowScripting = true;
    void Script::Start() {
-      if (std::filesystem::exists(Ignition::IO::GetProjectHome()+path) && !std::filesystem::is_directory(Ignition::IO::GetProjectHome()+path) && allowScripting) {
+      if (std::filesystem::exists(Ignition::IO::GetProjectHome()+path) && !std::filesystem::is_directory(Ignition::IO::GetProjectHome()+path)) {
          state = luaL_newstate();
          LoadIgnitionLibrary(state);
 
@@ -43,7 +43,8 @@ namespace Ignition {
          luabridge::setGlobal(state, time, "time");
          luabridge::setGlobal(state, dt, "deltaTime");
          luabridge::setGlobal(state, this->transform, "transform");
-         if (module["Update"].isFunction() && allowScripting) 
+         luabridge::setGlobal(state, this->object, "object");
+         if (module["Update"].isFunction()) 
             module["Update"]();
       } else if (std::filesystem::exists(Ignition::IO::GetProjectHome()+path)
          && !std::filesystem::is_directory(Ignition::IO::GetProjectHome()+path)) {
@@ -52,7 +53,7 @@ namespace Ignition {
    }
 
    void Script::Shutdown() {
-      if (module["Shutdown"].isFunction() && allowScripting) 
+      if (module["Shutdown"].isFunction()) 
          module["Shutdown"]();
 
       lua_close(state);

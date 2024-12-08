@@ -33,10 +33,20 @@ namespace Ignition::IO {
 
    std::string FileExplorer()
    {
-      char s[1024];
+      char s[256];
    
       FILE* f = popen("zenity --file-selection", "r");
-      fgets(s, 1024, f);
+      
+      if (!f) {
+         Ignition::IO::Error("Could Not Open File Explorer (zenity --file-selection)");
+         return NULL;
+      }
+
+      if ( fgets(s, 256, f) == NULL) {
+         Ignition::IO::Error("Failed To Read From File Explorer (fgets(\"zenity --file-selection\"))");
+      }
+
+      pclose(f);
       return s;
    }
 

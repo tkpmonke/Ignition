@@ -5,7 +5,7 @@
 project "ig-imgui"
    kind           "StaticLib"
    language       "C++"
-   cppdialect     "gnu++17"
+   cppdialect     "c++17"
    targetdir      "../bin"
    files      {   "imgui/**.cpp", "imgui/**.hpp" }
    includedirs{   "imgui" }
@@ -24,7 +24,7 @@ project "ig-imgui"
 project "preglsl"
    kind           "StaticLib"
    language       "C++"
-   cppdialect     "gnu++17"
+   cppdialect     "c++17"
    targetdir      "../bin"
    files      {   "preglsl/**.cpp", "preglsl/**.hpp" }
    includedirs{   "preglsl" }
@@ -38,3 +38,20 @@ project "preglsl"
       defines { "NDEBUG" }
       optimize "On"
 
+-- Jolt Physics
+project "ig-jolt"
+   kind           "StaticLib"
+   language       "C++"
+   cppdialect     "c++17"
+   targetdir      "../bin"
+   files      {   "Jolt/**.cpp", "Jolt/**.hpp" }
+   includedirs { "./" }
+
+   filter "configurations:Debug"
+      defines { "DEBUG" }
+      optimize "On"
+      symbols "On"
+
+   filter "configurations:Release"
+      defines { "NDEBUG" }
+      optimize "On"

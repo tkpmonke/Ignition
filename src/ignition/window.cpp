@@ -1,7 +1,7 @@
 #include "window.hpp"
 #include "stdio.h"
 
-#include <iostream>
+#include "utils/io.hpp"
 
 void GLAPIENTRY
 MessageCallback( GLenum source,
@@ -74,13 +74,19 @@ namespace Ignition {
       : isopen(b)
    {
       windowOpen = true;
+
+      Ignition::IO::DebugPrint("Initilizing GLFW");
+
       glfwInit();
       glfwWindowHint(GLFW_SAMPLES, 8);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
       this->window = glfwCreateWindow(w,h,c,NULL,NULL);
+
+      Ignition::IO::DebugPrint("Creating OpenGL Context");
       glfwMakeContextCurrent(this->window);
 
+      Ignition::IO::DebugPrint("Loading OpenGL Functions");
       glewInit();
 
       glEnable(GL_DEPTH_TEST);
@@ -99,9 +105,11 @@ namespace Ignition {
       glEnable(GL_DEBUG_OUTPUT);
       glDebugMessageCallback(MessageCallback, 0);
 #endif
-
+      
+      Ignition::IO::DebugPrint("Creating FrameBuffer Shader");
       s = Rendering::Shader(quadVertex, quadFragment, Rendering::ShaderType::Unlit);
 
+      Ignition::IO::DebugPrint("Creating FrameBuffer Quad");
       unsigned int VBO;
       glGenVertexArrays(1, &this->vao);
       glGenBuffers(1, &VBO);
@@ -115,6 +123,8 @@ namespace Ignition {
       glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
       glEnableVertexAttribArray(1);
 
+      Ignition::IO::DebugPrint("Creating FrameBuffer");
+      
       int width, height;
       glfwGetFramebufferSize(window, &width, &height);
 
@@ -144,6 +154,7 @@ namespace Ignition {
       if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	      std::cerr << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 
+      Ignition::IO::DebugPrint("Binding FrameBuffer 0");
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
    }
 
@@ -163,12 +174,16 @@ namespace Ignition {
 
    void Window::Shutdown()
    {
+
+      Ignition::IO::DebugPrint("Shutting Down");
       glfwDestroyWindow(this->window);
       glfwTerminate();
    }
 
    void Window::Close()
    {
+
+      Ignition::IO::DebugPrint("Closing");
       *isopen = false;
       windowOpen = false;
       glfwWindowShouldClose(window);
@@ -176,6 +191,7 @@ namespace Ignition {
 
    void Window::Restart()
    {
+      Ignition::IO::DebugPrint("Restarting");
       windowOpen = false;
       glfwWindowShouldClose(window);
    }

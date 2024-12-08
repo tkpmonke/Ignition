@@ -8,9 +8,6 @@
 using namespace Ignition::Scripting::Lua;
 
 namespace Ignition {
-   extern bool allowScripting;
-   static void DisableScripting() { allowScripting = false;}
-
    class Script : public Module {
    public:
       CREATE_MODULE("Script")
