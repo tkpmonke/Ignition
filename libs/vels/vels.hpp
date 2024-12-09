@@ -11,11 +11,14 @@
 #include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
+#include <Jolt/Physics/Collision/ShapeCast.h>
+#include <Jolt/Physics/Collision/Shape/MeshShape.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
 
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 JPH_SUPPRESS_WARNINGS_STD_BEGIN
 void* JPH_Allocate(size_t inSize) { return malloc(inSize); }
@@ -126,8 +129,7 @@ namespace vels {
          Factory::sInstance = new Factory();
          RegisterTypes();
 
-         TempAllocatorImpl tempAllocator(10*1024*1024);
-         JobSystemThreadPool jobSystem(cMaxPhysicsJobs, cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
+         jobSystem = std::unique_ptr<JobSystemThreadPool>(new JobSystemThreadPool(cMaxPhysicsJobs, cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1));
 
          BPLayerInterfaceImpl broad_phase_layer_interface;
 	      ObjectVsBroadPhaseLayerFilterImpl object_vs_broadphase_layer_filter;
@@ -140,8 +142,6 @@ namespace vels {
             object_vs_object_layer_filter
          );
          
-         BodyInterface& bI = physicsSystem.GetBodyInterface();
-
       }
 
       void Update() {
@@ -149,6 +149,8 @@ namespace vels {
          float time = glfwGetTime();
          this->deltaTime = time-pt;
          pt = time;
+
+
 
       }
 
@@ -158,23 +160,128 @@ namespace vels {
 
    private:
       PhysicsSystem physicsSystem;
+      TempAllocatorImpl allocator = TempAllocatorImpl(10*1024*1024);
+      std::unique_ptr<JobSystemThreadPool> jobSystem;
    };
 
-   class Collider {};
-
-   class BoxCollider : public Collider { 
+   template<typename From, typename To>
+   std::vector<To> Convert3DataArrType(const std::vector<From>& In) {
+       if (In.size() % 3 != 0) {
+           throw std::runtime_error("Input vector size is not a multiple of 3!");
+       }
    
+       std::vector<To> Out;
+       Out.reserve(In.size() / 3);
+   
+       for (size_t i = 0; i < In.size(); i += 3) {
+          Out.emplace_back(In[i], In[i + 1], In[i + 2]);
+       }
+   
+       return Out;
+   }
+
+   class Collider {
+   public:
+
+      enum ShapeType {
+         Cube,
+         Sphere,
+         Mesh
+      } shapeType = Cube;
+
+      void CreateCube(Vec3 size) {
+         shape = new BoxShape(size);
+         shapeType = Cube;
+      }
+
+      void CreateSphere(float radius) {
+         shape = new SphereShape(radius);
+         shapeType = Sphere;
+      }
+
+      void CreateMesh(std::vector<float>& vertices, std::vector<uint>& indices) {
+         auto verts = Convert3DataArrType<float, Float3>(vertices);
+         auto tris = Convert3DataArrType<uint, IndexedTriangle>(indices);
+
+         auto v = VertexList((const Float3*)verts.begin().base(), (const Float3*)verts.end().base());
+         auto t = IndexedTriangleList((const IndexedTriangle*)tris.begin().base(), (const IndexedTriangle*)tris.end().base());
+
+         auto meshSettings = MeshShapeSettings(v, t);
+         Shape::ShapeResult out;
+         shape = new MeshShape(meshSettings, out);
+      }
+
+      friend class Rigidbody;
+   private:
+      Shape* shape;
+
    };
 
    class Rigidbody {
    public:
       float mass = 1;
+      Vec3 position = Vec3(0,0,0);
+      Quat rotation = Quat::sIdentity();
+      Vec3 velocity = Vec3(0,0,0);
+
+      bool _static = false;
+
       std::shared_ptr<Collider> collider = nullptr;
 
-      Rigidbody(World* wrld) {
+      Rigidbody() = default;
+
+      void AddCollider(Collider c) {
+         collider = std::make_shared<Collider>(c);
+         EMotionType motionType = _static ? EMotionType::Static : EMotionType::Dynamic;
+         int layer = _static ? Layers::NonMoving : Layers::Moving;
+
+         BodyInterface& bodyInterface = world->physicsSystem.GetBodyInterface();
+         
+         BodyCreationSettings settings(
+             collider->shape,
+             position,
+             rotation,
+             motionType,
+             layer
+         );
+         
+         Body* newBodyID = bodyInterface.CreateBody(settings);
+         bodyInterface.AddBody(newBodyID->GetID(), EActivation::Activate);
+      }
+
+      void RefreshVariables() {
+         BodyInterface& bodyInterface = world->physicsSystem.GetBodyInterface();
+         
+         if (body) {
+             RVec3 position = body->GetPosition();
+             Quat rotation = body->GetRotation();
+             auto* shape = body->GetShape();
+         
+             bodyInterface.DestroyBody(body->GetID());
+
+             EMotionType motionType = _static ? EMotionType::Static : EMotionType::Dynamic;
+             int layer = _static ? Layers::NonMoving : Layers::Moving;
+         
+             BodyCreationSettings settings(
+                 shape,
+                 position,
+                 rotation,
+                 motionType,
+                 layer
+             );
+         
+             Body* newBodyID = bodyInterface.CreateBody(settings);
+             bodyInterface.AddBody(newBodyID->GetID(), EActivation::Activate);
+         }
+      }
+
+      void Init(World* world) {
+         this->world = world;
       }
       
 
    private:
+      Body* body;
+      World* world;
    };
 }
