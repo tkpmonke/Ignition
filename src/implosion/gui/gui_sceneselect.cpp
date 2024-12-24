@@ -102,7 +102,7 @@ namespace Implosion {
 
       for (auto& obj : *Ignition::scene.GetObjects())
       {
-         Ignition::Rendering::MeshRenderer* mr = (Ignition::Rendering::MeshRenderer*)obj.GetModule("Mesh Renderer");
+         Ignition::Rendering::MeshRenderer* mr = (Ignition::Rendering::MeshRenderer*)obj.GetModule("Mesh Renderer").get();
          if (mr == nullptr)
             continue;
 

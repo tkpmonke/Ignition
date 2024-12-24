@@ -34,5 +34,7 @@ namespace Ignition {
       
       void UpdateVectors();
 
+      void LookAt(Vector3);
+
    };
 }

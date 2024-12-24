@@ -19,8 +19,10 @@ namespace Ignition::Rendering {
    public:   
       // use this for most shaders
       Shader(std::string vert, std::string frag, ShaderType type);
+      Shader(std::string vert, std::string frag, int type);
       // use this for compute shaders
       Shader(std::string data, ShaderType type);
+      Shader(std::string data, int type);
 
       Shader() = default;
 

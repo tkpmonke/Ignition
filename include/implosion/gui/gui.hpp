@@ -93,7 +93,7 @@ namespace Implosion {
          Ignition::Rendering::Texture folder, file, empty_folder;
 
          struct {
-            Ignition::Rendering::Texture igscn;
+            Ignition::Rendering::Texture igscn, lua_script;
          } additionalTextures;
       } files;
    private:

@@ -8,6 +8,7 @@
 
 namespace Ignition::Rendering {
    std::unordered_map<std::string, int> shader_lookup_table;
+   Shader::Shader(std::string vert, std::string frag, int type) { *this = Shader(vert, frag, (ShaderType)type); }
    Shader::Shader(std::string vert, std::string frag, ShaderType type)
    {
       this->type = type;
@@ -59,7 +60,7 @@ namespace Ignition::Rendering {
       if (!success)
       {
          glGetProgramInfoLog(this->program, 512, NULL, infoLog);
-         Ignition::IO::Error("SHADER > COMPUTE > " + (std::string)infoLog);
+         Ignition::IO::Error("SHADER > PROGRAM > " + (std::string)infoLog);
       }
 
       
@@ -69,6 +70,7 @@ namespace Ignition::Rendering {
       shader_lookup_table[vert+frag] = this->program;
    }
 
+   Shader::Shader(std::string data, int type) { *this = Shader(data, (ShaderType)type); }
    Shader::Shader(std::string data, ShaderType type)
    {
       this->type = type;
@@ -97,7 +99,7 @@ namespace Ignition::Rendering {
          if(!success)
          {
             glGetShaderInfoLog(shader, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::COMPUTE::COMPILATION_FAILED\n" << infoLog << "\n";
+            Ignition::IO::Error("SHADER > COMPUT > " + (std::string)infoLog);
          }
 
          this->program = glCreateProgram();

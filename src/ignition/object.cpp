@@ -1,35 +1,49 @@
 #include "object.hpp"
+#include <algorithm>
 
 namespace Ignition {
 
    void Object::AddModule(std::shared_ptr<Module> mod)
    {
       this->modules.push_back(mod);
-      //mod->transform = std::make_shared<Transform>(this->transform);
-      mod->Start();
+      mod->transform = &this->transform;
+      if (!Ignition::IO::InEditor() || mod->runs_in_editor())
+         mod->Start();
    }
 
-   template <class T>
+   void Object::RemoveModule(std::string s) {
+      std::shared_ptr<Module> mod = nullptr;
+      for (auto i : this->modules) {
+         if (i->mod_type() == s)
+            mod = i;
+      }
+
+      if (mod != nullptr) {
+         modules.erase(std::remove(modules.begin(), modules.end(), mod), modules.end());
+      }
+   }
+
+   /*template <class T>
    T* Object::AddModule() {
       T mod = new T();
       auto sp = std::make_shared<T>(mod);
       this->modules.push_back(mod);
 
       return this->modules.at(modules.size()-1);
-   }
+   }*/
 
-   Module* Object::GetModule(std::string mod)
+   std::shared_ptr<Module> Object::GetModule(std::string mod)
    {
       for (auto i : this->modules)
       {
          if (i->mod_type() == mod)
-            return i.get();
+            return i;
       }
 
       return nullptr;
    }
 
-   template<class T>
+   /*template<class T>
    T* Object::GetModule()
    {
       for (auto i : this->modules)
@@ -39,7 +53,7 @@ namespace Ignition {
       }
 
       return nullptr;
-   }
+   }*/
 
    std::vector<Object*> Object::GetChildrenWithModule(std::string m)
    {

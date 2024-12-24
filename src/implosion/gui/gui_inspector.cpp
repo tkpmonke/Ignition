@@ -12,6 +12,8 @@
 #include "utils/model_loader.hpp"
 #include "utils/files.hpp"
 #include "modules/script.hpp"
+#include "modules/physics/rigidbody.hpp"
+#include "modules/rendering/light.hpp"
 
 #include <cstring>
 
@@ -22,6 +24,17 @@
                            }                                                                                      \
                            ImGui::EndDragDropTarget();                                                            \
                         }
+
+#define MODULE_HEADER_MENU(name) \
+   if (ImGui::BeginPopupContextItem((name+(std::string)"_"+mod->mod_type()).data())) {\
+      if (ImGui::MenuItem(("Remove " + mod->mod_type()).data())) {\
+         obj->RemoveModule(mod->mod_type());\
+         ImGui::EndPopup();\
+         ImGui::End();\
+         return;\
+      }\
+      ImGui::EndPopup();\
+   }
 
 namespace Implosion {
    void GUI::Inspector()
@@ -65,13 +78,11 @@ namespace Implosion {
             ImGui::EndChild();
             ImGui::Separator();
             
-            int i;
             for (std::shared_ptr<Ignition::Module> mod : obj->GetModules()) {
-               i++;
                if (ImGui::CollapsingHeader(mod->mod_type().data())) {
                   if (mod->mod_type() == "Mesh Renderer") {
                      auto m = std::dynamic_pointer_cast<Ignition::Rendering::MeshRenderer>(mod);
-                     ImGui::BeginChild("##Mesh_Renderer", ImVec2(0, 100));
+                     ImGui::BeginChild("##Mesh_Renderer", ImVec2(0, 150));
 
                      if (ImGui::BeginCombo("Mesh", m->model.name == "" ? "Mesh" : m->model.name.data())) {
                         if (ImGui::Button("None")) {
@@ -99,6 +110,22 @@ namespace Implosion {
                         m->shader.albedo.LoadData(s.substr(Ignition::IO::GetProjectHome().size(), s.size()));
                      GUI_END_DROP_TARGET
 
+                     if (ImGui::BeginCombo("##Shader", "Shader")) {
+                        if (ImGui::Button("Unlit")) {
+                           auto tex = m->shader.albedo;
+                           m->LoadShader(Ignition::Rendering::Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::Unlit));
+                           m->shader.albedo = tex;
+                        }
+
+                        if (ImGui::Button("Lit")) {
+                           auto tex = m->shader.albedo;
+                           m->LoadShader(Ignition::Rendering::Shader(unlit_vertex, lit_fragment, Ignition::Rendering::Lit));
+                           m->shader.albedo = tex;
+                        }
+
+                        ImGui::EndCombo();
+                     }
+
                      for (int i = 0; i < 4; ++i)
                         ImGui::Spacing();
 
@@ -118,8 +145,69 @@ namespace Implosion {
                         m->path = s.substr(Ignition::IO::GetProjectHome().size(), s.size());
                      GUI_END_DROP_TARGET
                      ImGui::EndChild();
+                  } if (mod->mod_type() == "Rigidbody") {
+                     auto m = std::dynamic_pointer_cast<Ignition::Physics::Rigidbody>(mod);
+                     ImGui::BeginChild("##Rigidbody_Component", ImVec2(0, 150));
+                     
+                     ImGui::InputFloat("Mass", &m->mass);
+                     ImGui::Checkbox("Is Trigger", &m->trigger);
+                     ImGui::Checkbox("Is Static", &m->_static);
+                     
+                     if (ImGui::BeginCombo("##Collider", "Collider")) {
+                        if (ImGui::Button("Empty")) {
+                           m->collider.shapeType = vels::Collider::Empty;
+                        }
+                        if (ImGui::Button("Cube")) {
+                           m->collider.shapeVariables.size = Vec3(m->object->transform.scale.x,
+                                    m->object->transform.scale.y,
+                                    m->object->transform.scale.z)/2;
+                           m->collider.shapeType = vels::Collider::Cube;
+                        }
+
+                        if (ImGui::Button("Sphere")) {
+                           m->collider.shapeVariables.radius = (m->object->transform.scale.x+
+                                    m->object->transform.scale.y+
+                                    m->object->transform.scale.z)/3;
+                           m->collider.shapeType = vels::Collider::Sphere;
+                        }
+
+                        ImGui::EndCombo();
+                     }
+
+                     if (m->collider.shapeType == vels::Collider::Cube) {
+                        ImGui::InputFloat3("Size", (float*)&m->collider.shapeVariables.size);
+                     }
+
+                     if (m->collider.shapeType == vels::Collider::Sphere) {
+                        ImGui::InputFloat("Radius", &m->collider.shapeVariables.radius);
+                     }
+
+                     ImGui::EndChild();
+                  } if (mod->mod_type() == "Light") {
+                     auto m = std::dynamic_pointer_cast<Ignition::Rendering::Light>(mod);
+                     if (ImGui::BeginCombo("##LightType", "Type of Light")) {
+                        if (ImGui::Button("Spot")) {
+                           m->type = Ignition::Rendering::Spot;
+                        }
+                        if (ImGui::Button("Point")) {
+                           m->type = Ignition::Rendering::Point;
+                        }
+
+                        ImGui::EndCombo();
+                     }
+
+                     ImGui::InputFloat("Distance", &m->distance);
+                     ImGui::InputFloat3("Ambient", (float*)&m->ambient);
+                     ImGui::InputFloat3("Diffuse", (float*)&m->diffuse);
+                     ImGui::InputFloat3("Specular", (float*)&m->specular);
+
+                     if (m->type == Ignition::Rendering::Spot) {
+                        ImGui::InputFloat("Cut Off", &m->cutOff);
+                        ImGui::InputFloat("Outer Cut Off", &m->outerCutOff);
+                     }
                   }
                }   
+               MODULE_HEADER_MENU("MODULE_HEADER_MENU")
             }
 
             if (ImGui::BeginCombo("##Add_Component", "Add Component")) {
@@ -138,13 +226,24 @@ namespace Implosion {
                   }
 
                   if (ImGui::Button("Script")) {
-                     Ignition::Script s;
-                     auto ptr = std::make_shared<Ignition::Script>(s);
+                     auto ptr = std::make_shared<Ignition::Script>();
+                     obj->AddModule(ptr);
+                  }
+
+                  if (ImGui::Button("Rigidbody")) {
+                     auto ptr = std::make_shared<Ignition::Physics::Rigidbody>();
+                     obj->AddModule(ptr);
+                  }
+
+                  if (ImGui::Button("Light")) {
+                     auto ptr = std::make_shared<Ignition::Rendering::Light>();
+                     Ignition::Rendering::lights.push_back(ptr);
                      obj->AddModule(ptr);
                   }
                   ImGui::EndCombo();
                }
          }
+
       }
 
       ImGui::End();
@@ -152,7 +251,7 @@ namespace Implosion {
       if (obj != nullptr)
       {
 
-         Ignition::Rendering::MeshRenderer* renderer = (Ignition::Rendering::MeshRenderer*)obj->GetModule("Mesh Renderer"); 
+         Ignition::Rendering::MeshRenderer* renderer = (Ignition::Rendering::MeshRenderer*)obj->GetModule("Mesh Renderer").get(); 
 
          if (renderer != nullptr)
          {
@@ -162,6 +261,7 @@ namespace Implosion {
             renderer->shader.color = (Ignition::Vector4){1,1,1,0.75f}*.5f+.5f;
             float intensity = renderer->shader.intensity;
             renderer->shader.intensity = 1;
+            renderer->transform = &obj->transform;
             renderer->Update();
             renderer->shader.color = col;
             renderer->shader.intensity = intensity;

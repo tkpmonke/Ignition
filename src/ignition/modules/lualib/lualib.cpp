@@ -2,6 +2,9 @@
 #include "utils/io.hpp"
 #include "camera.hpp"
 #include "input.hpp"
+#include "modules/rendering/meshrenderer.hpp"
+#include "vels/vels.hpp"
+#include "modules/physics/rigidbody.hpp"
 
 namespace Ignition::Scripting::Lua {
    lua_State* state;
@@ -25,20 +28,34 @@ namespace Ignition::Scripting::Lua {
 
    void RegisterFunctionsAndClasses(lua_State* state) {
       luabridge::getGlobalNamespace(state)
+         .beginNamespace("ig")
          .beginClass<Ignition::Vector2>("Vector2")
+            .addConstructor<void(*)(float)>()
             .addConstructor<void(*)(float, float)>()
             .addProperty("x", &Ignition::Vector2::x)
             .addProperty("y", &Ignition::Vector2::y)
          .endClass()
 
          .beginClass<Ignition::Vector3>("Vector3")
+            .addConstructor<void(*)(float)>()
             .addConstructor<void(*)(float, float, float)>()
             .addProperty("x", &Ignition::Vector3::x)
             .addProperty("y", &Ignition::Vector3::y)
             .addProperty("z", &Ignition::Vector3::z)
+            .addFunction("__add", +[](Vector3* a, Vector3& b){return *a+b;})
+            .addFunction("__mul", +[](Vector3* a, Vector3& b){return *a*b;})
+         .endClass()
+         
+         .beginClass<JPH::Vec3>("Vec3")
+            .addProperty("x", &Vec3::GetX, &Vec3::SetX)
+            .addProperty("y", &Vec3::GetY, &Vec3::SetY)
+            .addProperty("z", &Vec3::GetZ, &Vec3::SetZ)
          .endClass()
 
+         .addFunction("ig_to_jph", +[](Vector3* a){return new Vec3(a->x,a->y,a->z);})
+
          .beginClass<Ignition::Vector4>("Vector4")
+            .addConstructor<void(*)(float)>()
             .addConstructor<void(*)(float, float, float, float)>()
             .addProperty("x", &Ignition::Vector4::x)
             .addProperty("y", &Ignition::Vector4::y)
@@ -50,6 +67,7 @@ namespace Ignition::Scripting::Lua {
             .addConstructor<void(*)(Ignition::Vector3)>()
             .addConstructor<void(*)(Ignition::Vector3, Ignition::Vector3)>()
             .addConstructor<void(*)(Ignition::Vector3, Ignition::Vector3, Ignition::Vector3)>()
+            .addFunction("LookAt", &Ignition::Transform::LookAt)
             .addProperty("position", &Ignition::Transform::position)
             .addProperty("rotation", &Ignition::Transform::rotation)
             .addProperty("scale", &Ignition::Transform::scale)
@@ -58,9 +76,75 @@ namespace Ignition::Scripting::Lua {
             .addProperty("up", &Ignition::Transform::up)
          .endClass()
 
-         .beginClass<Ignition::Camera>("Camera")
-            .addProperty("fov", &Ignition::Camera::fov)
-            .addProperty<Ignition::Transform>("transform", &Ignition::Camera::transform)
+         .beginClass<Ignition::Module>("Module")
+            .addFunction("Start", &Ignition::Module::Start)
+            .addFunction("Update", &Ignition::Module::Update)
+            .addFunction("LateUpdate", &Ignition::Module::LateUpdate)
+            .addFunction("Shutdown", &Ignition::Module::Shutdown)
+            .addFunction("RunsInEditor", &Ignition::Module::runs_in_editor)
+            //.addFunction("ModType", &Ignition::Module::mod_type)
+            .addProperty("enabled", &Ignition::Module::enabled)
+            .addProperty("transform", &Ignition::Module::transform)
+         .endClass()
+
+         .beginClass<Ignition::Model>("Model")
+            .addProperty("indices", &Ignition::Model::indices)
+            .addProperty("vertices", &Ignition::Model::vertices)
+            .addProperty("normals", &Ignition::Model::normals)
+            .addProperty("uv", &Ignition::Model::uv)
+         .endClass()
+
+         .beginNamespace("ShaderType")
+            .addProperty("Lit", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::Lit);})
+            .addProperty("Unlit", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::Unlit);})
+            .addProperty("Compute", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::Compute);})
+         .endNamespace()
+
+         .beginClass<Ignition::Rendering::Shader>("Shader")
+            .addConstructor<void(*)(std::string, std::string, int)>()
+            .addConstructor<void(*)(std::string, int)>()
+            .addFunction("SetFloat", &Ignition::Rendering::Shader::SetFloat)
+            .addFunction("SetInt", &Ignition::Rendering::Shader::SetInt)
+            .addFunction("SetBool", &Ignition::Rendering::Shader::SetBool)
+            .addFunction("SetDouble", &Ignition::Rendering::Shader::SetDouble)
+            .addFunction("SetMatrix3", &Ignition::Rendering::Shader::SetMatrix3)
+            .addFunction("SetMatrix4", &Ignition::Rendering::Shader::SetMatrix4)
+            .addFunction("SetVector2", &Ignition::Rendering::Shader::SetVec2)
+            .addFunction("SetVector3", &Ignition::Rendering::Shader::SetVec3)
+            .addFunction("SetVector4", &Ignition::Rendering::Shader::SetVec4)
+            .addProperty("color", &Ignition::Rendering::Shader::color)
+            .addProperty("intensity", &Ignition::Rendering::Shader::intensity)
+         .endClass()
+
+         .deriveClass<Ignition::Rendering::MeshRenderer, Ignition::Module>("MeshRenderer")
+            .addConstructor<void(*)()>()
+            .addFunction("LoadShader", &Ignition::Rendering::MeshRenderer::LoadShader)
+            .addFunction("LoadModel", &Ignition::Rendering::MeshRenderer::LoadModel)
+            
+            .addProperty("shader", &Ignition::Rendering::MeshRenderer::shader)
+            .addProperty("model", &Ignition::Rendering::MeshRenderer::model, false)
+         .endClass()
+
+         .beginClass<vels::Collider>("Collider")
+            .addConstructor<void(*)()>()
+            .addFunction("CreateCube", &vels::Collider::CreateCube)
+            .addFunction("CreateSphere", &vels::Collider::CreateSphere)
+            .addFunction("CreateEmpty", &vels::Collider::CreateEmpty)
+         .endClass()
+
+         .deriveClass<vels::Rigidbody, Ignition::Module>("internal_vels_rigidbody")
+            .addFunction("AddCollider", &vels::Rigidbody::AddCollider)
+            .addFunction("AddForce", &vels::Rigidbody::AddForce)
+            .addProperty("mass", &vels::Rigidbody::mass)
+            .addProperty("velocity", &vels::Rigidbody::velocity)
+            .addProperty("static", &vels::Rigidbody::_static)
+            .addProperty("trigger", &vels::Rigidbody::trigger)
+            .addProperty("collider", &vels::Rigidbody::collider)
+         .endClass()
+
+         .deriveClass<Ignition::Physics::Rigidbody,vels::Rigidbody>("Rigidbody")
+            .addConstructor<std::shared_ptr<Ignition::Physics::Rigidbody>(*)()>()
+            .addFunction("Start", &Ignition::Physics::Rigidbody::Start)
          .endClass()
 
          .beginClass<Ignition::Object>("Object")
@@ -71,6 +155,12 @@ namespace Ignition::Scripting::Lua {
             .addProperty<Ignition::Transform>("transform", &Ignition::Object::transform)
             .addProperty<Ignition::Object*>("parent", &Ignition::Object::parent)
             .addFunction("AddChild", &Ignition::Object::AddChild)
+            .addFunction("AddModule", &Ignition::Object::AddModule)
+            .addFunction("GetModule", &Ignition::Object::GetModule)
+         .endClass()
+
+         .deriveClass<Ignition::Camera, Ignition::Object>("Camera")
+            .addProperty("fov", &Ignition::Camera::fov)
          .endClass()
 
          .addFunction("Poweroff", Functions::Shutdown)
@@ -83,6 +173,8 @@ namespace Ignition::Scripting::Lua {
          .addFunction("Error", Ignition::IO::Error)
          .addFunction("FatalError", Ignition::IO::FatalError)
          
+         .addFunction("GetScrollX", Ignition::IO::GetScrollX)
+         .addFunction("GetScrollY", Ignition::IO::GetScrollY)
          .addFunction("GetMouse", Ignition::IO::GetMouse)
          .addFunction("GetMouseUp", Ignition::IO::GetMouseUp)
          .addFunction("GetMouseDown", Ignition::IO::GetMouseDown)
@@ -149,7 +241,8 @@ namespace Ignition::Scripting::Lua {
             .addConstant("esc", Ignition::IO::Keys::esc)
          .endNamespace()
          
-         ;
+         
+         .endNamespace();
    }
 
 }

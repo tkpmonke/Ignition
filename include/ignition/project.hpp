@@ -14,6 +14,8 @@ namespace Ignition {
 
       Project() = default;
       void LoadProject(Window* win);
+      std::string Build();
+      void Run();
    };
    extern Project project; 
 }

@@ -52,7 +52,7 @@ namespace Ignition::IO {
 
       const int up            = '\265';
       const int down          = '\264';
-      const int left          = '\263';
+      const int left          = GLFW_KEY_LEFT;
       const int right         = '\262';
 
       const int enter         = '\n';
@@ -63,13 +63,21 @@ namespace Ignition::IO {
       const int esc          = '\256';
    }
 
-   static bool GetInput(int key)    { return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key); };
-   static bool GetInputDown(int key){ return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS; };
-   static bool GetInputUp(int key)  { return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_RELEASE; }
+   extern float scrollStatusX, scrollStatusY;
+   void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
-   static bool GetMouse(int key)    { return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key); }
-   static bool GetMouseDown(int key){ return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS; }
-   static bool GetMouseUp(int key) { return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_RELEASE; }
+   float GetScrollX();
+   float GetScrollY();
+
+   extern std::unordered_map<int, bool> keyStates;
+
+   bool GetInput(int key);
+   bool GetInputDown(int key);
+   bool GetInputUp(int key);  
+
+   bool GetMouse(int key);
+   bool GetMouseDown(int key);
+   bool GetMouseUp(int key); 
 
    static Ignition::Vector2 GetMousePosition() { double a,b; glfwGetCursorPos((GLFWwindow*)*Ignition::MainCamera::camera->window, &a, &b); return {a,b}; }
 

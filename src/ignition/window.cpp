@@ -102,8 +102,8 @@ namespace Ignition {
       glFrontFace(GL_CW);
 
 #ifdef DEBUG
-      glEnable(GL_DEBUG_OUTPUT);
-      glDebugMessageCallback(MessageCallback, 0);
+      //glEnable(GL_DEBUG_OUTPUT);
+      //glDebugMessageCallback(MessageCallback, 0);
 #endif
       
       Ignition::IO::DebugPrint("Creating FrameBuffer Shader");

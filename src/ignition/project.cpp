@@ -1,6 +1,9 @@
 #include "project.hpp"
 #include "utils/files.hpp"
 #include "utils/io.hpp"
+#include "project.hpp"
+#include "packer.hpp"
+#include "lua/appinfo.hpp"
 
 #include <filesystem>
 
@@ -47,4 +50,43 @@ namespace Ignition {
       glfwSetWindowIcon((GLFWwindow*)*window, 1, image);
       stbi_image_free(image[0].pixels);
    }
+
+   std::string Project::Build() {
+      Ignition::scene.WriteSceneToDisk();
+      Ignition::Scripting::Lua::LoadAppInfo();
+
+      this->name = Ignition::Scripting::Lua::appInfo.appName;
+
+      pack(Ignition::IO::GetProjectHome().data(),(Ignition::IO::GetProjectHome() + "/bin").data(), 1); 
+      auto exeLoc = Ignition::IO::GetProjectHome() + "/bin/" + this->name;
+      std::filesystem::copy_file("/usr/bin/ignition-runtime", exeLoc);
+
+      return exeLoc;
+   }
+
+#define STARTING_GAME   pid == 0
+#define CONTINUE        pid > 0
+
+   void Project::Run() {
+      Ignition::Scripting::Lua::LoadAppInfo();
+      pid_t pid = fork();
+
+      this->name = Ignition::Scripting::Lua::appInfo.appName;
+
+      if (STARTING_GAME) {
+         Ignition::IO::Print("Starting " + this->name);
+         auto exeLoc = Ignition::IO::GetProjectHome() + "/bin/";
+
+         chdir(exeLoc.data());
+         execl((exeLoc + this->name).data(), this->name.data(), nullptr);
+
+         Ignition::IO::FatalError("Failed To Start Game");
+      } else if (CONTINUE) {
+         return;
+      } else {
+         Ignition::IO::Error("Fork Failed, Could Not Start Game");
+      }
+   }
+#undef STARTING_GAME
+#undef CONTINUE
 }

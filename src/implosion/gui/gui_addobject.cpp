@@ -16,7 +16,7 @@
 using namespace Ignition::Rendering;
 
 #define CREATE_SHADER()                                                                     \
-         Shader s = Shader(unlit_vertex, unlit_fragment, ShaderType::Unlit);                       \
+         Shader s = Shader(unlit_vertex, lit_fragment, ShaderType::Lit);                       \
          s.albedo = Texture();                                                                           \
          s.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);                                \
          s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");              
@@ -63,7 +63,7 @@ namespace Implosion {
       if (ImGui::BeginMenu("Debug")) { 
          if (ImGui::MenuItem("Performance Test"))
          {
-            for (int i = 0; i < 1000; ++i)
+            for (int i = 0; i < 100; ++i)
             {
                CREATE_SHADER(); 
                MeshRenderer m;
@@ -77,9 +77,9 @@ namespace Implosion {
 
                std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
                Ignition::Object* o = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
-               int x = -50 + rand() % 100;
-               int y = -50 + rand() % 100;
-               int z = -50 + rand() % 100;
+               int x = rand() % 10;
+               int y = rand() % 50;
+               int z = rand() % 10;
 
                int rx = -180 + rand() % 360;
                int ry = -180 + rand() % 360;

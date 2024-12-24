@@ -39,9 +39,10 @@ namespace Ignition {
    void Script::Update() {
       float time = glfwGetTime();
       float dt = time-ptime;
+      ptime = time;
       if (init) {
-         luabridge::setGlobal(state, time, "time");
-         luabridge::setGlobal(state, dt, "deltaTime");
+         luabridge::setGlobal(state, time, "ig_time");
+         luabridge::setGlobal(state, dt, "ig_deltaTime");
          luabridge::setGlobal(state, this->transform, "transform");
          luabridge::setGlobal(state, this->object, "object");
          if (module["Update"].isFunction()) 

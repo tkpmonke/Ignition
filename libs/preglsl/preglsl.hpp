@@ -58,7 +58,19 @@ std::string preglsl_operate_raw(std::string data, std::string name);
 
 
 static inline std::vector<std::pair<std::string,std::string>> constDefines = {
-   {"__PREGLSL", PREGLSL_VERSION_STRING}
+    {"__PREGLSL", PREGLSL_VERSION_STRING}
+#ifdef __WIN32__
+   ,{"__WIN32__", ""}
+#endif
+#ifdef __unix__
+   ,{"__UNIX__", ""}
+#endif
+#ifdef __linux__
+   ,{"__LINUX__", ""}
+#endif
+#ifdef __apple__ 
+
+#endif
 };
 
 template<typename T>

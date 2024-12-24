@@ -55,6 +55,7 @@ void ReadPreferences(Implosion::GUI* guis)
    if (!Ignition::IO::CanRead(0))
       return;
    guis->vsync = Ignition::IO::Read8();
+   glfwSwapInterval(guis->vsync);
    guis->anti = Ignition::IO::Read8();
    guis->enableGrid = Ignition::IO::Read8();
    guis->enableDistanceFalloff = Ignition::IO::Read8();

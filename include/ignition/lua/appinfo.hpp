@@ -12,6 +12,11 @@ namespace Ignition::Scripting::Lua {
       std::string graphicsAPI;
    } appInfo;
 
+   inline struct CameraInfo {
+      Vector3 position, rotation;
+      float fov, min, max;
+   } cameraInfo;
+
    inline void LoadAppInfo() {
       lua_State* L = luaL_newstate();
       luaL_openlibs(L);
@@ -31,6 +36,31 @@ namespace Ignition::Scripting::Lua {
          }
       } else {
          Ignition::IO::Error("app.lua did not return a table");
+      }
+
+      lua_close(L);
+   }
+   
+   inline void LoadCameraInfo() {
+      lua_State* L = luaL_newstate();
+      LoadIgnitionLibrary(L);
+      luaL_dofile(L, (Ignition::IO::GetProjectHome()+"/settings/camera.lua").data());
+
+      if (lua_gettop(L) > 0) {
+         try {
+            luabridge::LuaRef M = luabridge::LuaRef::fromStack(L, -1);
+            if (M.isTable()) {
+               cameraInfo.position = M["position"].cast<Ignition::Vector3>();
+               cameraInfo.rotation = M["rotation"].cast<Ignition::Vector3>();
+               cameraInfo.fov = M["fov"].cast<float>();
+               cameraInfo.min = M["min"].cast<float>();
+               cameraInfo.max = M["max"].cast<float>();
+            }
+         } catch (const luabridge::LuaException& e) {
+            Ignition::IO::Error("Error reading camera.lua table : " + (std::string)e.what());
+         }
+      } else {
+         Ignition::IO::Error("camera.lua did not return a table");
       }
 
       lua_close(L);
