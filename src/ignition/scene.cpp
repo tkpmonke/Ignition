@@ -3,6 +3,8 @@
 
 #include "modules/rendering/meshrenderer.hpp"
 #include "modules/script.hpp"
+#include "modules/physics/rigidbody.hpp"
+#include "modules/rendering/light.hpp"
 
 #include <iostream>
 
@@ -15,6 +17,33 @@ namespace Ignition {
       for (int i = 0; i < objects.size(); ++i)
       {
          objects[i].Update();
+      }
+   }
+   
+   void Scene::LateUpdate()
+   {
+      for (int i = 0; i < objects.size(); ++i)
+      {
+         for (auto& m : objects[i].GetModules()) 
+            m->LateUpdate();
+      }
+   }
+   
+   void Scene::FixedUpdate()
+   {
+      for (int i = 0; i < objects.size(); ++i)
+      {
+         for (auto& m : objects[i].GetModules()) 
+            m->FixedUpdate();
+      }
+   }
+   
+   void Scene::LateFixedUpdate()
+   {
+      for (int i = 0; i < objects.size(); ++i)
+      {
+         for (auto& m : objects[i].GetModules()) 
+            m->LateFixedUpdate();
       }
    }
 
@@ -57,17 +86,9 @@ namespace Ignition {
          Ignition::IO::WriteString(objects[i].name);
          Ignition::IO::WriteString(objects[i].tag);
 
-         Ignition::IO::WriteFloat(objects[i].transform.position.x);
-         Ignition::IO::WriteFloat(objects[i].transform.position.y);
-         Ignition::IO::WriteFloat(objects[i].transform.position.z);
-
-         Ignition::IO::WriteFloat(objects[i].transform.rotation.x);
-         Ignition::IO::WriteFloat(objects[i].transform.rotation.y);
-         Ignition::IO::WriteFloat(objects[i].transform.rotation.z);
-
-         Ignition::IO::WriteFloat(objects[i].transform.scale.x);
-         Ignition::IO::WriteFloat(objects[i].transform.scale.y);
-         Ignition::IO::WriteFloat(objects[i].transform.scale.z);
+         Ignition::IO::WriteVector3(objects[i].transform.position);
+         Ignition::IO::WriteVector3(objects[i].transform.rotation);
+         Ignition::IO::WriteVector3(objects[i].transform.scale);
 
          Ignition::IO::Write8(objects[i].enabled);
 
@@ -121,22 +142,36 @@ namespace Ignition {
 
             if (type == "Mesh Renderer")
             {
-               MeshRenderer m;
-               m.enabled = enabled;
-
-               m.Deserialize();
-
-               o.AddModule(std::make_shared<MeshRenderer>(m));
+               auto m = std::make_shared<MeshRenderer>();
+               m->enabled = enabled;
+               m->Deserialize();
+               o.AddModule(m);
             }
 
             if (type == "Script")
             {
-               Ignition::Script m;
-               m.enabled = enabled;
+               auto m = std::make_shared<Ignition::Script>();
+               m->enabled = enabled;
+               m->Deserialize();
+               o.AddModule(m);
+            }
 
-               m.Deserialize();
+            if (type == "Rigidbody") {
+               auto rb = std::make_shared<Ignition::Physics::Rigidbody>();
+               rb->enabled = enabled;
+               o.AddModule(rb);
+               auto r = (Ignition::Physics::Rigidbody*)o.GetModule("Rigidbody").get();
+               r->Deserialize();
+            }
 
-               o.AddModule(std::make_shared<Ignition::Script>(m));
+            if (type == "Light") {
+               auto m = std::make_shared<Ignition::Rendering::Light>();
+               m->enabled = enabled;
+               m->Deserialize(); 
+               o.AddModule(m);
+
+               auto l = std::make_shared<Ignition::Rendering::Light>(*(Ignition::Rendering::Light*)o.GetModule("Light").get());
+               lights.push_back(l);
             }
          }
 

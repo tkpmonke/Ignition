@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdint>
 
+#include "object.hpp"
+
 namespace Ignition::IO {
 
    std::string GetHome();
@@ -25,6 +27,10 @@ namespace Ignition::IO {
    float ReadFloat();
    std::string ReadString();
 
+   Vector2 ReadVector2();
+   Vector3 ReadVector3();
+   Vector4 ReadVector4();
+
    bool CanRead(int);
 
    void Write8(uint8_t data);
@@ -32,6 +38,10 @@ namespace Ignition::IO {
    void Write32(uint32_t data);
    void WriteFloat(float data);
    void WriteString(std::string data);
+
+   void WriteVector2(Vector2 data);
+   void WriteVector3(Vector3 data);
+   void WriteVector4(Vector4 data);
 
    void EndBinaryRead();
    void EndBinaryWrite();

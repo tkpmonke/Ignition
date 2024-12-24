@@ -17,4 +17,13 @@ namespace Ignition {
       this->up = glm::normalize(glm::cross(this->right, this->forward));
 
    }
+
+   void Transform::LookAt(Vector3 tr) {
+      Vector3 direction = glm::normalize(tr - this->position);
+
+      float yaw = glm::degrees(atan2(direction.z, direction.x));
+      float pitch = glm::degrees(asin(-direction.y));
+      this->rotation = Vector3(0,-pitch, yaw);
+
+   }
 }

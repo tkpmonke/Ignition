@@ -33,18 +33,21 @@ namespace Ignition {
       Object* parent;
       
       void AddModule(std::shared_ptr<Module>);
+      void RemoveModule(std::string);
 
-      template<class T>
-      T* AddModule();
+      //template<class T>
+      //T* AddModule();
 
       // GetModule with mod_name
-      Module* GetModule(std::string);
+      std::shared_ptr<Module> GetModule(std::string);
       
       // GetModule with templates
-      template<class T>
-      T* GetModule();
+      //template<class T>
+      //T* GetModule();
 
       std::vector<std::shared_ptr<Module>>& GetModules() { return modules; }
+
+
 
       std::vector<Object*>* GetChildren() { return &children; };
       std::vector<Object*> GetChildrenWithModule(std::string);

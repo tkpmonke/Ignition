@@ -6,6 +6,7 @@
 #include "utils/default_shaders.hpp"
 #include "textures/grid.hpp"
 #include "utils/io.hpp"
+#include "modules/rendering/light.hpp"
 
 namespace Ignition::Rendering {
    int currentProgram = std::numeric_limits<int>::max();
@@ -106,11 +107,57 @@ namespace Ignition::Rendering {
       
       if (this->shader.type == ShaderType::Lit)
       {
-         this->shader.SetInt(this->shader.diffuse, "material.diffuse");
-         this->shader.SetFloat(this->shader.shininess, "material.shininess");
-         this->shader.SetVec3(this->shader.specular, "material.specular");
-         glActiveTexture(GL_TEXTURE1); 
-         glBindTexture(GL_TEXTURE_2D, this->shader.diffuse);
+         this->shader.SetFloat(32, "material.shininess");
+         this->shader.SetBool(false, "material.use_specular_map");
+         this->shader.SetVec3(Vector3(0.5f), "material.specular");
+         this->shader.SetBool(false, "material.use_normal_map");
+         //glActiveTexture(GL_TEXTURE1); 
+         //glBindTexture(GL_TEXTURE_2D, this->shader.diffuse);
+         
+         this->shader.SetVec3(Vector3(-0.2f, 0.6f, -0.3f), "dirLight.direction");
+         this->shader.SetVec3(Vector3(0.05f, 0.05f, 0.05f), "dirLight.ambient");
+         this->shader.SetVec3(Vector3(0.1f, 0.1f, 0.1f), "dirLight.diffuse");
+         this->shader.SetVec3(Vector3(0.5f, 0.5f, 0.5f), "dirLight.specular");
+
+         this->shader.SetVec3(camera->transform.position, "viewPos");
+
+         int spotCount = 0;
+         int pointCount = 0;
+         for (int l = 0; l < (int)lights.size(); ++l) {
+            if (lights[l]->type == LightType::Spot) {
+               std::string varNameStart = "spotLights[" + std::to_string(spotCount) + "].";
+               this->shader.SetInt(spotCount++, "numberOfSpotLights");
+
+               this->shader.SetVec3(lights[l]->transform->position, varNameStart+"position");
+               this->shader.SetVec3(lights[l]->ambient, varNameStart+"ambient");
+               this->shader.SetVec3(lights[l]->diffuse, varNameStart+"diffuse");
+               this->shader.SetVec3(lights[l]->specular, varNameStart+"specular");
+
+               this->shader.SetFloat(lights[l]->distance, varNameStart+"distance");
+               this->shader.SetFloat(lights[l]->constant, varNameStart+"constant");
+               this->shader.SetFloat(lights[l]->linear, varNameStart+"linear");
+               this->shader.SetFloat(lights[l]->quadratic, varNameStart+"quadratic");
+               
+               this->shader.SetFloat(lights[l]->cutOff, varNameStart+"cutOff");
+               this->shader.SetFloat(lights[l]->outerCutOff, varNameStart+"outerCutOff");
+
+
+            } else if (lights[l]->type == LightType::Point) {
+               std::string varNameStart = "pointLights[" + std::to_string(pointCount) + "].";
+               this->shader.SetInt(pointCount++, "numberOfPointLights");
+               
+               this->shader.SetVec3(lights[l]->transform->position, varNameStart+"position");
+               this->shader.SetVec3(lights[l]->ambient, varNameStart+"ambient");
+               this->shader.SetVec3(lights[l]->diffuse, varNameStart+"diffuse");
+               this->shader.SetVec3(lights[l]->specular, varNameStart+"specular");
+               
+               this->shader.SetFloat(lights[l]->distance, varNameStart+"distance");
+               this->shader.SetFloat(lights[l]->constant, varNameStart+"constant");
+               this->shader.SetFloat(lights[l]->linear, varNameStart+"linear");
+               this->shader.SetFloat(lights[l]->quadratic, varNameStart+"quadratic");
+            }
+         }
+
       }
 
       glDrawElements(GL_TRIANGLES, this->model.indices.size(), GL_UNSIGNED_INT, 0);
@@ -118,9 +165,6 @@ namespace Ignition::Rendering {
 
    void MeshRenderer::Serialize() {
       Ignition::IO::WriteString(model.path);
-
-      // for testing, the only shader that works is the default unlit
-      Ignition::IO::WriteString("");
 
       Ignition::IO::Write8((int)shader.type);
 
@@ -143,14 +187,26 @@ namespace Ignition::Rendering {
          LoadModel(square_model);
       else 
          LoadModel(Ignition::ModelLoader::LoadModel(Ignition::IO::GetProjectHome() + modelName));
-      std::string shaderName = Ignition::IO::ReadString();
-      bool isLit = Ignition::IO::Read8(); 
-      if (shaderName.empty())
-      {
-         Shader s = Shader(unlit_vertex, unlit_fragment, (ShaderType)isLit);
-         LoadShader(s);
-      }
 
+      ShaderType type = (ShaderType)Ignition::IO::Read8(); 
+      switch(type) {
+         case(Unlit): {
+            Shader s = Shader(unlit_vertex, unlit_fragment, type);
+            LoadShader(s);
+            break;
+         }
+         case(Lit): {
+            Shader s = Shader(unlit_vertex, lit_fragment, type);
+            LoadShader(s);
+            break;
+         }
+         case(Compute): {
+            Shader s = Shader(unlit_vertex, type);
+            LoadShader(s);
+            break;
+         }
+      }
+      
       shader.color.r = Ignition::IO::ReadFloat();
       shader.color.g = Ignition::IO::ReadFloat();
       shader.color.b = Ignition::IO::ReadFloat();

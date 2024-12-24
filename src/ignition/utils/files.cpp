@@ -26,6 +26,7 @@
 namespace Ignition::IO {
    
    std::string projectName;
+   std::string log;
    void SetProjectHome(std::string s)
    {
       projectName = s;
@@ -218,6 +219,30 @@ namespace Ignition::IO {
       return o;
    }
 
+   Vector2 ReadVector2() {
+      Vector2 a;
+      a.x = ReadFloat();
+      a.y = ReadFloat();
+      return a;
+   }
+
+   Vector3 ReadVector3() {
+      Vector3 a;
+      a.x = ReadFloat();
+      a.y = ReadFloat();
+      a.z = ReadFloat();
+      return a;
+   }
+
+   Vector4 ReadVector4() {
+      Vector4 a;
+      a.x = ReadFloat();
+      a.y = ReadFloat();
+      a.z = ReadFloat();
+      a.w = ReadFloat();
+      return a;
+   }
+
    bool CanRead(int amount)
    {
       return read.size > read.i+amount;
@@ -255,10 +280,28 @@ namespace Ignition::IO {
 
    void WriteString(std::string data)
    {
-      Write16((int)data.size());
+      Write16((unsigned int)data.size());
 
       for (int i = 0; i < data.size(); ++i)
          Write8(data[i]);
+   }
+
+   void WriteVector2(Vector2 data) {
+      WriteFloat(data.x);
+      WriteFloat(data.y);
+   }
+
+   void WriteVector3(Vector3 data) {
+      WriteFloat(data.x);
+      WriteFloat(data.y);
+      WriteFloat(data.z);
+   }
+
+   void WriteVector4(Vector4 data) {
+      WriteFloat(data.x);
+      WriteFloat(data.y);
+      WriteFloat(data.z);
+      WriteFloat(data.w);
    }
 
    void EndBinaryRead()

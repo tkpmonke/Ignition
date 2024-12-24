@@ -72,26 +72,29 @@ namespace Implosion {
 #endif
 #ifdef __linux__
             ImGui::SeparatorText("CPU Info");
-            this->coreCount=0;
-            this->cpuSpeed=0;
-            std::ifstream cpu("/proc/cpuinfo");
-            std::string line;
-            while (std::getline(cpu, line))
-            {
-               if (line.find("model name") != std::string::npos) {
-                  std::string s = STR::tail(&line,':');
-                  this->cpuModel = s.substr(2,s.size());
+            static int g = 0;
+            if (g % 5 == 0) {
+               this->coreCount=0;
+               this->cpuSpeed=0;
+               std::ifstream cpu("/proc/cpuinfo");
+               std::string line;
+               while (std::getline(cpu, line))
+               {
+                  if (line.find("model name") != std::string::npos) {
+                     std::string s = STR::tail(&line,':');
+                     this->cpuModel = s.substr(2,s.size());
+                  }
+                  if (line.find("processor") != std::string::npos)
+                     this->coreCount++;
+                  if (line.find("cpu MHz") != std::string::npos) {
+                     std::string s = STR::tail(&line,':');
+                     this->cpuSpeed += std::stof(s.substr(1,s.size()));
+                  }
                }
-               if (line.find("processor") != std::string::npos)
-                  this->coreCount++;
-               if (line.find("cpu MHz") != std::string::npos) {
-                  std::string s = STR::tail(&line,':');
-                  this->cpuSpeed += std::stof(s.substr(1,s.size()));
-               }
+
+               cpu.close();
             }
-
-            cpu.close();
-
+            g++;
             ImGui::Text("CPU Model :                     %s", cpuModel.data());
             ImGui::Text("CPU Core Count :                %d", coreCount);
             ImGui::Text("CPU Speed :                     %.0fMhz", cpuSpeed/coreCount);
@@ -189,6 +192,9 @@ namespace Implosion {
          ImGui::Separator();
          for (auto i : Ignition::Rendering::texture_lookup_table)
          {
+            if (i.first == "")
+               continue;
+
             if (ImGui::Selectable(i.first.data(), (selected == i.first))) {
                selected = i.first;
             }

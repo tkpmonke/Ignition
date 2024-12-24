@@ -10,6 +10,10 @@ namespace Ignition {
    class Scene {
    public:
       void Update();
+      void LateUpdate();
+
+      void FixedUpdate();
+      void LateFixedUpdate();
 
       std::vector<Object>* GetObjects() {return &this->objects;}
       std::vector<Object*> GetObjectsWithTag(std::string tag);

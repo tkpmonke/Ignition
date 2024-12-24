@@ -62,7 +62,7 @@ namespace Ignition {
       glDisable(GL_CULL_FACE);
       o.transform.position = Ignition::MainCamera::camera->transform.position;
       
-      Rendering::MeshRenderer* ptr = (Rendering::MeshRenderer*)o.GetModule("Mesh Renderer");
+      auto ptr = (Rendering::MeshRenderer*)o.GetModule("Mesh Renderer").get();
 
       glUseProgram(ptr->shader.program);
 

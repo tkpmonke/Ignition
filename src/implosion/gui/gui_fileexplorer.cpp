@@ -1,13 +1,22 @@
 #include "gui/gui.hpp"
 #include "utils/files.hpp"
 
-#include <iostream>
 #include <filesystem>
+#include <algorithm> // for std::sort
+#include <cctype>    // for std::tolower
 
 namespace Implosion {
    
 
    bool b = 0;
+
+   std::string toLowerCase(const std::string &str) {
+      std::string result = str;
+      std::transform(result.begin(), result.end(), result.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+      return result;
+   }
+
    void GUI::RefreshFiles() {
       if (files.activeDirectory == "") {
          if (b == 0)
@@ -30,6 +39,10 @@ namespace Implosion {
    
          files.files.push_back({file.path().filename().string(), file.path().string(), type});
       }
+
+      std::sort(files.files.begin(), files.files.end(), [](const auto& a, const auto& b) {
+            return toLowerCase(a.name) < toLowerCase(b.name);
+      });
    }
 
    void GUI::FileExplorer() {
@@ -59,6 +72,14 @@ namespace Implosion {
             {
                auto& file = files.files[i];
 
+               // skip folder with build cause it's just annoying
+               if ((file.type == 1 || file.type == 2) && file.name == "bin")
+                  continue;
+
+               // skip project file cause it's also annoying
+               if (file.type == 0 && file.name == "project")
+                  continue;
+
                if (ImGui::BeginChild(("##CHILD_OF_EXPLORER_"+std::to_string(i)).data(),
                         ImVec2(files.size, files.size+25)))
                {
@@ -70,6 +91,8 @@ namespace Implosion {
 
                      if (s == ".igscn") {
                         type = files.additionalTextures.igscn;
+                     } else if (s == ".lua") {
+                        type = files.additionalTextures.lua_script;
                      }
                   }
 

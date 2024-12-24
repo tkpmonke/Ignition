@@ -1,9 +1,10 @@
 #include "gui/gui.hpp"
-#include "packer.hpp"
-#include "lua/appinfo.hpp"
+#include "utils/files.hpp"
 #include "project.hpp"
 
-#include <filesystem>
+#ifdef __linux__
+#include <unistd.h>
+#endif
 
 namespace Implosion {
    void GUI::MenuBar()
@@ -17,6 +18,7 @@ namespace Implosion {
             }
             ImGui::EndMenu();
          }
+         
          if (ImGui::BeginMenu("Scene"))
          {
             ImGui::SeparatorText("Add Object");
@@ -24,15 +26,18 @@ namespace Implosion {
 
             ImGui::EndMenu();
          }
+         
          if (ImGui::MenuItem("Build")) {
+            Ignition::project.Build();
+         }
+         
+         if (ImGui::MenuItem("Build And Run")) {
+            auto s = Ignition::project.Build();
+            Ignition::project.Run();
+         }
 
-            Ignition::scene.WriteSceneToDisk();
-            Ignition::Scripting::Lua::LoadAppInfo();
-
-            pack(Ignition::IO::GetProjectHome().data(),(Ignition::IO::GetProjectHome() + "/bin").data(), 1); 
-            std::filesystem::copy_file("/usr/bin/ignition-runtime", Ignition::IO::GetProjectHome() + "/bin/"
-                  + Ignition::Scripting::Lua::appInfo.appName);
-            
+         if (ImGui::MenuItem("Run")) {
+            Ignition::project.Run();
          }
 
          std::string s = Ignition::IO::GetDateTime();

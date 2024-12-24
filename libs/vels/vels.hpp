@@ -11,21 +11,24 @@
 #include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
+#include <Jolt/Physics/Collision/Shape/EmptyShape.h>
 #include <Jolt/Physics/Collision/ShapeCast.h>
 #include <Jolt/Physics/Collision/Shape/MeshShape.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
 
 #include <memory>
-#include <unordered_map>
 #include <vector>
+#include <functional>
 
-JPH_SUPPRESS_WARNINGS_STD_BEGIN
-void* JPH_Allocate(size_t inSize) { return malloc(inSize); }
-void JPH_Free(void* inBlock) { free(inBlock); }
-JPH_SUPPRESS_WARNINGS_STD_END
+#ifdef DEBUG
+#include <iostream>
+#endif
 
 using namespace JPH;
+
+#define vels_impulse 0
+#define vels_force 1
 
 namespace vels {
    namespace Layers {
@@ -45,6 +48,7 @@ namespace vels {
    public:
    	virtual bool ShouldCollide(ObjectLayer inObject1, ObjectLayer inObject2) const override
    	{
+         return true;
    		switch (inObject1)
    		{
             case Layers::NonMoving:
@@ -99,6 +103,7 @@ namespace vels {
    public:
    	virtual bool ShouldCollide(ObjectLayer inLayer1, BroadPhaseLayer inLayer2) const override
    	{
+         return true;
    		switch (inLayer1)
    		{
    		case Layers::NonMoving:
@@ -112,28 +117,37 @@ namespace vels {
    	}
    };
 
+   static void DebugCallback(const char* message, ...) {
+      std::cout << ("JOLT > "+(std::string)message);
+   };
+
+   static void RegisterDebugCallback() {
+      JPH::Trace = &DebugCallback;
+      
+   }
+
    class World {
    public:
       float deltaTime;
+      float fixedTimeStep = (float)1/60;
       int sampleRate;
 
-      int maxBodies = 1024;
-      int maxBodyPairs = 1024;
+      int maxBodies = 10000;
+      int maxBodyPairs = 65536;
       int numBodyMutexes = 8;
-      int maxContactConstraints = 1024;
+      int maxContactConstraints = 65536;
 
       friend class Rigidbody;
       friend class Colider;
 
       void Init() {
+         RegisterDefaultAllocator();
          Factory::sInstance = new Factory();
          RegisterTypes();
 
-         jobSystem = std::unique_ptr<JobSystemThreadPool>(new JobSystemThreadPool(cMaxPhysicsJobs, cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1));
+         allocator = std::unique_ptr<TempAllocatorImpl>(new TempAllocatorImpl(120*1024*1024));
 
-         BPLayerInterfaceImpl broad_phase_layer_interface;
-	      ObjectVsBroadPhaseLayerFilterImpl object_vs_broadphase_layer_filter;
-	      ObjectLayerPairFilterImpl object_vs_object_layer_filter;
+         jobSystem = std::unique_ptr<JobSystemThreadPool>(new JobSystemThreadPool(cMaxPhysicsJobs, cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1));
 
          physicsSystem.Init(
             maxBodies, numBodyMutexes, maxBodyPairs, maxContactConstraints,
@@ -144,24 +158,43 @@ namespace vels {
          
       }
 
-      void Update() {
+      void Update(std::function<void()> physicsUpdate, std::function<void()> latePhysicsUpdate) {
          static float pt = 0;
          float time = glfwGetTime();
          this->deltaTime = time-pt;
          pt = time;
 
+         static float accumulator = 0;
+         accumulator += deltaTime;
 
+         while (accumulator >= fixedTimeStep) {
+            physicsUpdate();
+            accumulator -= fixedTimeStep;
 
+            physicsSystem.Update(fixedTimeStep, 1, allocator.get(), jobSystem.get());
+            latePhysicsUpdate();
+         }
       }
 
       void Shutdown() {
+         UnregisterTypes();
+         delete Factory::sInstance;
+         Factory::sInstance = nullptr;
+      }
 
+      // optimizes broadphase
+      void OptimizeCollisionPerformace() {
+         physicsSystem.OptimizeBroadPhase();
       }
 
    private:
       PhysicsSystem physicsSystem;
-      TempAllocatorImpl allocator = TempAllocatorImpl(10*1024*1024);
+      std::unique_ptr<TempAllocatorImpl> allocator;
       std::unique_ptr<JobSystemThreadPool> jobSystem;
+
+      BPLayerInterfaceImpl broad_phase_layer_interface;
+	   ObjectVsBroadPhaseLayerFilterImpl object_vs_broadphase_layer_filter;
+	   ObjectLayerPairFilterImpl object_vs_object_layer_filter;
    };
 
    template<typename From, typename To>
@@ -184,18 +217,26 @@ namespace vels {
    public:
 
       enum ShapeType {
-         Cube,
-         Sphere,
-         Mesh
-      } shapeType = Cube;
+         Cube = 1,
+         Sphere = 2,
+         Mesh = 3,
+         Empty = 0
+      } shapeType = Empty;
+
+      union ShapeVariables {
+         float radius;
+         Vec3 size;
+      } shapeVariables;
 
       void CreateCube(Vec3 size) {
          shape = new BoxShape(size);
+         shapeVariables.size = size;
          shapeType = Cube;
       }
 
       void CreateSphere(float radius) {
          shape = new SphereShape(radius);
+         shapeVariables.radius = radius;
          shapeType = Sphere;
       }
 
@@ -211,42 +252,60 @@ namespace vels {
          shape = new MeshShape(meshSettings, out);
       }
 
+      void CreateEmpty() {
+         shape = new EmptyShape();
+         shapeType = Empty;
+      }
+
       friend class Rigidbody;
    private:
-      Shape* shape;
+      Shape* shape = nullptr;
 
    };
 
    class Rigidbody {
    public:
       float mass = 1;
+      
+      Vec3 velocity = Vec3(0,0,0);
       Vec3 position = Vec3(0,0,0);
       Quat rotation = Quat::sIdentity();
-      Vec3 velocity = Vec3(0,0,0);
 
       bool _static = false;
+      bool trigger = false;
 
-      std::shared_ptr<Collider> collider = nullptr;
+      Collider collider;
 
       Rigidbody() = default;
 
       void AddCollider(Collider c) {
-         collider = std::make_shared<Collider>(c);
+         BodyInterface& bodyInterface = world->physicsSystem.GetBodyInterface();
+         
+         if (body != nullptr) {
+            bodyInterface.RemoveBody(body->GetID());
+            bodyInterface.DestroyBody(body->GetID());
+            body = nullptr;
+         }
+         this->collider = c;
          EMotionType motionType = _static ? EMotionType::Static : EMotionType::Dynamic;
          int layer = _static ? Layers::NonMoving : Layers::Moving;
 
-         BodyInterface& bodyInterface = world->physicsSystem.GetBodyInterface();
          
          BodyCreationSettings settings(
-             collider->shape,
+             collider.shape,
              position,
              rotation,
              motionType,
              layer
          );
          
-         Body* newBodyID = bodyInterface.CreateBody(settings);
-         bodyInterface.AddBody(newBodyID->GetID(), EActivation::Activate);
+         body = bodyInterface.CreateBody(settings);
+         if (body == nullptr) {
+            std::cerr << "Failed to create body!\n";
+            return;
+         }
+         bodyInterface.AddBody(body->GetID(), EActivation::Activate);
+
       }
 
       void RefreshVariables() {
@@ -270,18 +329,73 @@ namespace vels {
                  layer
              );
          
-             Body* newBodyID = bodyInterface.CreateBody(settings);
-             bodyInterface.AddBody(newBodyID->GetID(), EActivation::Activate);
+             body = bodyInterface.CreateBody(settings);
+             bodyInterface.AddBody(body->GetID(), EActivation::Activate);
          }
       }
 
-      void Init(World* world) {
+      void Init(std::shared_ptr<World> world) {
          this->world = world;
+
+         Collider c;
+         c.CreateEmpty();
+         AddCollider(c);
+
+         std::cout << "init\n";
+      }
+
+      virtual void UpdateFixed() {
+         BodyInterface& bodyInterface = world->physicsSystem.GetBodyInterface();
+
+         if (body != nullptr ) {
+            if (!_static) {
+               body->SetLinearVelocity(this->velocity);
+               body->SetIsSensor(this->trigger);
+               bodyInterface.SetGravityFactor(body->GetID(), this->mass);
+            }
+            bodyInterface.SetPositionAndRotationWhenChanged(
+               body->GetID(), this->position, this->rotation, EActivation::Activate);
+         }
+      }
+
+      virtual void PostUpdateFixed() {
+         BodyInterface& bodyInterface = world->physicsSystem.GetBodyInterface();
+         if (body != nullptr/* && !_static*/) {
+            this->velocity = bodyInterface.GetLinearVelocity(body->GetID());
+            this->position = bodyInterface.GetCenterOfMassPosition(body->GetID());
+            this->rotation = bodyInterface.GetRotation(body->GetID());
+         }
+      }
+
+      void Delete() {
+         BodyInterface& bodyInterface = world->physicsSystem.GetBodyInterface();
+         if (body != nullptr) {
+            bodyInterface.RemoveBody(body->GetID());
+            bodyInterface.DestroyBody(body->GetID());
+         }
+      }
+
+
+
+      void AddForce(Vec3 force, int type) {
+         BodyInterface& bodyInterface = world->physicsSystem.GetBodyInterface();
+         bodyInterface.ActivateBody(body->GetID());
+
+         Vec3 vel = bodyInterface.GetLinearVelocity(body->GetID());
+
+         if (type == 0) {
+            vel += force;
+         } else {
+            vel += force*world->deltaTime;
+         }
+
+         this->velocity = vel;
       }
       
 
    private:
-      Body* body;
-      World* world;
+      Body* body = nullptr;
+      std::shared_ptr<World> world;
+   
    };
 }
