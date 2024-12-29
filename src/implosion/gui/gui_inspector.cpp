@@ -8,6 +8,7 @@
 #include "types/texture.hpp"
 #include "shapes/square.hpp"
 #include "shapes/cube.hpp"
+#include "shapes/ico_sphere.hpp"
 #include "textures/grid.hpp"
 #include "utils/model_loader.hpp"
 #include "utils/files.hpp"
@@ -80,6 +81,7 @@ namespace Implosion {
             
             for (std::shared_ptr<Ignition::Module> mod : obj->GetModules()) {
                if (ImGui::CollapsingHeader(mod->mod_type().data())) {
+                  ImGui::Checkbox(("Enabled##"+mod->mod_type()).data(), &mod->enabled);
                   if (mod->mod_type() == "Mesh Renderer") {
                      auto m = std::dynamic_pointer_cast<Ignition::Rendering::MeshRenderer>(mod);
                      ImGui::BeginChild("##Mesh_Renderer", ImVec2(0, 150));
@@ -95,6 +97,10 @@ namespace Implosion {
                         
                         if (ImGui::Button("Cube")) {
                            m->LoadModel(cube_model);
+                        }
+                        
+                        if (ImGui::Button("Ico Sphere")) {
+                           m->LoadModel(ico_sphere);
                         }
 
                         ImGui::EndCombo();
@@ -134,8 +140,8 @@ namespace Implosion {
                      ImGui::DragFloat("Intensity", &m->shader.intensity);
 
                      ImGui::EndChild();
-                  }
-                  if (mod->mod_type() == "Script") {
+
+                  } if (mod->mod_type() == "Script") {
                      auto m = std::dynamic_pointer_cast<Ignition::Script>(mod);
                      ImGui::BeginChild("##Script_Component", ImVec2(0, 100));
                      ImGui::InputText("Path", &m->path);
@@ -145,11 +151,13 @@ namespace Implosion {
                         m->path = s.substr(Ignition::IO::GetProjectHome().size(), s.size());
                      GUI_END_DROP_TARGET
                      ImGui::EndChild();
+
                   } if (mod->mod_type() == "Rigidbody") {
                      auto m = std::dynamic_pointer_cast<Ignition::Physics::Rigidbody>(mod);
                      ImGui::BeginChild("##Rigidbody_Component", ImVec2(0, 150));
                      
                      ImGui::InputFloat("Mass", &m->mass);
+                     ImGui::InputFloat("Bounciness", &m->bounciness);
                      ImGui::Checkbox("Is Trigger", &m->trigger);
                      ImGui::Checkbox("Is Static", &m->_static);
                      
@@ -183,6 +191,7 @@ namespace Implosion {
                      }
 
                      ImGui::EndChild();
+
                   } if (mod->mod_type() == "Light") {
                      auto m = std::dynamic_pointer_cast<Ignition::Rendering::Light>(mod);
                      if (ImGui::BeginCombo("##LightType", "Type of Light")) {
@@ -237,8 +246,8 @@ namespace Implosion {
 
                   if (ImGui::Button("Light")) {
                      auto ptr = std::make_shared<Ignition::Rendering::Light>();
-                     Ignition::Rendering::lights.push_back(ptr);
                      obj->AddModule(ptr);
+                     Ignition::Rendering::lights.push_back(std::make_shared<Ignition::Rendering::Light>(*(Ignition::Rendering::Light*)obj->GetModule("Light").get()));
                   }
                   ImGui::EndCombo();
                }

@@ -63,8 +63,8 @@ int main(int argc, char** argv)
       Ignition::Window window = Ignition::Window(1920, 1080, "Implosion", &applicationOpen);
       Ignition::Camera camera = Ignition::Camera(&window);
       camera.fov = 75;
-      camera.clipping_planes.min = 0.1f;
-      camera.clipping_planes.max = 100.f;
+      camera.clippingPlanes.min = 0.1f;
+      camera.clippingPlanes.max = 100.f;
       camera.transform.position = Ignition::Vector3(-5,1,0);
       camera.MakeMainCamera();
 
@@ -129,6 +129,7 @@ int main(int argc, char** argv)
          camera.EndRender(true);
          gui.EndFrame();
          camera.EndGUI();
+
       }
 
       WritePreferences(); 

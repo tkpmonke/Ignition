@@ -37,8 +37,8 @@ void WritePreferences()
    Ignition::IO::WriteFloat(sensitivity);
    Ignition::IO::WriteFloat(movespeed);
    Ignition::IO::WriteFloat(shiftMul);
-   Ignition::IO::WriteFloat(gui->camera->clipping_planes.min);
-   Ignition::IO::WriteFloat(gui->camera->clipping_planes.max);
+   Ignition::IO::WriteFloat(gui->camera->clippingPlanes.min);
+   Ignition::IO::WriteFloat(gui->camera->clippingPlanes.max);
    Ignition::IO::WriteFloat(gui->camera->fov);
 
    Ignition::IO::WriteFloat(gui->files.size);
@@ -74,8 +74,8 @@ void ReadPreferences(Implosion::GUI* guis)
    sensitivity = Ignition::IO::ReadFloat();
    movespeed = Ignition::IO::ReadFloat();
    shiftMul = Ignition::IO::ReadFloat();
-   guis->camera->clipping_planes.min = Ignition::IO::ReadFloat();
-   guis->camera->clipping_planes.max = Ignition::IO::ReadFloat();
+   guis->camera->clippingPlanes.min = Ignition::IO::ReadFloat();
+   guis->camera->clippingPlanes.max = Ignition::IO::ReadFloat();
    guis->camera->fov = Ignition::IO::ReadFloat();
 
    //WritePreferences();

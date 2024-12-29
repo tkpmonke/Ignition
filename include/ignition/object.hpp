@@ -60,6 +60,10 @@ namespace Ignition {
          return &transform;
       }
       void SetTransform(const Transform* t) { transform = *t; }
+
+      bool operator==(const Object& other) const {
+         return id == other.id;
+      }
       
    private:
       std::vector<std::shared_ptr<Module>> modules;

@@ -10,11 +10,16 @@ namespace Ignition {
       float fov;
       struct {
          float min, max;
-      } clipping_planes;
+      } clippingPlanes;
+
+      enum {
+         Perspective = 0,
+         Orthographic = 1
+      } projectionMode = Perspective;
    
       void MakeMainCamera();
 
-      Matrix4 view_projection();
+      Matrix4 ViewProjectionMatrix();
 
       Matrix4 ViewMatrix();
       Matrix4 ProjectionMatrix();
@@ -33,8 +38,6 @@ namespace Ignition {
 
       Vector2 size;
    };
-
-}
-namespace Ignition::MainCamera {
-   extern Camera* camera;
+   
+   extern Camera* mainCamera;
 }

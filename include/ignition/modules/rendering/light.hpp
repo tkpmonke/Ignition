@@ -21,9 +21,9 @@ namespace Ignition::Rendering {
       const float linear = 0.09f;
       const float quadratic = 0.032f;
 
-      Vector3 ambient;
-      Vector3 diffuse;
-      Vector3 specular;
+      Vector3 ambient = Vector3(0.05f, 0.05f, 0.05f);
+      Vector3 diffuse = Vector3(1,1,1);
+      Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
 
       // only in use if using spot light
       float cutOff;

@@ -57,7 +57,7 @@ namespace Ignition {
       glViewport(0, 0, x, y);
    
       glBindTexture(GL_TEXTURE_2D, this->color);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, x, y, 0, GL_RGBA, GL_FLOAT, NULL);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, color, 0);
@@ -101,6 +101,8 @@ namespace Ignition {
       glCullFace(GL_FRONT);
       glFrontFace(GL_CW);
 
+      glfwSwapInterval(1);
+
 #ifdef DEBUG
       //glEnable(GL_DEBUG_OUTPUT);
       //glDebugMessageCallback(MessageCallback, 0);
@@ -133,7 +135,7 @@ namespace Ignition {
 
       glGenTextures(1, &color);
       glBindTexture(GL_TEXTURE_2D, color);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       //glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA8, width, height, true);
@@ -152,7 +154,7 @@ namespace Ignition {
       glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
 
       if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	      std::cerr << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	      Ignition::IO::FatalError("Framebuffer is not complete!");
 
       Ignition::IO::DebugPrint("Binding FrameBuffer 0");
       glBindFramebuffer(GL_FRAMEBUFFER, 0);

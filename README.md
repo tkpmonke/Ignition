@@ -6,7 +6,7 @@ Right now Ignition is only avalible on the AUR, with APT planned in the near fut
 
 ```
 # for arch based distros
-# you can use your favorite pacman wrapper (mine is yay)
+# you can use your favorite pacman wrapper
 yay -S implosion
 ```
 

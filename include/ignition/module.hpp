@@ -25,7 +25,7 @@ namespace Ignition {
       virtual bool runs_in_editor() { return false; }
       virtual const std::string mod_type() { return "Module"; }; 
 
-      bool enabled;
+      bool enabled = true;
       Transform* transform;
       Object* object;
    };

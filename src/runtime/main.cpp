@@ -30,11 +30,12 @@ int main() {
 
       Ignition::Scripting::Lua::LoadCameraInfo();
       Ignition::Camera camera = Ignition::Camera(&window);
+      camera.projectionMode = Ignition::Camera::Perspective;
       camera.transform.position = Ignition::Scripting::Lua::cameraInfo.position;
       camera.transform.rotation = Ignition::Scripting::Lua::cameraInfo.rotation;
       camera.fov = Ignition::Scripting::Lua::cameraInfo.fov;
-      camera.clipping_planes.min = Ignition::Scripting::Lua::cameraInfo.min;
-      camera.clipping_planes.max = Ignition::Scripting::Lua::cameraInfo.max;
+      camera.clippingPlanes.min = Ignition::Scripting::Lua::cameraInfo.min;
+      camera.clippingPlanes.max = Ignition::Scripting::Lua::cameraInfo.max;
 
       camera.MakeMainCamera();
 
@@ -59,10 +60,12 @@ int main() {
                               [&](){Ignition::scene.LateFixedUpdate();});
 
          camera.EndRender(false);
+         
          int w,h;
-         glfwGetWindowSize(window, &w, &h);
+         glfwGetFramebufferSize(window, &w,&h);
          camera.size.x = w;
          camera.size.y = h;
+         glViewport(0, 0, w, h);
          window.Resize(w,h);
 
       }

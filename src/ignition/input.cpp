@@ -13,7 +13,7 @@ namespace Ignition::IO {
    std::unordered_map<int, bool> keyStates;
 
    bool GetInput(int key) {
-      return glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS;
+      return glfwGetKey((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_PRESS;
    }
 
    bool GetInputDown(int key) {
@@ -21,7 +21,7 @@ namespace Ignition::IO {
          keyStates[key] = true;
       }
 
-      bool b = glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS;
+      bool b = glfwGetKey((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_PRESS;
       if (b && keyStates[key]) {
          keyStates[key] = false;
          return true;
@@ -34,7 +34,7 @@ namespace Ignition::IO {
          keyStates[key] = true;
       }
 
-      bool b = glfwGetKey((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_RELEASE;
+      bool b = glfwGetKey((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_RELEASE;
       if (b && keyStates[key]) {
          keyStates[key] = false;
          return true;
@@ -43,7 +43,7 @@ namespace Ignition::IO {
    }
 
    bool GetMouse(int key) {
-      return glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS;
+      return glfwGetMouseButton((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_PRESS;
    }
 
    bool GetMouseDown(int key) {
@@ -51,7 +51,7 @@ namespace Ignition::IO {
          keyStates[key] = true;
       }
 
-      bool b = glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_PRESS;
+      bool b = glfwGetMouseButton((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_PRESS;
       if (b && keyStates[key]) {
          keyStates[key] = false;
          return true;
@@ -64,7 +64,7 @@ namespace Ignition::IO {
          keyStates[key] = true;
       }
 
-      bool b = glfwGetMouseButton((GLFWwindow*)*Ignition::MainCamera::camera->window, key) == GLFW_RELEASE;
+      bool b = glfwGetMouseButton((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_RELEASE;
       if (b && keyStates[key]) {
          keyStates[key] = false;
          return true;

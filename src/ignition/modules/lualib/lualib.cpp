@@ -16,14 +16,14 @@ namespace Ignition::Scripting::Lua {
    }
 
    void Functions::Shutdown() {
-      Ignition::MainCamera::camera->window->Shutdown();
+      Ignition::mainCamera->window->Shutdown();
    }
 
    void Functions::Reboot() {
-      Ignition::MainCamera::camera->window->Restart();
+      Ignition::mainCamera->window->Restart();
    }
 
-   Ignition::Camera* Functions::GetCamera() { return Ignition::MainCamera::camera;}
+   Ignition::Camera* Functions::GetCamera() { return Ignition::mainCamera;}
    int Functions::CreateObject() { return 0; }
 
    void RegisterFunctionsAndClasses(lua_State* state) {

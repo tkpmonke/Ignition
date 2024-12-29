@@ -46,6 +46,7 @@ namespace Ignition::Physics {
       IO::Write8(this->trigger);
       IO::Write8(this->_static);
       IO::WriteFloat(this->mass);
+      IO::WriteFloat(this->bounciness);
 
       IO::Write8(this->collider.shapeType);
 
@@ -68,6 +69,7 @@ namespace Ignition::Physics {
       this->trigger = IO::Read8();
       this->_static = IO::Read8();
       this->mass = IO::ReadFloat();
+      this->bounciness = IO::ReadFloat();
 
       if (!Ignition::IO::InEditor()) {
          switch(IO::Read8()) {
@@ -87,7 +89,7 @@ namespace Ignition::Physics {
             }
             case(vels::Collider::Sphere):
                this->collider.CreateSphere(IO::ReadFloat());
-               IO::DebugPrint("Loaded Sphere");
+               IO::DebugPrint("Loaded Sphere > " + std::to_string(this->collider.shapeVariables.radius));
                break;
          }
          AddCollider(this->collider);

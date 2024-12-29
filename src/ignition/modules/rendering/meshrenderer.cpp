@@ -2,6 +2,7 @@
 #include "utils/files.hpp"
 #include "shapes/cube.hpp"
 #include "shapes/square.hpp"
+#include "shapes/ico_sphere.hpp"
 #include "utils/model_loader.hpp"
 #include "utils/default_shaders.hpp"
 #include "textures/grid.hpp"
@@ -71,7 +72,7 @@ namespace Ignition::Rendering {
    }
 
    void MeshRenderer::Start() {
-      camera = Ignition::MainCamera::camera;
+      camera = Ignition::mainCamera;
    }
    
    void MeshRenderer::Update() {
@@ -80,7 +81,7 @@ namespace Ignition::Rendering {
          currentProgram = this->shader.program;
         
          if (camera->viewProj == Matrix4(0)) {
-            camera->viewProj = camera->view_projection();
+            camera->viewProj = camera->ViewProjectionMatrix();
          }
 
          this->shader.SetMatrix4(camera->viewProj, "projection");
@@ -185,10 +186,12 @@ namespace Ignition::Rendering {
          LoadModel(cube_model);
       else if (modelName == "square")
          LoadModel(square_model);
+      else if (modelName == "ico_sphere")
+         LoadModel(ico_sphere);
       else 
          LoadModel(Ignition::ModelLoader::LoadModel(Ignition::IO::GetProjectHome() + modelName));
 
-      ShaderType type = (ShaderType)Ignition::IO::Read8(); 
+      int type = Ignition::IO::Read8(); 
       switch(type) {
          case(Unlit): {
             Shader s = Shader(unlit_vertex, unlit_fragment, type);

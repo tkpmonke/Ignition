@@ -271,6 +271,8 @@ namespace vels {
       Vec3 position = Vec3(0,0,0);
       Quat rotation = Quat::sIdentity();
 
+      float bounciness = 0.1f;
+
       bool _static = false;
       bool trigger = false;
 
@@ -352,6 +354,9 @@ namespace vels {
                body->SetLinearVelocity(this->velocity);
                body->SetIsSensor(this->trigger);
                bodyInterface.SetGravityFactor(body->GetID(), this->mass);
+
+               bodyInterface.SetRestitution(body->GetID(), bounciness);
+               
             }
             bodyInterface.SetPositionAndRotationWhenChanged(
                body->GetID(), this->position, this->rotation, EActivation::Activate);

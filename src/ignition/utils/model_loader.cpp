@@ -1,3 +1,5 @@
+#ifndef IGNITION_NO_ASSIMP
+
 #include "utils/files.hpp"
 #include "utils/model_loader.hpp"
 #include "types/model.hpp"
@@ -13,8 +15,6 @@
 
 namespace Ignition::ModelLoader {
    Model LoadModel(std::string path) {
-
-     
       Model m;
       Assimp::Importer importer;
       const aiScene *scene = importer.ReadFile(
@@ -66,7 +66,48 @@ namespace Ignition::ModelLoader {
          m.name = mesh->mName.C_Str() + i == 0 ? "" : std::to_string(i);
        }
      }
+
+     /* used for ico_sphere, was originally generated in blender
+
+     std::cout << "\t.indices = {\n";
+     for (int i = 0; i < (int)m.indices.size(); i += 3) {
+        std::cout << "\t\t" +
+                     std::to_string(m.indices[i]) + ", " 
+                   + std::to_string(m.indices[i+1]) + ", "
+                   + std::to_string(m.indices[i+2]) + ",\n";
+     }
+     std::cout << "},\n";
+     
+     std::cout << "\t.vertices = {\n";
+     for (int i = 0; i < (int)m.vertices.size(); i += 3) {
+        std::cout << "\t\t" +
+                     std::to_string(m.vertices[i]) + ", " 
+                   + std::to_string(m.vertices[i+1]) + ", "
+                   + std::to_string(m.vertices[i+2]) + ",\n";
+     }
+     std::cout << "},\n";
    
+     std::cout << "\t.normals = {\n";
+     for (int i = 0; i < (int)m.normals.size(); i += 3) {
+        std::cout << "\t\t" +
+                     std::to_string(m.normals[i]) + ", " 
+                   + std::to_string(m.normals[i+1]) + ", "
+                   + std::to_string(m.normals[i+2]) + ",\n";
+     }
+     std::cout << "},\n";
+     
+     std::cout << "\t.uv = {\n";
+     for (int i = 0; i < (int)m.uv.size(); i += 3) {
+        std::cout << "\t\t" +
+                     std::to_string(m.uv[i]) + ", " 
+                   + std::to_string(m.uv[i+1]) + ", "
+                   + std::to_string(m.uv[i+2]) + ",\n";
+     }
+     std::cout << "},\n";
+
+     */
      return m;
    }
 } // namespace Ignition::ModelLoader
+  
+#endif
