@@ -56,10 +56,12 @@ namespace Implosion {
 
          if (ImGui::BeginChild("##ExplorerFiles", ImVec2(0, ImGui::GetWindowHeight()-100))) {
             
+            auto& style = ImGui::GetStyle();
+            ImVec2 size = ImVec2((files.size+25)+style.FramePadding.x, (files.size+25)+style.FramePadding.y);
             if (ImGui::BeginChild("##BACK_OF_EXPLORER_",
-                        ImVec2(files.size, files.size+20)))
+                        size))
             {
-               if (ImGui::Button("##BUTTON___BACK___", ImVec2(files.size,files.size)))
+               if (ImGui::Button("##BUTTON___BACK___", ImVec2(files.size+style.FramePadding.x*2, files.size+style.FramePadding.y*2)))
                {
                   files.activeDirectory = files.activeDirectory.substr(0, files.activeDirectory.find_last_of('/'));
                   RefreshFiles();
@@ -80,8 +82,10 @@ namespace Implosion {
                if (file.type == 0 && file.name == "project")
                   continue;
 
+               auto& style = ImGui::GetStyle();
+               ImVec2 size = ImVec2((files.size+25)+style.FramePadding.x, (files.size+25)+style.FramePadding.y);
                if (ImGui::BeginChild(("##CHILD_OF_EXPLORER_"+std::to_string(i)).data(),
-                        ImVec2(files.size, files.size+25)))
+                        size))
                {
                   int type;
 
