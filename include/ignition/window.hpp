@@ -32,7 +32,6 @@ namespace Ignition {
       GLFWwindow* window;
       unsigned int vao;
       Rendering::Shader s;
-      void FramebufferCallback(GLFWwindow*, int, int);
       bool* isopen;
    };
 }

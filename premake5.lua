@@ -51,13 +51,24 @@ project "implosion"
 
 project "implosion-hub"
    kind "ConsoleApp"
+
+   -- a majority is written in c, but the files that interface with ignition are c++ due to
+   -- ignition being a c++ library
+
    language "C++"
    cppdialect "c++17"
+   cdialect "c99"
    targetdir "bin"
 
-   includedirs { "libs/imgui", "libs" }
-   files {"utils/hub/hub.cpp", "libs/imgui/**.hpp"}
-   links { "glfw", "GL", "ig-imgui" }
+   links { "glfw", "GL", "GLEW", "ignition", "assimp" }
+   includedirs { "include/ignition" }
+   files {"utils/hub/**.c", "utils/hub/**.cpp", "utils/hub/**.h", "include/**.hpp" }
+
+   defines { "IGNITION_NO_ASSIMP" }
+
+   filter "files:**.c"
+      language "C"
+
 
    filter "configurations:Debug"
       defines { "DEBUG" }

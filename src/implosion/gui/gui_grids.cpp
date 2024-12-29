@@ -186,7 +186,7 @@ namespace Implosion {
       glUniform1i(glGetUniformLocation(this->gridProgram, "enableDistanceFalloff"), this->enableDistanceFalloff);
       glUniform4f(glGetUniformLocation(this->gridProgram, "color"), this->gridColor.x, this->gridColor.y, this->gridColor.z, this->gridColor.w);
       glUniform3f(glGetUniformLocation(this->gridProgram, "camera"), this->camera->transform.position.x, this->camera->transform.position.y, this->camera->transform.position.z);
-      glUniformMatrix4fv(glGetUniformLocation(this->gridProgram, "proj"), 1, GL_FALSE, glm::value_ptr(this->camera->view_projection()));
+      glUniformMatrix4fv(glGetUniformLocation(this->gridProgram, "proj"), 1, GL_FALSE, glm::value_ptr(this->camera->ViewProjectionMatrix()));
       glLineWidth(this->gridWidth);
       glBindVertexArray(this->gridVao);
       glDrawArrays(GL_LINES, 0, gridVertSize); 
@@ -198,7 +198,7 @@ namespace Implosion {
       glUniform1i(glGetUniformLocation(this->gridXYProgram, "enableDistanceFalloff"), this->enableDistanceFalloff);
       glUniform4f(glGetUniformLocation(this->gridXYProgram, "color"), this->gridColor.x, this->gridColor.y, this->gridColor.z, this->gridColor.w);
       glUniform3f(glGetUniformLocation(this->gridXYProgram, "camera"), this->camera->transform.position.x, this->camera->transform.position.y, this->camera->transform.position.z);
-      glUniformMatrix4fv(glGetUniformLocation(this->gridXYProgram, "proj"), 1, GL_FALSE, glm::value_ptr(this->camera->view_projection()));
+      glUniformMatrix4fv(glGetUniformLocation(this->gridXYProgram, "proj"), 1, GL_FALSE, glm::value_ptr(this->camera->ViewProjectionMatrix()));
       glLineWidth(this->gridWidth*1.25f);
       glBindVertexArray(this->gridXYVao);
       glDrawArrays(GL_LINES, 0, 4);

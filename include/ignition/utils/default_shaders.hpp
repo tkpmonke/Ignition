@@ -16,7 +16,7 @@ const std::string unlit_vertex =
 "  gl_Position = projection * model * vec4(position, 1);\n"
 "  tex_uv = uv;\n"
 "  normals = mat3(transpose(inverse(model))) * normal;\n"
-"  frag_pos = vec3(vec4(position,1)*model);\n"
+"  frag_pos = vec3(model*vec4(position, 1));\n"
 "}\0";
 
 const std::string unlit_fragment = 
@@ -116,8 +116,10 @@ const std::string lit_fragment =
 "  float diff = max(dot(normal, lightDir), 0.0);\n"
 "  vec3 reflectDir = reflect(-lightDir, normal);\n"
 "  float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);\n"
-"  float attenuation = 1.0 / (light.constant + light.linear * light.distance +"
-"                                            light.quadratic * (light.distance * light.distance));\n"
+"  float distance = length(light.position - fragPos);\n"
+//"  float attenuation = 1.0 / (light.constant + light.linear * distance +"
+//"                                            light.quadratic * (distance * distance));\n"
+"  float attenuation = 1;\n"
 "  vec3 ambient  = light.ambient  * vec3(texture(material.albedo, tex_uv));\n"
 "  vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.albedo, tex_uv));\n"
 
@@ -149,8 +151,8 @@ const std::string lit_fragment =
 "  vec3 col = CalcDirLight(dirLight, normal, normalize(viewPos - frag_pos));\n"
 
 "  for (int i = 0; i < numberOfPointLights; ++i)\n"
-"     col += CalcPointLight(pointLights[i], normal, frag_pos, normalize(viewPos-frag_pos));\n"
-//"     col += vec3(1);\n"
+//"     col += CalcPointLight(pointLights[i], normal, frag_pos, normalize(viewPos-frag_pos));\n"
+"     col += pointLights[i].diffuse;\n"
 
 "  o = vec4(col, 1);\n"
 "}\0";

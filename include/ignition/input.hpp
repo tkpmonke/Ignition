@@ -79,7 +79,7 @@ namespace Ignition::IO {
    bool GetMouseDown(int key);
    bool GetMouseUp(int key); 
 
-   static Ignition::Vector2 GetMousePosition() { double a,b; glfwGetCursorPos((GLFWwindow*)*Ignition::MainCamera::camera->window, &a, &b); return {a,b}; }
+   static Ignition::Vector2 GetMousePosition() { double a,b; glfwGetCursorPos((GLFWwindow*)*Ignition::mainCamera->window, &a, &b); return {a,b}; }
 
    static float GetAxisHorizontal() {
       float f = 0;

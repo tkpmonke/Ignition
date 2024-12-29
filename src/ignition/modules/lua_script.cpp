@@ -11,6 +11,7 @@ namespace Ignition {
          LoadIgnitionLibrary(state);
 
          luabridge::setGlobal(state, this->transform, "transform");
+         luabridge::setGlobal(state, this->object, "object");
          
          if (luaL_dofile(state, (Ignition::IO::GetProjectHome()+path).data()) != LUA_OK) {
             Ignition::IO::Error("Error Loading Lua Script");
@@ -27,7 +28,6 @@ namespace Ignition {
                   module["Start"]();
                init = true;
             } else {
-               Ignition::IO::Error(path + " does not return a table");
                return;
             }
          }
@@ -40,13 +40,15 @@ namespace Ignition {
       float time = glfwGetTime();
       float dt = time-ptime;
       ptime = time;
+
       if (init) {
          luabridge::setGlobal(state, time, "ig_time");
          luabridge::setGlobal(state, dt, "ig_deltaTime");
          luabridge::setGlobal(state, this->transform, "transform");
          luabridge::setGlobal(state, this->object, "object");
-         if (module["Update"].isFunction()) 
+         if (module["Update"].isFunction()) { 
             module["Update"]();
+         }
       } else if (std::filesystem::exists(Ignition::IO::GetProjectHome()+path)
          && !std::filesystem::is_directory(Ignition::IO::GetProjectHome()+path)) {
          Start();

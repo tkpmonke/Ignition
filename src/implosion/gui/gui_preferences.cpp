@@ -82,8 +82,8 @@ namespace Implosion {
 
             ImGui::Spacing();
 
-            ImGui::InputFloat("Near", &this->camera->clipping_planes.min);
-            ImGui::InputFloat("Far", &this->camera->clipping_planes.max);
+            ImGui::InputFloat("Near", &this->camera->clippingPlanes.min);
+            ImGui::InputFloat("Far", &this->camera->clippingPlanes.max);
             ImGui::SliderFloat("FOV", &this->camera->fov, 15, 130);
 
             ImGui::EndTabItem();

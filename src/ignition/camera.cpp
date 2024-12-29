@@ -1,20 +1,19 @@
 #include "camera.hpp"
 #include "modules/rendering/meshrenderer.hpp"
 
-namespace Ignition::MainCamera {
-   Camera* camera;
-}
 
 namespace Ignition {
+   Camera* mainCamera;
    void Camera::MakeMainCamera()
    {
-      Ignition::MainCamera::camera = this;
+      Ignition::mainCamera = this;
    }
 
-   Matrix4 Camera::view_projection() 
+   Matrix4 Camera::ViewProjectionMatrix() 
    {
       return ProjectionMatrix() * ViewMatrix();
    }
+
    Matrix4 Camera::ViewMatrix() 
    {
       Matrix4 view = glm::lookAt(this->transform.position, this->transform.position + this->transform.forward, this->transform.up);
@@ -28,8 +27,13 @@ namespace Ignition {
 
          glfwGetWindowSize((GLFWwindow*)*this->window, (int*)&size.x, (int*)&size.y);
       }
-      Matrix4 projection = glm::perspective(glm::radians(this->fov), (float)size.x/(float)size.y, this->clipping_planes.min, this->clipping_planes.max);
-
+      Matrix4 projection;
+      
+      if (this->projectionMode == Perspective) {
+         projection = glm::perspective(glm::radians(this->fov), (float)size.x/(float)size.y, this->clippingPlanes.min, this->clippingPlanes.max);
+      } else {
+         projection = glm::ortho(0.f, (float)this->size.x, 0.f, (float)this->size.y, this->clippingPlanes.min, this->clippingPlanes.max); 
+      }
       return projection;
    }
 
@@ -51,20 +55,19 @@ namespace Ignition {
       glDisable(GL_DEPTH_TEST);
       glClear(GL_COLOR_BUFFER_BIT);
       if (!gui) {
-        
-         //int w,h;
-         //glfwGetFramebufferSize((GLFWwindow*)*window, &w,&h);
-         //window->Resize(w,h);
-
          glUseProgram(window->s.program);
          glBindTexture(GL_TEXTURE_2D, window->color);
+
          glBindVertexArray(window->vao);
          glDrawArrays(GL_TRIANGLES, 0, 6);
           
          glfwSwapBuffers((GLFWwindow*)*this->window);
+
+         
       }
 
       glfwPollEvents();
+      
    }
 
    void Camera::EndGUI() {

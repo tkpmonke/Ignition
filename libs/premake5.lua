@@ -8,7 +8,6 @@ project "ig-imgui"
    cppdialect     "c++17"
    targetdir      "../bin"
    files      {   "imgui/**.cpp", "imgui/**.hpp" }
-   includedirs{   "imgui" }
    links      {   "glfw", "GL" }
 
    filter "configurations:Debug"

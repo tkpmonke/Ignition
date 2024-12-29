@@ -3,7 +3,7 @@
 #include "scene.hpp"
 #include "GLFW/glfw3.h"
 
-#include <iostream>
+#include <algorithm>
 #ifdef DEBUG 
 #include <chrono>
 #endif
@@ -41,7 +41,8 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
    if ((key == GLFW_KEY_DELETE)
          && action == GLFW_PRESS)
    {
-      Ignition::scene.GetObjects()->erase(Ignition::scene.GetObjects()->begin() + g->selectedObject->id);
+      auto ptr = Ignition::scene.GetObjects();
+      ptr->erase(std::remove(ptr->begin(), ptr->end(), *g->selectedObject), ptr->end());
       g->selectedObject = nullptr;
    }
 

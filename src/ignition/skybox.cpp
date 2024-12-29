@@ -60,7 +60,7 @@ namespace Ignition {
    void Skybox::Render() {
       glDisable(GL_DEPTH_TEST);
       glDisable(GL_CULL_FACE);
-      o.transform.position = Ignition::MainCamera::camera->transform.position;
+      o.transform.position = Ignition::mainCamera->transform.position;
       
       auto ptr = (Rendering::MeshRenderer*)o.GetModule("Mesh Renderer").get();
 
@@ -76,7 +76,7 @@ namespace Ignition {
       model = glm::translate(model, o.transform.position);
       ptr->shader.SetMatrix4(model, "model");
 
-      ptr->shader.SetMatrix4(Ignition::MainCamera::camera->view_projection(), "projection");
+      ptr->shader.SetMatrix4(Ignition::mainCamera->ViewProjectionMatrix(), "projection");
 
       glBindVertexArray(ptr->vao);
       glDrawElements(GL_TRIANGLES, ptr->model.indices.size(), GL_UNSIGNED_INT, 0);
