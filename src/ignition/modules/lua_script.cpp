@@ -3,8 +3,9 @@
 #include "utils/files.hpp"
 
 #include <filesystem>
+#include <vector>
 namespace Ignition {
-   bool allowScripting = true;
+   bool allowScripting = !Ignition::IO::InEditor();
    void Script::Start() {
       if (std::filesystem::exists(Ignition::IO::GetProjectHome()+path) && !std::filesystem::is_directory(Ignition::IO::GetProjectHome()+path)) {
          state = luaL_newstate();
@@ -22,6 +23,7 @@ namespace Ignition {
                module = luabridge::LuaRef::fromStack(state, -1);
                lua_pop(state, 1);
 
+               GetLuaScriptVariables();
                if (module["Start"].isFunction() && allowScripting) {
                   luabridge::setGlobal(state, this->transform, "transform");
                   luabridge::setGlobal(state, this->object, "object");
@@ -66,43 +68,112 @@ namespace Ignition {
 
    void Script::Serialize() {
       Ignition::IO::WriteString(path);
+      Ignition::IO::Write16(variables.size());
+
+      for (auto& v : variables) {
+         Ignition::IO::WriteString(v.name);
+         Ignition::IO::Write8((int)v.type);
+         switch(v.type) {
+            case LuaData::Float:
+               Ignition::IO::WriteFloat(v.f);
+               break;
+            case LuaData::String:
+               Ignition::IO::WriteString(v.s);
+               break;
+            case LuaData::Boolean:
+               Ignition::IO::Write8(v.b);
+               break;
+         }
+      }
    }
 
    void Script::Deserialize() {
       this->path = Ignition::IO::ReadString();
+      int count = Ignition::IO::Read16();
+
+      for (int i = 0; i < count; ++i) {
+         LuaData v;
+         v.name = Ignition::IO::ReadString();
+         v.type = (LuaData::Type)Ignition::IO::Read8();
+         switch(v.type) {
+            case LuaData::Float:
+               v.f = Ignition::IO::ReadFloat();
+               break;
+            case LuaData::String:
+               v.s = Ignition::IO::ReadString();
+               break;
+            case LuaData::Boolean:
+               v.b = Ignition::IO::Read8();
+               break;
+         }
+
+         variables.push_back(v);
+      }
    }
 
    void Script::GetLuaScriptVariables() {
+      if (Ignition::IO::InEditor()) {
+         std::vector<LuaData> o;
+         this->variables.clear();
+         std::string name;
 
-      std::vector<LuaData> o;
-      int a = lua_gettop(state);
-      lua_pushnil(state);
-   
-      while (lua_next(state, a-1) != 0) {
-         const char* name;
-         name = lua_tostring(state, -2);
+         for (luabridge::Iterator it(module); !it.isNil(); ++it) {
+            name = it.key().tostring();
+            auto value = it.value();
 
-         if (lua_isboolean(state, -1)) {
-            o.push_back({
-               .data = {.b = (bool)lua_toboolean(state, -1)}, 
-               .type = LuaData::Boolean, 
-               .name = name
-            });
-         } else if (lua_isnumber(state, -1)) {
-            o.push_back({
-               .data = {.f = lua_tonumber(state, -1)}, 
-               .type = LuaData::Float, 
-               .name = name
-            });
-         } else if (lua_isstring(state, -1)) {
-            o.push_back({
-               .data = {.s = lua_tostring(state, -1)}, 
-               .type = LuaData::String, 
-               .name = name
-            });
+            if (value.isBool()) {
+               o.push_back({
+                  .b = value.cast<bool>(), 
+                  .type = LuaData::Boolean, 
+                  .name = name
+               });
+            } else if (value.isNumber()) {
+               o.push_back({
+                  .f = value.cast<float>(), 
+                  .type = LuaData::Float, 
+                  .name = name
+               });
+            } else if (value.isString()) {
+               o.push_back({
+                  .s = value.cast<std::string>(),
+                  .type = LuaData::String, 
+                  .name = name
+               });
+            }
+         }
+
+         
+         this->variables = o;
+      } else {
+         for (auto& v : variables) {
+            switch (v.type) {
+               case LuaData::Boolean:
+                  module[v.name] = v.b;
+                  break;
+               case LuaData::Float:
+                  module[v.name] = v.f;
+                  break;
+               case LuaData::String:
+                  module[v.name] = v.s;
+                  break;
+            }
          }
       }
-
-      this->variables = o;
+      
+      for (auto& v : variables) {
+         Ignition::IO::DebugPrint(v.name);
+         
+         switch(v.type) {
+            case LuaData::Boolean:
+               Ignition::IO::DebugPrint(v.b ? "true" : "false");
+               break;
+            case LuaData::Float:
+               Ignition::IO::DebugPrint(std::to_string(v.f));
+               break;
+            case LuaData::String:
+               Ignition::IO::DebugPrint(v.s);
+               break;
+         }
+      }
    }
 }
