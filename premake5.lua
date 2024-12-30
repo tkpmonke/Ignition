@@ -60,8 +60,8 @@ project "implosion-hub"
    cdialect "c99"
    targetdir "bin"
 
-   links { "glfw", "GL", "GLEW", "ignition", "assimp" }
-   includedirs { "include/ignition", "libs" }
+   links { "glfw", "GL", "GLEW", "ignition", "assimp", "ig-imgui" }
+   includedirs { "include/ignition", "libs", "libs/imgui" }
    files {"utils/hub/**.c", "utils/hub/**.cpp", "utils/hub/**.h", "include/**.hpp" }
 
    defines { "IGNITION_NO_ASSIMP" }
