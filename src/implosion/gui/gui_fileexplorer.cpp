@@ -170,6 +170,17 @@ namespace Implosion {
             b = "";
          }
 
+         ImGui::SameLine();
+
+         if (ImGui::Button("Make Folder")) {
+            if (b == "") {
+               std::filesystem::create_directory(files.activeDirectory / (std::filesystem::path)"folder");
+            } else {
+               std::filesystem::create_directory(files.activeDirectory / (std::filesystem::path)b);
+            }
+            b = "";
+            RefreshFiles();
+         }
 
          ImGui::SliderFloat("##ExplorerSize", &files.size, 10, 400);
       }

@@ -14,7 +14,7 @@ void ProcessNode(Ignition::Object* obj, Implosion::GUI* gui)
       ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(.4f,.6f,1,255)); 
    }
 
-   if (ImGui::TreeNode((obj->name + "##" + std::to_string(obj->id)).data()))
+   if (ImGui::TreeNode((obj->name + " " + std::to_string(obj->id)).data()))
    {
       if (b) {
          ImGui::PopStyleColor();

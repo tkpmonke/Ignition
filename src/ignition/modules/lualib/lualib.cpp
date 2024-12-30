@@ -6,6 +6,7 @@
 #include "vels/vels.hpp"
 #include "modules/physics/rigidbody.hpp"
 
+
 namespace Ignition::Scripting::Lua {
    lua_State* state;
 
@@ -45,7 +46,10 @@ namespace Ignition::Scripting::Lua {
             .addProperty("z", &Ignition::Vector3::z)
             .addFunction("__add", +[](Vector3* a, Vector3& b){return *a+b;})
             .addFunction("__mul", +[](Vector3* a, Vector3& b){return *a*b;})
+            .addFunction("__tostring", +[](Vector3* a){return std::to_string(a->x) + ", " + std::to_string(a->y) + ", " + std::to_string(a->z);})
          .endClass()
+
+         .addFunction("lerp", +[](Vector3* a, Vector3* b, float t){return *a*(1-t)+*b*t;})
 
          .beginClass<Ignition::Vector4>("Vector4")
             .addConstructor<void(*)(float)>()

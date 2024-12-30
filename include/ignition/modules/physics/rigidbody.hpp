@@ -11,6 +11,7 @@ namespace Ignition::Physics {
 
       float mass = 1;
       float bounciness = 0.1f;
+      float drag = 0.1f;
 
       Vector3 velocity = Vector3(0, 0, 0);
 

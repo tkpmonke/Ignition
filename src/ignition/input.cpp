@@ -17,27 +17,19 @@ namespace Ignition::IO {
    }
 
    bool GetInputDown(int key) {
-      if (!keyStates.count(key)) {
-         keyStates[key] = true;
-      }
-
       bool b = glfwGetKey((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_PRESS;
-      if (b && keyStates[key]) {
-         keyStates[key] = false;
-         return true;
+      if (b == keyStates[key]) {
+         keyStates[key] = !b;
+         return b == true;
       }
       return false;
    }
    
    bool GetInputUp(int key) {
-      if (!keyStates.count(key)) {
-         keyStates[key] = true;
-      }
-
-      bool b = glfwGetKey((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_RELEASE;
-      if (b && keyStates[key]) {
-         keyStates[key] = false;
-         return true;
+      bool b = glfwGetKey((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_PRESS;
+      if (b == keyStates[key]) {
+         keyStates[key] = !b;
+         return b == false;
       }
       return false;
    }
@@ -47,27 +39,19 @@ namespace Ignition::IO {
    }
 
    bool GetMouseDown(int key) {
-      if (!keyStates.count(key)) {
-         keyStates[key] = true;
-      }
-
       bool b = glfwGetMouseButton((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_PRESS;
-      if (b && keyStates[key]) {
-         keyStates[key] = false;
-         return true;
+      if (b == keyStates[key]) {
+         keyStates[key] = !b;
+         return b == true;
       }
       return false;
    }
    
    bool GetMouseUp(int key) {
-      if (!keyStates.count(key)) {
-         keyStates[key] = true;
-      }
-
-      bool b = glfwGetMouseButton((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_RELEASE;
-      if (b && keyStates[key]) {
-         keyStates[key] = false;
-         return true;
+      bool b = glfwGetMouseButton((GLFWwindow*)*Ignition::mainCamera->window, key) == GLFW_PRESS;
+      if (b == keyStates[key]) {
+         keyStates[key] = !b;
+         return b == false;
       }
       return false;
    }
