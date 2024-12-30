@@ -62,8 +62,8 @@ namespace Ignition {
 
    void Scene::AddObject(Object object)
    {
+      object.id = objects.size() > 0 ? objects.at(objects.size()-1).id+1 : 0;
       objects.push_back(object);
-      objects[objects.size()-1].id = objects.size() > 0 ? objects.at(objects.size()-1).id+1 : 0;
    }
 
    int Scene::CreateObject() 
@@ -119,7 +119,7 @@ namespace Ignition {
 
          o.name = Ignition::IO::ReadString();
          o.tag = Ignition::IO::ReadString();
-         o.id = objects.size() > 0 ? objects.at(objects.size()-1).id+1 : 0;
+         //o.id = objects.size() > 0 ? objects.at(objects.size()-1).id+1 : 0;
 
          o.transform.position.x = Ignition::IO::ReadFloat();
          o.transform.position.y = Ignition::IO::ReadFloat();

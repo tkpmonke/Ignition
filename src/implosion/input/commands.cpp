@@ -39,7 +39,8 @@ void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
    //*/
    
    if ((key == GLFW_KEY_DELETE)
-         && action == GLFW_PRESS)
+         && action == GLFW_PRESS
+         && g->selectedObject != nullptr)
    {
       auto ptr = Ignition::scene.GetObjects();
       ptr->erase(std::remove(ptr->begin(), ptr->end(), *g->selectedObject), ptr->end());

@@ -6,20 +6,19 @@
 #include "camera.hpp"
 
 namespace Ignition::Scripting::Lua {
-   struct LuaData { 
-      union {
-         float f;
-         const char* s;
-         bool b;
-      } data;
+   class LuaData { 
+   public:
+      float f = 0;
+      std::string s = "";
+      bool b = false;
 
-      enum {
+      enum Type {
          Float,
          String,
          Boolean
       } type;
 
-      const char* name;
+      std::string name;
    };
    
    void LoadIgnitionLibrary(lua_State* state);

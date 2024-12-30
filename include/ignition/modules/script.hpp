@@ -31,8 +31,9 @@ namespace Ignition {
       void Serialize() override;
       void Deserialize() override;
 
-   private:
       void GetLuaScriptVariables();
+
+   private:
       lua_State* state;
       bool init = false;
       luabridge::LuaRef module;

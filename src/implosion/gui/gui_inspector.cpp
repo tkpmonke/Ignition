@@ -148,6 +148,18 @@ namespace Implosion {
                      ImGui::BeginChild(VAR("##Script_Component"), ImVec2(0, 100));
                      ImGui::InputText(VAR("Path"), &m->path);
 
+                     ImGui::Spacing();
+
+                     for (auto& v : m->variables) {
+                        if (v.type == LuaData::Float) {
+                           ImGui::InputFloat(VAR(v.name), &v.f);
+                        } else if (v.type == LuaData::String) {
+                           ImGui::InputText(VAR(v.name), &v.s);
+                        } else if (v.type == LuaData::Boolean) {
+                           ImGui::Checkbox(VAR(v.name), &v.b);
+                        }
+                     }
+
                      GUI_BEGIN_DROP_TARGET
                         std::string s = (const char*)payload->Data;
                         m->path = s.substr(Ignition::IO::GetProjectHome().size(), s.size());
