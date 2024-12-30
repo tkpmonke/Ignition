@@ -28,13 +28,14 @@ namespace Ignition::Physics {
       if (body != nullptr ) {
          if (!_static) {
             body->SetLinearVelocity(Vector3ToVec3(this->velocity));
-            body->SetIsSensor(this->trigger);
-            bodyInterface.SetGravityFactor(body->GetID(), this->mass);
-
-            bodyInterface.SetRestitution(body->GetID(), bounciness);
-            
+            body->GetMotionProperties()->SetLinearDamping(drag);
          }
-         bodyInterface.SetPositionAndRotationWhenChanged(
+
+         body->SetIsSensor(this->trigger);
+         bodyInterface.SetGravityFactor(body->GetID(), this->mass);
+         bodyInterface.SetRestitution(body->GetID(), bounciness);
+         bodyInterface.SetFriction(body->GetID(), drag);
+         bodyInterface.SetPositionAndRotation(
             body->GetID(), 
             Vector3ToVec3(this->transform->position), 
             EulerToQuat(this->transform->rotation), 
@@ -64,13 +65,14 @@ namespace Ignition::Physics {
       IO::Write8(this->_static);
       IO::WriteFloat(this->mass);
       IO::WriteFloat(this->bounciness);
+      IO::WriteFloat(this->drag);
 
       IO::Write8(this->collider.shapeType);
 
       switch(this->collider.shapeType) {
          case(Collider::Cube): {
             Vec3 v = this->collider.shapeVariables.size;
-            IO::WriteVector3(Vector3(v.GetZ(), v.GetY(), v.GetZ()));
+            IO::WriteVector3(Vector3(v.GetX(), v.GetY(), v.GetZ()));
             break;
          }
          case(Collider::Sphere): {
@@ -87,6 +89,7 @@ namespace Ignition::Physics {
       this->_static = IO::Read8();
       this->mass = IO::ReadFloat();
       this->bounciness = IO::ReadFloat();
+      this->drag = IO::ReadFloat();
 
       if (!Ignition::IO::InEditor()) {
          switch(IO::Read8()) {

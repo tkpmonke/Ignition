@@ -160,6 +160,7 @@ namespace Implosion {
                      
                      ImGui::InputFloat(VAR("Mass"), &m->mass);
                      ImGui::InputFloat(VAR("Bounciness"), &m->bounciness);
+                     ImGui::InputFloat(VAR("Drag"), &m->drag);
                      ImGui::Checkbox(VAR("Is Trigger"), &m->trigger);
                      ImGui::Checkbox(VAR("Is Static"), &m->_static);
                      

@@ -16,7 +16,7 @@
 using namespace Ignition::Rendering;
 
 #define CREATE_SHADER()                                                                     \
-         Shader s = Shader(unlit_vertex, unlit_fragment, ShaderType::Lit);                       \
+         Shader s = Shader(unlit_vertex, unlit_fragment, ShaderType::Unlit);                       \
          s.albedo = Texture();                                                                           \
          s.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);                                \
          s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");              

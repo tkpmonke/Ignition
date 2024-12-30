@@ -29,7 +29,7 @@ namespace Ignition::Physics {
    class World {
    public:
       float deltaTime;
-      float fixedTimeStep = (float)1/60;
+      float fixedTimeStep = (float)1/120;
       int sampleRate;
 
       int maxBodies = 10000;
