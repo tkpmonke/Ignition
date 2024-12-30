@@ -1,3 +1,5 @@
+#define IGNITION_NO_MODULES
+
 #include "camera.hpp"
 #include "window.hpp"
 

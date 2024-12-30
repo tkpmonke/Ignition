@@ -1,6 +1,6 @@
 #pragma once
-#include "object.hpp"
 #include "window.hpp"
+#include "object.hpp"
 
 #include <glm/mat4x4.hpp>
 

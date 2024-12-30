@@ -28,5 +28,6 @@ namespace Ignition {
       bool enabled = true;
       Transform* transform;
       Object* object;
+      unsigned int id;
    };
 }

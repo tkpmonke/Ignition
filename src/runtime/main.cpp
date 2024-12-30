@@ -39,11 +39,7 @@ int main() {
 
       camera.MakeMainCamera();
 
-#ifdef DEBUG
-      vels::RegisterDebugCallback();
-#endif
-
-      Ignition::Physics::physicsWorld = std::make_shared<vels::World>();
+      Ignition::Physics::physicsWorld = std::make_shared<Ignition::Physics::World>();
       Ignition::Physics::physicsWorld->Init();
 
       Ignition::project.LoadProject(&window);

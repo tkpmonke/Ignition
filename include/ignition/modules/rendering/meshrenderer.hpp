@@ -2,7 +2,6 @@
 
 #include "types/shader.hpp"
 #include "types/model.hpp"
-#include "camera.hpp"
 
 #include <GL/glew.h>
 #include <module.hpp>
@@ -35,9 +34,6 @@ namespace Ignition::Rendering {
       void Deserialize() override;
 
       uint vao;
-   private:
-      Camera* camera;
-
    };
 
 }
