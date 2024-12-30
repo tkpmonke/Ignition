@@ -53,8 +53,8 @@ namespace Ignition::Scripting::Lua {
                cameraInfo.position = M["position"].cast<Ignition::Vector3>();
                cameraInfo.rotation = M["rotation"].cast<Ignition::Vector3>();
                cameraInfo.fov = M["fov"].cast<float>();
-               cameraInfo.min = M["min"].cast<float>();
-               cameraInfo.max = M["max"].cast<float>();
+               cameraInfo.min = M["near"].cast<float>();
+               cameraInfo.max = M["far"].cast<float>();
             }
          } catch (const luabridge::LuaException& e) {
             Ignition::IO::Error("Error reading camera.lua table : " + (std::string)e.what());
