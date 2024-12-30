@@ -1,7 +1,9 @@
 #include "gui/gui.hpp"
 #include "utils/files.hpp"
+#include "imgui_stdlib.h"
 
 #include <filesystem>
+#include <fstream>
 #include <algorithm> // for std::sort
 #include <cctype>    // for std::tolower
 
@@ -149,6 +151,26 @@ namespace Implosion {
             files.activeDirectory = files.activeDirectory.substr(0, files.activeDirectory.find_last_of('/'));
             RefreshFiles();
          }
+         ImGui::SameLine();
+         
+         static std::string b;
+         ImGui::InputText("##input_string", &b);
+         ImGui::SameLine();
+
+         if (ImGui::Button("Make File")) {
+            if (b == "") {
+               std::ofstream file(files.activeDirectory / (std::filesystem::path)"file.txt");
+               file.close();
+            } else {
+               std::ofstream file(files.activeDirectory / (std::filesystem::path)b);
+               file.close();
+            }
+
+            RefreshFiles();
+            b = "";
+         }
+
+
          ImGui::SliderFloat("##ExplorerSize", &files.size, 10, 400);
       }
 

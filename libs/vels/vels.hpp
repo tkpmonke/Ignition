@@ -257,6 +257,10 @@ namespace vels {
          shapeType = Empty;
       }
 
+      Collider() {
+         CreateEmpty();
+      }
+
       friend class Rigidbody;
    private:
       Shape* shape = nullptr;
@@ -334,16 +338,6 @@ namespace vels {
              body = bodyInterface.CreateBody(settings);
              bodyInterface.AddBody(body->GetID(), EActivation::Activate);
          }
-      }
-
-      void Init(std::shared_ptr<World> world) {
-         this->world = world;
-
-         Collider c;
-         c.CreateEmpty();
-         AddCollider(c);
-
-         std::cout << "init\n";
       }
 
       virtual void UpdateFixed() {

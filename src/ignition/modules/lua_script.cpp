@@ -10,9 +10,6 @@ namespace Ignition {
          state = luaL_newstate();
          LoadIgnitionLibrary(state);
 
-         luabridge::setGlobal(state, this->transform, "transform");
-         luabridge::setGlobal(state, this->object, "object");
-         
          if (luaL_dofile(state, (Ignition::IO::GetProjectHome()+path).data()) != LUA_OK) {
             Ignition::IO::Error("Error Loading Lua Script");
             Ignition::IO::Error(lua_tostring(state, -1));
@@ -24,8 +21,12 @@ namespace Ignition {
             if (lua_istable(state, -1)) {
                module = luabridge::LuaRef::fromStack(state, -1);
                lua_pop(state, 1);
-               if (module["Start"].isFunction() && allowScripting) 
+
+               if (module["Start"].isFunction() && allowScripting) {
+                  luabridge::setGlobal(state, this->transform, "transform");
+                  luabridge::setGlobal(state, this->object, "object");
                   module["Start"]();
+               }
                init = true;
             } else {
                return;

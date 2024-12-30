@@ -6,7 +6,9 @@ namespace Ignition {
    void Object::AddModule(std::shared_ptr<Module> mod)
    {
       this->modules.push_back(mod);
+      modules.at(modules.size()-1)->id = modules.size();
       mod->transform = &this->transform;
+      mod->object = this;
       if (!Ignition::IO::InEditor() || mod->runs_in_editor())
          mod->Start();
    }
@@ -41,6 +43,14 @@ namespace Ignition {
       }
 
       return nullptr;
+   }
+
+   Rendering::MeshRenderer* Object::GetMeshRenderer() {
+      return (Rendering::MeshRenderer*)this->GetModule("Mesh Renderer").get();
+   }
+
+   Physics::Rigidbody* Object::GetRigidbody() {
+      return (Physics::Rigidbody*)this->GetModule("Rigidbody").get();
    }
 
    /*template<class T>

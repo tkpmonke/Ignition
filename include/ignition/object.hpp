@@ -9,6 +9,11 @@
 #include "types/transform.hpp"
 #include "utils/io.hpp"
 
+#ifndef IGNITION_NO_MODULES
+#include "modules/rendering/meshrenderer.hpp"
+#include "modules/physics/rigidbody.hpp"
+#endif
+
 #define UPDATE_OBJECT() this->transform.UpdateVectors();                                  \
                         for (std::shared_ptr<Module> m : modules)  {                      \
                            m->transform = &this->transform;                               \
@@ -40,6 +45,11 @@ namespace Ignition {
 
       // GetModule with mod_name
       std::shared_ptr<Module> GetModule(std::string);
+      
+#ifndef IGNITION_NO_MODULES
+      Rendering::MeshRenderer* GetMeshRenderer();
+      Physics::Rigidbody* GetRigidbody();
+#endif
       
       // GetModule with templates
       //template<class T>

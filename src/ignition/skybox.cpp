@@ -1,6 +1,7 @@
 #include "skybox.hpp"
 #include "modules/rendering/meshrenderer.hpp"
 #include "shapes/cube.hpp"
+#include "camera.hpp"
 
 const char* skybox_vert =
 "#version 330\n"

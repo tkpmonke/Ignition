@@ -19,6 +19,7 @@ namespace Implosion {
       ImGui::SetCurrentContext(ImGui::GetCurrentContext());
       ImGuiIO& io = ImGui::GetIO();
       io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+      io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
       io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
       io.IniFilename = s.data(); 
 

@@ -23,6 +23,7 @@ namespace Ignition::Scripting::Lua {
       Ignition::mainCamera->window->Restart();
    }
 
+
    Ignition::Camera* Functions::GetCamera() { return Ignition::mainCamera;}
    int Functions::CreateObject() { return 0; }
 
@@ -45,14 +46,6 @@ namespace Ignition::Scripting::Lua {
             .addFunction("__add", +[](Vector3* a, Vector3& b){return *a+b;})
             .addFunction("__mul", +[](Vector3* a, Vector3& b){return *a*b;})
          .endClass()
-         
-         .beginClass<JPH::Vec3>("Vec3")
-            .addProperty("x", &Vec3::GetX, &Vec3::SetX)
-            .addProperty("y", &Vec3::GetY, &Vec3::SetY)
-            .addProperty("z", &Vec3::GetZ, &Vec3::SetZ)
-         .endClass()
-
-         .addFunction("ig_to_jph", +[](Vector3* a){return new Vec3(a->x,a->y,a->z);})
 
          .beginClass<Ignition::Vector4>("Vector4")
             .addConstructor<void(*)(float)>()
@@ -125,26 +118,27 @@ namespace Ignition::Scripting::Lua {
             .addProperty("model", &Ignition::Rendering::MeshRenderer::model, false)
          .endClass()
 
-         .beginClass<vels::Collider>("Collider")
+         .beginClass<Ignition::Physics::Collider>("Collider")
             .addConstructor<void(*)()>()
-            .addFunction("CreateCube", &vels::Collider::CreateCube)
-            .addFunction("CreateSphere", &vels::Collider::CreateSphere)
-            .addFunction("CreateEmpty", &vels::Collider::CreateEmpty)
+            .addFunction("CreateCube", &Ignition::Physics::Collider::CreateCube)
+            .addFunction("CreateSphere", &Ignition::Physics::Collider::CreateSphere)
+            .addFunction("CreateEmpty", &Ignition::Physics::Collider::CreateEmpty)
          .endClass()
 
-         .deriveClass<vels::Rigidbody, Ignition::Module>("internal_vels_rigidbody")
-            .addFunction("AddCollider", &vels::Rigidbody::AddCollider)
-            .addFunction("AddForce", &vels::Rigidbody::AddForce)
-            .addProperty("mass", &vels::Rigidbody::mass)
-            .addProperty("velocity", &vels::Rigidbody::velocity)
-            .addProperty("static", &vels::Rigidbody::_static)
-            .addProperty("trigger", &vels::Rigidbody::trigger)
-            .addProperty("collider", &vels::Rigidbody::collider)
-         .endClass()
+         .beginNamespace("ForceMode")
+            .addProperty("Impulse", +[](){return 0;})
+            .addProperty("Force", +[](){return 1;})
+         .endNamespace()
 
-         .deriveClass<Ignition::Physics::Rigidbody,vels::Rigidbody>("Rigidbody")
+         .deriveClass<Ignition::Physics::Rigidbody, Ignition::Module>("Rigidbody")
+            .addFunction("AddCollider", &Ignition::Physics::Rigidbody::AddCollider)
+            .addFunction("AddForce", &Ignition::Physics::Rigidbody::AddForce)
+            .addProperty("mass", &Ignition::Physics::Rigidbody::mass)
+            .addProperty("velocity", &Ignition::Physics::Rigidbody::velocity)
+            .addProperty("static", &Ignition::Physics::Rigidbody::_static)
+            .addProperty("trigger", &Ignition::Physics::Rigidbody::trigger)
+            .addProperty("collider", &Ignition::Physics::Rigidbody::collider)
             .addConstructor<std::shared_ptr<Ignition::Physics::Rigidbody>(*)()>()
-            .addFunction("Start", &Ignition::Physics::Rigidbody::Start)
          .endClass()
 
          .beginClass<Ignition::Object>("Object")
@@ -157,6 +151,8 @@ namespace Ignition::Scripting::Lua {
             .addFunction("AddChild", &Ignition::Object::AddChild)
             .addFunction("AddModule", &Ignition::Object::AddModule)
             .addFunction("GetModule", &Ignition::Object::GetModule)
+            .addFunction("GetMeshRenderer", &Ignition::Object::GetMeshRenderer)
+            .addFunction("GetRigidbody", &Ignition::Object::GetRigidbody)
          .endClass()
 
          .deriveClass<Ignition::Camera, Ignition::Object>("Camera")

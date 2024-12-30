@@ -61,7 +61,7 @@ project "implosion-hub"
    targetdir "bin"
 
    links { "glfw", "GL", "GLEW", "ignition", "assimp" }
-   includedirs { "include/ignition" }
+   includedirs { "include/ignition", "libs" }
    files {"utils/hub/**.c", "utils/hub/**.cpp", "utils/hub/**.h", "include/**.hpp" }
 
    defines { "IGNITION_NO_ASSIMP" }

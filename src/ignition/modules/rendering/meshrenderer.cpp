@@ -8,6 +8,7 @@
 #include "textures/grid.hpp"
 #include "utils/io.hpp"
 #include "modules/rendering/light.hpp"
+#include "camera.hpp"
 
 namespace Ignition::Rendering {
    int currentProgram = std::numeric_limits<int>::max();
@@ -70,6 +71,8 @@ namespace Ignition::Rendering {
 
        model_lookup_table[m.name] = this->vao;
    }
+
+   Camera* camera;
 
    void MeshRenderer::Start() {
       camera = Ignition::mainCamera;
