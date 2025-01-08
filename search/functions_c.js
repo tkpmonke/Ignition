@@ -1,0 +1,8 @@
+var searchData=
+[
+  ['postprocess_0',['PostProcess',['../classIgnition_1_1Rendering_1_1PostProcess.html#a7bce9329efb5ca74d23fbb16a91afdc8',1,'Ignition::Rendering::PostProcess::PostProcess(std::string data, Window *window)'],['../classIgnition_1_1Rendering_1_1PostProcess.html#a5445a4622d2ea038fafcd17e80cc663b',1,'Ignition::Rendering::PostProcess::PostProcess(std::string data, Window *window, int passes)'],['../classIgnition_1_1Rendering_1_1PostProcess.html#a4328c3d9bea881b95f091cd4a21a2038',1,'Ignition::Rendering::PostProcess::PostProcess(std::string data, Window *window, Vector2 kernalSize)'],['../classIgnition_1_1Rendering_1_1PostProcess.html#ad42ec1565a07fbc28f4e85f16bb6d8fd',1,'Ignition::Rendering::PostProcess::PostProcess(std::string data, Window *window, int passes, Vector2 kernalSize)'],['../classIgnition_1_1Rendering_1_1PostProcess.html#a27af69fddc483e57d08e512ce69df02d',1,'Ignition::Rendering::PostProcess::PostProcess()=default']]],
+  ['ppmanager_1',['PPManager',['../classIgnition_1_1Rendering_1_1PPManager.html#a36f40d5cac2d9141f6a66ee98d12591c',1,'Ignition::Rendering::PPManager::PPManager(Window *)'],['../classIgnition_1_1Rendering_1_1PPManager.html#ab562bf70e5e63e1ae2373e636d819a2e',1,'Ignition::Rendering::PPManager::PPManager()=default']]],
+  ['print_2',['Print',['../namespaceIgnition_1_1IO.html#a1a01e85e6b63179e35123b556f6f2203',1,'Ignition::IO']]],
+  ['project_3',['Project',['../classIgnition_1_1Project.html#a708591fd0857b6f623a4312f85ca4755',1,'Ignition::Project']]],
+  ['projectionmatrix_4',['ProjectionMatrix',['../classIgnition_1_1Camera.html#a17e9ceb313246d76bd19c32435645d11',1,'Ignition::Camera']]]
+];
