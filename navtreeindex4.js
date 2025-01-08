@@ -1,7 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"shader_8hpp.html#a329bd99bc320fb09275c99bab4ad5360":[3,0,0,0,4,1,2],
-"shader_8hpp.html#ab824f4a31c97c7599390ccc627b7b094":[3,0,0,0,4,1,1],
 "shader_8hpp.html#ab824f4a31c97c7599390ccc627b7b094a4db03487348bd4b2569d5dd607b88e22":[3,0,0,0,4,1,1,2],
 "shader_8hpp.html#ab824f4a31c97c7599390ccc627b7b094a80761e152d54aed81ced84b7864aab60":[3,0,0,0,4,1,1,0],
 "shader_8hpp.html#ab824f4a31c97c7599390ccc627b7b094a9c13c7a45f8bddeaa97c9e02f9aabf2d":[3,0,0,0,4,1,1,1],

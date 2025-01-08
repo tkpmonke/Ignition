@@ -16,7 +16,6 @@ var classIgnition_1_1Rendering_1_1Shader =
     [ "SetVec4", "classIgnition_1_1Rendering_1_1Shader.html#a4918066f5bc2a4640a720e66100d9d81", null ],
     [ "albedo", "classIgnition_1_1Rendering_1_1Shader.html#a5060c16192600f9dd5950ca3803104a5", null ],
     [ "color", "classIgnition_1_1Rendering_1_1Shader.html#aac9b39be3ebb1c44bac90827f25f29af", null ],
-    [ "diffuse", "classIgnition_1_1Rendering_1_1Shader.html#ab26e0662740d421fbd47f5ee43204997", null ],
     [ "frag", "classIgnition_1_1Rendering_1_1Shader.html#ad0d3805d4b162ec76579512808af2d82", null ],
     [ "intensity", "classIgnition_1_1Rendering_1_1Shader.html#a1cba65f6477a0480071d677d91bbef49", null ],
     [ "program", "classIgnition_1_1Rendering_1_1Shader.html#a2fffdb4bfe4f7ffd0e7b88e3d020244e", null ],
