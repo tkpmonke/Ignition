@@ -12,14 +12,32 @@ jobs:
       url: https://tkpmonke.github.io/Ignition
     runs-on: ubuntu-22.04
     permissions:
-      contents: write
+      contents: read
       pages: write
       id-token: write
-
     steps:
-      - name: Compile Doxygen Docs
-        uses: DenverCoder1/doxygen-github-pages-action@v2.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: indev
-          target_folder: docs/bin
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependinces
+        run: |
+          sudo apt-add-repository universe
+          sudo apt-get update
+          sudo apt-get install doxygen graphviz -y
+
+      - name: Build Doxygen Docs
+        run:
+          doxygen Doxyfile
+
+      - name: Create nojekyll
+        run:
+          touch docs/html/.nojekyll
+      
+      - name: Deploy Page
+        run: |
+          rm -rf docs/bin/*
+          mkdir docs/bin
+          mv docs/html/* docs/bin/*
+          git add --all
+          git commit -am "Generated Doxygen Docs"
+          git push -f origin gh-pages:gh-pages
