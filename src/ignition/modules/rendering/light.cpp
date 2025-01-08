@@ -63,8 +63,8 @@ namespace Ignition::Rendering {
 
       Matrix4 lightProjection = glm::ortho(-10.f, 10.f, -10.f, 10.f, 0.1f, 20.f);
       Matrix4 lightView = glm::lookAt(directionalLight.direction, Vector3(0), Vector3(0, 1, 0));
-      Ignition::mainCamera->viewProj = lightProjection * lightView;
-      Ignition::mainCamera->lightProj = lightProjection * lightView;
+      Ignition::mainCamera->i_viewProj = lightProjection * lightView;
+      Ignition::mainCamera->i_lightProj = lightProjection * lightView;
 
       Ignition::scene.Render(program);
 
@@ -77,7 +77,7 @@ namespace Ignition::Rendering {
          Ignition::scene.Render();
       }*/
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
-      Ignition::mainCamera->viewProj = Matrix4(0);
+      Ignition::mainCamera->i_viewProj = Matrix4(0);
 
       glViewport(0, 0, Ignition::mainCamera->size.x, Ignition::mainCamera->size.y);
    }

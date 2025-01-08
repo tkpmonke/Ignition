@@ -49,7 +49,7 @@ namespace Ignition {
    {
       Rendering::currentProgram = std::numeric_limits<int>::max();
       Rendering::currentVao = std::numeric_limits<int>::max();
-      viewProj = Matrix4(0);
+      i_viewProj = Matrix4(0);
 
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
       glDisable(GL_DEPTH_TEST);

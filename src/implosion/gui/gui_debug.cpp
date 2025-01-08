@@ -10,8 +10,6 @@
 #ifdef __linux__
 #include <iostream>
 #include <fstream>
-
-#include "utils/str.hpp"
 #endif 
 
 #ifdef __unix__
@@ -32,6 +30,17 @@ float ptime;
 int frameCount = 0;
 float fps = 0;
 namespace Implosion {
+   std::vector<std::string> split(std::string* s, char c) {
+      std::vector<std::string> o;
+      std::string l;
+      std::istringstream f(*s);
+      while (std::getline(f, l, c))
+         o.push_back(l);
+      return o;
+   }
+   std::string tail(std::string* s, char c) { return s->substr(s->find(c),s->size()); }
+   std::string front(std::string* s, char c) { return s->substr(0,s->find(c)); }
+
    void GUI::DebugMenu()
    {
       ImGuiWindowFlags flags = ImGuiWindowFlags_NoBackground;
@@ -81,13 +90,13 @@ namespace Implosion {
                while (std::getline(cpu, line))
                {
                   if (line.find("model name") != std::string::npos) {
-                     std::string s = STR::tail(&line,':');
+                     std::string s = tail(&line,':');
                      this->cpuModel = s.substr(2,s.size());
                   }
                   if (line.find("processor") != std::string::npos)
                      this->coreCount++;
                   if (line.find("cpu MHz") != std::string::npos) {
-                     std::string s = STR::tail(&line,':');
+                     std::string s = tail(&line,':');
                      this->cpuSpeed += std::stof(s.substr(1,s.size()));
                   }
                }

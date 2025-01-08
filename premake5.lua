@@ -1,10 +1,10 @@
 workspace "implosion"
    architecture "x86_64"
    configurations { "Debug", "Release"}
-
-
+   
 -- LIBRARYS (eg imgui) --
 dofile("libs/premake5.lua")
+dofile("generate-docs.lua")
 
 project "ignition"
    kind "StaticLib"
@@ -99,4 +99,6 @@ project "ignition-runtime"
    filter "configurations:Release"
       defines { "NDEBUG" }
       optimize "On"
+
+
 

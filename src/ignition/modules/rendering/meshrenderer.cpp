@@ -83,11 +83,11 @@ namespace Ignition::Rendering {
          glUseProgram(this->shader.program);
          currentProgram = this->shader.program;
         
-         if (camera->viewProj == Matrix4(0)) {
-            camera->viewProj = camera->ViewProjectionMatrix();
+         if (camera->i_viewProj == Matrix4(0)) {
+            camera->i_viewProj = camera->ViewProjectionMatrix();
          }
 
-         this->shader.SetMatrix4(camera->viewProj, "projection");
+         this->shader.SetMatrix4(camera->i_viewProj, "projection");
       }
       if (this->vao != (uint)currentVao) {
          glBindVertexArray(this->vao); 
