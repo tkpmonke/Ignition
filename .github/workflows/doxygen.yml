@@ -36,7 +36,6 @@ jobs:
       - name: Deploy Page
         run: |
           rm -rf docs/bin/*
-          mkdir docs/bin
           mv docs/html/* docs/bin/*
           git add --all
           git commit -am "Generated Doxygen Docs"
