@@ -7,9 +7,7 @@
 namespace Ignition {
    class Camera : public Object {
    public:
-      /**
-       * Value of current FOV 
-       */
+      /// Value of current FOV 
       float fov;
 
       
