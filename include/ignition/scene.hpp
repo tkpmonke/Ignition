@@ -21,6 +21,9 @@ namespace Ignition {
       void AddObject(Object object);
       int CreateObject();
 
+      // used in shadow calculations, not intended for user code
+      void Render(int program);
+
       void WriteSceneToDisk();
       void ReadSceneFromDisk();
 

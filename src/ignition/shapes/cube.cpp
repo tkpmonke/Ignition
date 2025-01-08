@@ -41,16 +41,16 @@ const Ignition::Model cube_model {
                   0.5f,  0.5f,  0.5f},
    .normals = {
       // Front face
-      0.0f,  0.0f,  1.0f,  // Vertex 4
-      0.0f,  0.0f,  1.0f,  // Vertex 5
-      0.0f,  0.0f,  1.0f,  // Vertex 6
-      0.0f,  0.0f,  1.0f,  // Vertex 7
+      0.0f,  0.0f,  -1.0f,  // Vertex 4
+      0.0f,  0.0f,  -1.0f,  // Vertex 5
+      0.0f,  0.0f,  -1.0f,  // Vertex 6
+      0.0f,  0.0f,  -1.0f,  // Vertex 7
 
       // Back face
-      0.0f,  0.0f, -1.0f,  // Vertex 0
-      0.0f,  0.0f, -1.0f,  // Vertex 1
-      0.0f,  0.0f, -1.0f,  // Vertex 2
-      0.0f,  0.0f, -1.0f,  // Vertex 3
+      0.0f,  0.0f,  1.0f,  // Vertex 0
+      0.0f,  0.0f,  1.0f,  // Vertex 1
+      0.0f,  0.0f,  1.0f,  // Vertex 2
+      0.0f,  0.0f,  1.0f,  // Vertex 3
 
       // Left face
    -  1.0f,  0.0f,  0.0f,  // Vertex 8
@@ -65,16 +65,16 @@ const Ignition::Model cube_model {
       1.0f,  0.0f,  0.0f,  // Vertex 15
 
       // Top face
-      0.0f,  1.0f,  0.0f,  // Vertex 20
-      0.0f,  1.0f,  0.0f,  // Vertex 21
-      0.0f,  1.0f,  0.0f,  // Vertex 22
-      0.0f,  1.0f,  0.0f,  // Vertex 23
+      0.0f,  -1.0f,  0.0f,  // Vertex 20
+      0.0f,  -1.0f,  0.0f,  // Vertex 21
+      0.0f,  -1.0f,  0.0f,  // Vertex 22
+      0.0f,  -1.0f,  0.0f,  // Vertex 23
 
       // Bottom face
-      0.0f, -1.0f,  0.0f,  // Vertex 16
-      0.0f, -1.0f,  0.0f,  // Vertex 17
-      0.0f, -1.0f,  0.0f,  // Vertex 18
-      0.0f, -1.0f,  0.0f,  // Vertex 19
+      0.0f, 1.0f,  0.0f,  // Vertex 16
+      0.0f, 1.0f,  0.0f,  // Vertex 17
+      0.0f, 1.0f,  0.0f,  // Vertex 18
+      0.0f, 1.0f,  0.0f,  // Vertex 19
    },
    .uv = { 0,0,0,
            1,0,0,

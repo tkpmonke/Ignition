@@ -47,6 +47,7 @@ namespace Ignition::Scripting::Lua {
             .addFunction("__add", +[](Vector3* a, Vector3& b){return *a+b;})
             .addFunction("__mul", +[](Vector3* a, Vector3& b){return *a*b;})
             .addFunction("__tostring", +[](Vector3* a){return std::to_string(a->x) + ", " + std::to_string(a->y) + ", " + std::to_string(a->z);})
+            .addStaticFunction("singleCreate", +[](float f){return Vector3(f);})
          .endClass()
 
          .addFunction("lerp", +[](Vector3* a, Vector3* b, float t){return *a*(1-t)+*b*t;})
@@ -184,6 +185,8 @@ namespace Ignition::Scripting::Lua {
          .addFunction("GetAxisHorizontal", Ignition::IO::GetAxisHorizontal)
          .addFunction("GetAxisVertical", Ignition::IO::GetAxisVertical)
          .addFunction("GetMousePosition", Ignition::IO::GetMousePosition)
+         .addFunction("LockMouse", Ignition::IO::LockMouse)
+         .addFunction("HideMouse", Ignition::IO::HideMouse)
          
          .beginNamespace("Keys")
             .addConstant("a", Ignition::IO::Keys::a)

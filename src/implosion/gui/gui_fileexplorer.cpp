@@ -120,12 +120,20 @@ namespace Implosion {
                      }
                   }
 
-                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+                  if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
                   {
                      ImGui::SetDragDropPayload("__FILE_EXPLORER_", file.path.data(), file.path.size() +1);
                      ImGui::Text("%s", file.path.substr(Ignition::IO::GetProjectHome().size(),file.path.size()).data());
                      ImGui::EndDragDropSource();
                   } 
+
+                 if (ImGui::BeginPopupContextItem(("##CONTEXT_MENU_"+std::to_string(i)).data())) {
+                    if (ImGui::MenuItem(((std::string)"Delete " + (file.type == 0 ? "File" : "Folder")).data())) {
+                       std::filesystem::remove(file.path);
+                       RefreshFiles();
+                    }
+                    ImGui::EndPopup();
+                 }
 
                   ImGui::Text("%s",(file.name).data());
                }

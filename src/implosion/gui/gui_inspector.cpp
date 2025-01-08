@@ -148,7 +148,7 @@ namespace Implosion {
                      ImGui::BeginChild(VAR("##Script_Component"), ImVec2(0, 100));
                      ImGui::InputText(VAR("Path"), &m->path);
 
-                     ImGui::Spacing();
+                     ImGui::Separator();
 
                      for (auto& v : m->variables) {
                         if (v.type == LuaData::Float) {
@@ -193,6 +193,10 @@ namespace Implosion {
                                     m->object->transform.scale.z)/3;
                            m->collider.shapeType = Ignition::Physics::Collider::Sphere;
                         }
+
+                        /*if (ImGui::Button("Mesh")) {
+                           m->collider.shapeType = Ignition::Physics::Collider::Mesh;
+                        }*/
 
                         ImGui::EndCombo();
                      }

@@ -60,7 +60,7 @@ project "implosion-hub"
    cdialect "c99"
    targetdir "bin"
 
-   links { "glfw", "GL", "GLEW", "ignition", "assimp", "ig-imgui" }
+   links { "glfw", "GL", "GLEW", "ignition", "assimp", "ig-imgui", "ig-jolt", "lua5.4" }
    includedirs { "include/ignition", "libs", "libs/imgui" }
    files {"utils/hub/**.c", "utils/hub/**.cpp", "utils/hub/**.h", "include/**.hpp" }
 

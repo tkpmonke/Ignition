@@ -10,6 +10,13 @@
 #define IGNITION_CUBE_MAP     4
 #define IGNITION_2D           2
 
+#define IGNITION_RGBA32F      GL_RGBA32F
+#define IGNITION_RGBA         GL_RGBA 
+#define IGNITION_RGB          GL_RGB
+#define IGNITION_RG           GL_RG
+#define IGNITION_R            GL_RED
+#define IGNITION_DEPTH        GL_DEPTH_COMPONENT
+
 namespace Ignition::Rendering {
 
    extern std::unordered_map<std::string, int> texture_lookup_table;
@@ -44,35 +51,57 @@ namespace Ignition::Rendering {
 
    class RenderTexture {
    public:
+      RenderTexture() = default;
       unsigned int framebuffer, color, depth;
 
-      unsigned int width, height;
+      unsigned int width, height, format;
 
       void Bind() {
          glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+         glViewport(0, 0, width, height);
       }
 
-      void Resize(int x, int y);
+      void Resize(int x, int y) {
+         width = x; height = y;
+         Bind();
+      }
 
-      RenderTexture(int width, int height) : width(width), height(height) {
+      RenderTexture(int width, int height, int format) : width(width), height(height), format(format) {
          glGenFramebuffers(1, &framebuffer);
          glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
-         glGenTextures(1, &color);
-         glBindTexture(GL_TEXTURE_2D, color);
-         glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 0, GL_RGBA32F, width, height, GL_TRUE);
-         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, color, 0);
+         if (format != IGNITION_DEPTH) {
+            glGenTextures(1, &color);
+            glBindTexture(GL_TEXTURE_2D, color);
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_FLOAT, NULL);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
 
-         glGenTextures(1, &depth);
-         glBindTexture(GL_TEXTURE_2D, depth);
+            glGenTextures(1, &depth);
+            glBindTexture(GL_TEXTURE_2D, depth);
 
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
-         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
+         } else {
+            glGenTextures(1, &depth);
+            glBindTexture(GL_TEXTURE_2D, depth);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
+            glDrawBuffer(GL_NONE);
+            glReadBuffer(GL_NONE);
+         }
+
 
          if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	         Ignition::IO::FatalError("Framebuffer is not complete!");

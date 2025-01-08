@@ -55,4 +55,18 @@ namespace Ignition::IO {
       }
       return false;
    }
+
+   void LockMouse(bool lock) {
+      if (lock)
+         glfwSetInputMode((GLFWwindow*)*Ignition::mainCamera->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+      else
+         glfwSetInputMode((GLFWwindow*)*Ignition::mainCamera->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+   }
+
+   void HideMouse(bool hide) {
+      if (hide)
+         glfwSetInputMode((GLFWwindow*)*Ignition::mainCamera->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+      else
+         glfwSetInputMode((GLFWwindow*)*Ignition::mainCamera->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+   }
 }

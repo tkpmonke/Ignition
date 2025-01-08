@@ -40,7 +40,7 @@ namespace Ignition::Physics {
 
       void CreateSphere(float radius);
 
-      void CreateMesh(std::vector<float>& vertices, std::vector<uint>& indices);
+      void CreateMesh(std::vector<float>* vertices, std::vector<uint>* indices);
 
       void CreateEmpty();
 
@@ -50,6 +50,6 @@ namespace Ignition::Physics {
          }
       }
    
-      Shape* shape = nullptr;
+      Ref<Shape> shape = nullptr;
    };
 }

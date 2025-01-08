@@ -1,4 +1,5 @@
 #include "module.hpp"
+#include "types/texture.hpp"
 
 #include <memory>
 #include <vector>
@@ -13,7 +14,7 @@ namespace Ignition::Rendering {
    public:
       CREATE_MODULE("Light");
 
-      LightType type;
+      LightType type = Point;
 
       float distance=5;
       
@@ -32,6 +33,22 @@ namespace Ignition::Rendering {
       void Serialize() override;
       void Deserialize() override;
    };
+
+   class DirectionalLight {
+   public:
+      Vector3 direction = Vector3(-0.2f, -0.6f, -0.3f);
+      Vector3 ambient = Vector3(0.05f, 0.05f, 0.05f);
+      Vector3 diffuse = Vector3(0.2f, 0.2f, 0.2f);
+      Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
+
+      void Init() { shadowMap = RenderTexture(1024,1024,IGNITION_DEPTH); }
+
+      DirectionalLight() = default;
+
+      RenderTexture shadowMap;
+   };
    
    extern std::vector<std::shared_ptr<Light>> lights;
+   extern DirectionalLight directionalLight;
+   void RenderShadowMaps();
 }

@@ -33,6 +33,7 @@ namespace Ignition {
       Camera() = default;
       Camera(Window* window) { this->window = window; } 
       Matrix4 viewProj;
+      Matrix4 lightProj;
 
       Window* window;
 

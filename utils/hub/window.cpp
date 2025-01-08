@@ -37,4 +37,15 @@ int update_window() {
 
 void present_window() {
    igCamera->EndRender(false);
+   
+   int w,h;
+   glfwGetFramebufferSize(window, &w,&h);
+   igCamera->size.x = w;
+   igCamera->size.y = h;
+   glViewport(0, 0, w, h);
+   igWindow->Resize(w,h);
+}
+
+void shutdown_window() {
+   igWindow->Close();
 }
