@@ -19,22 +19,31 @@ namespace Ignition::Rendering {
    class Shader {
    public:   
       // use this for most shaders
+      /// Load vertex and fragment shader
       Shader(std::string vert, std::string frag, ShaderType type);
       Shader(std::string vert, std::string frag, int type);
       // use this for compute shaders
+      /// Load compute shader
       Shader(std::string data, ShaderType type);
       Shader(std::string data, int type);
 
       Shader() = default;
 
+      /// Shader code. Editing these does not do anything
       std::string vert, frag;
 
+      /// Program location (used by opengl)
       unsigned int program;
       
+      
       Vector4 color = Vector4(1,1,1,1);
+      
+      /// Main Texture
       Texture albedo;
-      Texture diffuse;
+
       float shininess;
+
+      /// Changes intensity of color
       float intensity = 1.f;
       Vector3 specular;
 
