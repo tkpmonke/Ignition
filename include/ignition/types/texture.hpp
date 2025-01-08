@@ -36,11 +36,22 @@ namespace Ignition::Rendering {
 
       void SetFlags(int flags) { this->flags = flags; }
       void SetType(int type) { this->type = type; }
+
+      /// Load data from file
       void LoadData(std::string file);
+
+      /// Load cube map from multiple files
       void LoadData(std::vector<std::string> file);
+
+      /// Load cube map from char[]
       void LoadData(std::vector<const char*> data, int w, int h, int nr, std::string name);
+      /// Load data from unsigned char[]
       void LoadData(unsigned char* data, int w, int h, int nr, std::string name);
+
+      /// location of the texture (used by opengl)
       unsigned int location = 0;
+
+      /// name of texture / path of texture
       std::string name;
       operator int() const { return location; };
       int type = IGNITION_2D;
