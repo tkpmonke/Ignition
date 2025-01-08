@@ -1,0 +1,26 @@
+var classIgnition_1_1Rendering_1_1Shader =
+[
+    [ "Shader", "classIgnition_1_1Rendering_1_1Shader.html#a245db28f72415a79334aacc754b9cc9d", null ],
+    [ "Shader", "classIgnition_1_1Rendering_1_1Shader.html#a1dfec02fe748b2e6377392613c609909", null ],
+    [ "Shader", "classIgnition_1_1Rendering_1_1Shader.html#a8fc0d433342c72ec25fe434beae38895", null ],
+    [ "Shader", "classIgnition_1_1Rendering_1_1Shader.html#aa66b5e5e6414bd8850d94293c875738c", null ],
+    [ "Shader", "classIgnition_1_1Rendering_1_1Shader.html#a9ec96b1d6362b705f508a596922d543e", null ],
+    [ "SetBool", "classIgnition_1_1Rendering_1_1Shader.html#ab329930244ef1da26aec11bdc6803298", null ],
+    [ "SetDouble", "classIgnition_1_1Rendering_1_1Shader.html#a128b4431161770fa8eca0f520a1e8de6", null ],
+    [ "SetFloat", "classIgnition_1_1Rendering_1_1Shader.html#a9e58546298a2efc300fac71043569178", null ],
+    [ "SetInt", "classIgnition_1_1Rendering_1_1Shader.html#ab88e880820850f85169ee44321ab6711", null ],
+    [ "SetMatrix3", "classIgnition_1_1Rendering_1_1Shader.html#a6e65fcd06834f5b454f61c0f20655124", null ],
+    [ "SetMatrix4", "classIgnition_1_1Rendering_1_1Shader.html#a400f097400dc10340b24582099e0f150", null ],
+    [ "SetVec2", "classIgnition_1_1Rendering_1_1Shader.html#a90dd31c273e78fce86e75a2ddd648597", null ],
+    [ "SetVec3", "classIgnition_1_1Rendering_1_1Shader.html#a33f1dab9987c3b71b4083b126f3c8afb", null ],
+    [ "SetVec4", "classIgnition_1_1Rendering_1_1Shader.html#a4918066f5bc2a4640a720e66100d9d81", null ],
+    [ "albedo", "classIgnition_1_1Rendering_1_1Shader.html#a5060c16192600f9dd5950ca3803104a5", null ],
+    [ "color", "classIgnition_1_1Rendering_1_1Shader.html#aac9b39be3ebb1c44bac90827f25f29af", null ],
+    [ "frag", "classIgnition_1_1Rendering_1_1Shader.html#ad0d3805d4b162ec76579512808af2d82", null ],
+    [ "intensity", "classIgnition_1_1Rendering_1_1Shader.html#a1cba65f6477a0480071d677d91bbef49", null ],
+    [ "program", "classIgnition_1_1Rendering_1_1Shader.html#a2fffdb4bfe4f7ffd0e7b88e3d020244e", null ],
+    [ "shininess", "classIgnition_1_1Rendering_1_1Shader.html#abf2f663bb9f4864f9f79b49f91ffb7c2", null ],
+    [ "specular", "classIgnition_1_1Rendering_1_1Shader.html#a971157c5273ed9ffb75d817e28454b14", null ],
+    [ "type", "classIgnition_1_1Rendering_1_1Shader.html#a50f2f74f53077aab8761bb8bd6b5722a", null ],
+    [ "vert", "classIgnition_1_1Rendering_1_1Shader.html#ab22d804f433c4dc7789a20ae1861f406", null ]
+];
