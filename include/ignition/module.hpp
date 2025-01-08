@@ -10,6 +10,7 @@ namespace Ignition {
    class Object;
    class Module {
    public:
+      /// Called on start
       virtual void Start() {};
       virtual void Shutdown() {};
 
