@@ -9,7 +9,7 @@ var classIgnition_1_1Camera =
     [ "Camera", "classIgnition_1_1Camera.html#aa0888b038dd219b6bc9442a7e30cde7b", null ],
     [ "BeginRender", "classIgnition_1_1Camera.html#ae03dce48b0b2ac93e060cb6439a7b7ab", null ],
     [ "EndGUI", "classIgnition_1_1Camera.html#aa1a14ebd8531c11b754427e16acdee33", null ],
-    [ "EndRender", "classIgnition_1_1Camera.html#a197f267e63914cfce650fd6c9dc5c945", null ],
+    [ "EndRender", "classIgnition_1_1Camera.html#aa407309bc0fd550b2a0092da0671ca1a", null ],
     [ "MakeMainCamera", "classIgnition_1_1Camera.html#a5fe6be3d9bbfd9313ad41c4e26c8d557", null ],
     [ "ProjectionMatrix", "classIgnition_1_1Camera.html#a17e9ceb313246d76bd19c32435645d11", null ],
     [ "ViewMatrix", "classIgnition_1_1Camera.html#ae70da5afb806171571c377c9db0d5f0f", null ],

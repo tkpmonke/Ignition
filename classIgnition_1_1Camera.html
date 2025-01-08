@@ -138,16 +138,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a5fe6be3d9bbfd9313ad41c4e26c8d557"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets Main <a class="el" href="classIgnition_1_1Camera.html">Camera</a> To This.  <br /></td></tr>
 <tr class="separator:a5fe6be3d9bbfd9313ad41c4e26c8d557"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e3ca2809ac972dfb6cad8efe36aa329"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIgnition.html#ae43c4a75ea2a9229538e24a65a757958">Matrix4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIgnition_1_1Camera.html#a7e3ca2809ac972dfb6cad8efe36aa329">ViewProjectionMatrix</a> ()</td></tr>
+<tr class="memdesc:a7e3ca2809ac972dfb6cad8efe36aa329"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns ProjectionMatrix * ViewMatrix.  <br /></td></tr>
 <tr class="separator:a7e3ca2809ac972dfb6cad8efe36aa329"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae70da5afb806171571c377c9db0d5f0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIgnition.html#ae43c4a75ea2a9229538e24a65a757958">Matrix4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIgnition_1_1Camera.html#ae70da5afb806171571c377c9db0d5f0f">ViewMatrix</a> ()</td></tr>
+<tr class="memdesc:ae70da5afb806171571c377c9db0d5f0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns View Matrix.  <br /></td></tr>
 <tr class="separator:ae70da5afb806171571c377c9db0d5f0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17e9ceb313246d76bd19c32435645d11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIgnition.html#ae43c4a75ea2a9229538e24a65a757958">Matrix4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIgnition_1_1Camera.html#a17e9ceb313246d76bd19c32435645d11">ProjectionMatrix</a> ()</td></tr>
+<tr class="memdesc:a17e9ceb313246d76bd19c32435645d11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns Projection Matrix.  <br /></td></tr>
 <tr class="separator:a17e9ceb313246d76bd19c32435645d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae03dce48b0b2ac93e060cb6439a7b7ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIgnition_1_1Camera.html#ae03dce48b0b2ac93e060cb6439a7b7ab">BeginRender</a> ()</td></tr>
+<tr class="memdesc:ae03dce48b0b2ac93e060cb6439a7b7ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call at beginning of rendering.  <br /></td></tr>
 <tr class="separator:ae03dce48b0b2ac93e060cb6439a7b7ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a197f267e63914cfce650fd6c9dc5c945"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIgnition_1_1Camera.html#a197f267e63914cfce650fd6c9dc5c945">EndRender</a> (bool)</td></tr>
-<tr class="separator:a197f267e63914cfce650fd6c9dc5c945"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa407309bc0fd550b2a0092da0671ca1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIgnition_1_1Camera.html#aa407309bc0fd550b2a0092da0671ca1a">EndRender</a> (bool hasGUI)</td></tr>
+<tr class="memdesc:aa407309bc0fd550b2a0092da0671ca1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">End <a class="el" href="namespaceIgnition_1_1Rendering.html">Rendering</a>, pass true if a gui needs to render after the rest of the scene.  <br /></td></tr>
+<tr class="separator:aa407309bc0fd550b2a0092da0671ca1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1a14ebd8531c11b754427e16acdee33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIgnition_1_1Camera.html#aa1a14ebd8531c11b754427e16acdee33">EndGUI</a> ()</td></tr>
+<tr class="memdesc:aa1a14ebd8531c11b754427e16acdee33"><td class="mdescLeft">&#160;</td><td class="mdescRight">If EndRender was told that a gui was rendering, use this to finish rendering the gui.  <br /></td></tr>
 <tr class="separator:aa1a14ebd8531c11b754427e16acdee33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc0dc4b4d65b04b52409edbbd874ee6e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIgnition_1_1Camera.html#afc0dc4b4d65b04b52409edbbd874ee6e">Camera</a> ()=default</td></tr>
 <tr class="separator:afc0dc4b4d65b04b52409edbbd874ee6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -308,6 +314,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Call at beginning of rendering. </p>
+
 </div>
 </div>
 <a id="aa1a14ebd8531c11b754427e16acdee33" name="aa1a14ebd8531c11b754427e16acdee33"></a>
@@ -325,10 +333,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>If EndRender was told that a gui was rendering, use this to finish rendering the gui. </p>
+
 </div>
 </div>
-<a id="a197f267e63914cfce650fd6c9dc5c945" name="a197f267e63914cfce650fd6c9dc5c945"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a197f267e63914cfce650fd6c9dc5c945">&#9670;&#160;</a></span>EndRender()</h2>
+<a id="aa407309bc0fd550b2a0092da0671ca1a" name="aa407309bc0fd550b2a0092da0671ca1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa407309bc0fd550b2a0092da0671ca1a">&#9670;&#160;</a></span>EndRender()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -337,11 +347,13 @@ Public Attributes</h2></td></tr>
           <td class="memname">void Ignition::Camera::EndRender </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>hasGUI</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>End <a class="el" href="namespaceIgnition_1_1Rendering.html">Rendering</a>, pass true if a gui needs to render after the rest of the scene. </p>
 
 </div>
 </div>
@@ -379,6 +391,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns Projection Matrix. </p>
+
 </div>
 </div>
 <a id="ae70da5afb806171571c377c9db0d5f0f" name="ae70da5afb806171571c377c9db0d5f0f"></a>
@@ -396,6 +410,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns View Matrix. </p>
+
 </div>
 </div>
 <a id="a7e3ca2809ac972dfb6cad8efe36aa329" name="a7e3ca2809ac972dfb6cad8efe36aa329"></a>
@@ -412,6 +428,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Returns ProjectionMatrix * ViewMatrix. </p>
 
 </div>
 </div>
