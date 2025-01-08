@@ -23,7 +23,10 @@ namespace Ignition::Rendering {
 
       MeshRenderer() = default;
       
+      /// Set s to currect shader
       void LoadShader(Shader s) {this->shader = s; }
+
+      /// Set and load m to current model
       void LoadModel(Model m); 
 
       void Start() override;

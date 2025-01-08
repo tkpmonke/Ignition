@@ -3,7 +3,6 @@ name: Auto Deploy Doxy Gen Documentation
 on:
   push:
     branches:
-      - main
       - indev
 
 jobs:
