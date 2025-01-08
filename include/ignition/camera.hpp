@@ -27,15 +27,22 @@ namespace Ignition {
       /// Sets Main Camera To This
       void MakeMainCamera();
 
+      /// Returns ProjectionMatrix * ViewMatrix
       Matrix4 ViewProjectionMatrix();
 
+      /// Returns View Matrix
       Matrix4 ViewMatrix();
+
+      /// Returns Projection Matrix
       Matrix4 ProjectionMatrix();
 
+      /// Call at beginning of rendering
       void BeginRender();
 
-      void EndRender(bool);
+      /// End Rendering, pass true if a gui needs to render after the rest of the scene
+      void EndRender(bool hasGUI);
 
+      /// If EndRender was told that a gui was rendering, use this to finish rendering the gui
       void EndGUI();
 
       Camera() = default;
