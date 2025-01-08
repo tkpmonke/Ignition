@@ -5,6 +5,11 @@
 #include "types/shader.hpp"
 
 namespace Ignition {
+
+   /**
+    * Handles windowing
+    */
+
    class Window {
    public:
       Window() = default;
