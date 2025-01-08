@@ -1,7 +1,7 @@
 var searchData=
 [
   ['warning_0',['Warning',['../namespaceIgnition_1_1IO.html#a3b39f90f2da25a1e9d50e3860e464c8f',1,'Ignition::IO']]],
-  ['window_1',['Window',['../classIgnition_1_1Window.html#a0ef26d9b109ef033691f19cd3409991c',1,'Ignition::Window::Window()=default'],['../classIgnition_1_1Window.html#aa5f278a54616724e28563055d6f89709',1,'Ignition::Window::Window(int, int, const char *, bool *)']]],
+  ['window_1',['Window',['../classIgnition_1_1Window.html#a0ef26d9b109ef033691f19cd3409991c',1,'Ignition::Window::Window()=default'],['../classIgnition_1_1Window.html#ad534baf7646c6efad124926db837b945',1,'Ignition::Window::Window(int width, int height, const char *name, bool *isOpen)']]],
   ['write16_2',['Write16',['../namespaceIgnition_1_1IO.html#a9a2fd7c1d12791033578347b3780684f',1,'Ignition::IO']]],
   ['write32_3',['Write32',['../namespaceIgnition_1_1IO.html#af39589f6b3517ca7e5f770390c3ade3c',1,'Ignition::IO']]],
   ['write8_4',['Write8',['../namespaceIgnition_1_1IO.html#a466c17cb90b461cd93a72f6dce6e2907',1,'Ignition::IO']]],

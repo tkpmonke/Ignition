@@ -1,7 +1,7 @@
 var classIgnition_1_1Window =
 [
     [ "Window", "classIgnition_1_1Window.html#a0ef26d9b109ef033691f19cd3409991c", null ],
-    [ "Window", "classIgnition_1_1Window.html#aa5f278a54616724e28563055d6f89709", null ],
+    [ "Window", "classIgnition_1_1Window.html#ad534baf7646c6efad124926db837b945", null ],
     [ "Bind", "classIgnition_1_1Window.html#a1218a4bed891dcd019d03a40ac654dc8", null ],
     [ "Close", "classIgnition_1_1Window.html#a8d85926dc588e18cdf9f5517341be321", null ],
     [ "IsOpen", "classIgnition_1_1Window.html#ad04e19e9614c0bd83af25a7d7504e7bb", null ],
