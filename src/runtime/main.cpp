@@ -43,10 +43,15 @@ int main() {
       Ignition::Physics::physicsWorld->Init();
 
       Ignition::project.LoadProject(&window);
+
+      Ignition::Rendering::directionalLight.Init();
  
       while (window.IsOpen())
       {
          window.Update();
+
+         Ignition::Rendering::RenderShadowMaps();
+
          window.Bind();
          camera.BeginRender();
           

@@ -9,7 +9,7 @@
 #include "sprites/skybox_top.h"
 #include "sprites/skybox_sides.h"
 #include "utils/io.hpp"
-#include "modules/physics/rigidbody.hpp"
+#include "modules/rendering/light.hpp"
 
 #include <string.h>
 
@@ -70,6 +70,8 @@ int main(int argc, char** argv)
 
       Ignition::project.LoadProject(&window);
 
+      Ignition::Rendering::directionalLight.Init();
+
       Implosion::GUI gui = Implosion::GUI(&window, &camera);
       ReadPreferences(&gui);
 
@@ -84,6 +86,8 @@ int main(int argc, char** argv)
       };
       Ignition::scene.skybox = Ignition::Skybox(skyboxImages, 64, 64, 3, "IMPLOSION_SKYBOX");
 
+      skyboxImages.clear();
+
       gui.InitGrid();
 
       pp_manager = PPManager(&window);
@@ -93,6 +97,9 @@ int main(int argc, char** argv)
       while (window.IsOpen())
       {
          window.Update();
+
+         Ignition::Rendering::RenderShadowMaps();
+
          window.Bind();
          camera.BeginRender();
           

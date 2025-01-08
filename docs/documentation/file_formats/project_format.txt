@@ -10,7 +10,7 @@ FOR EACH SCENE
    x BYTES, name
 
 -- SCENE FILE --
-TWO BYTES num of objects
+FOUR BYTES num of objects
 
 FOR EACH OBJECT
    TWO BYTES, name length

@@ -103,6 +103,10 @@ namespace Ignition::Rendering {
          glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       }
 
+
+      glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
       GLenum format;
       switch (nr) {
          case(1):

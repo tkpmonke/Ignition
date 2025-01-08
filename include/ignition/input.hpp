@@ -81,6 +81,9 @@ namespace Ignition::IO {
 
    static Ignition::Vector2 GetMousePosition() { double a,b; glfwGetCursorPos((GLFWwindow*)*Ignition::mainCamera->window, &a, &b); return {a,b}; }
 
+   void LockMouse(bool lock);
+   void HideMouse(bool hide);
+
    static float GetAxisHorizontal() {
       float f = 0;
       f += GetInput(Keys::a);

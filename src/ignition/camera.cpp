@@ -1,6 +1,6 @@
 #include "camera.hpp"
 #include "modules/rendering/meshrenderer.hpp"
-
+#include "modules/rendering/light.hpp"
 
 namespace Ignition {
    Camera* mainCamera;
@@ -56,13 +56,14 @@ namespace Ignition {
       glClear(GL_COLOR_BUFFER_BIT);
       if (!gui) {
          glUseProgram(window->s.program);
+         glActiveTexture(GL_TEXTURE0);
          glBindTexture(GL_TEXTURE_2D, window->color);
+         //window->s.SetInt(0, "tex");
 
          glBindVertexArray(window->vao);
          glDrawArrays(GL_TRIANGLES, 0, 6);
           
          glfwSwapBuffers((GLFWwindow*)*this->window);
-
          
       }
 

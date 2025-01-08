@@ -76,6 +76,31 @@ namespace Ignition {
       return objects.size()-1;
    }
 
+   void Scene::Render(int program) {
+      for (auto& obj : objects) {
+         auto m = obj.GetMeshRenderer();
+
+         if (m != nullptr) {
+            m->transform = &obj.transform;
+            m->object = &obj;
+            if (!m->enabled || !obj.enabled) continue;
+            
+            int i = m->shader.program;
+            m->shader.program = program;
+            auto t = m->shader.type;
+            m->shader.type = ShaderType::None;
+            
+            m->Update();
+
+            m->shader.type = t;
+            m->shader.program = i;
+         }
+      }
+
+      Rendering::currentVao = std::numeric_limits<int>::max();
+      Rendering::currentProgram = std::numeric_limits<int>::max();
+   }
+
    void Scene::WriteSceneToDisk()
    {
       Ignition::IO::BeginBinaryWrite(Ignition::IO::GetProjectHome() + "/" + name + ".igscn"); 
@@ -143,6 +168,7 @@ namespace Ignition {
             if (type == "Mesh Renderer")
             {
                auto m = std::make_shared<MeshRenderer>();
+               m->object = &o;
                m->enabled = enabled;
                m->Deserialize();
                o.AddModule(m);
@@ -151,6 +177,7 @@ namespace Ignition {
             if (type == "Script")
             {
                auto m = std::make_shared<Ignition::Script>();
+               m->object = &o;
                m->enabled = enabled;
                m->Deserialize();
                o.AddModule(m);
@@ -158,6 +185,7 @@ namespace Ignition {
 
             if (type == "Rigidbody") {
                auto rb = std::make_shared<Ignition::Physics::Rigidbody>();
+               rb->object = &o;
                rb->enabled = enabled;
                o.AddModule(rb);
                auto r = (Ignition::Physics::Rigidbody*)o.GetModule("Rigidbody").get();
@@ -166,12 +194,11 @@ namespace Ignition {
 
             if (type == "Light") {
                auto m = std::make_shared<Ignition::Rendering::Light>();
+               m->object = &o;
                m->enabled = enabled;
                m->Deserialize(); 
                o.AddModule(m);
-
-               auto l = std::make_shared<Ignition::Rendering::Light>(*(Ignition::Rendering::Light*)o.GetModule("Light").get());
-               lights.push_back(l);
+               lights.push_back(m);
             }
          }
 

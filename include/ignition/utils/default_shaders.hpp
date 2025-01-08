@@ -55,25 +55,12 @@ const std::string lit_fragment =
 "  vec3 ambient;\n"
 "  vec3 diffuse;\n"
 "  vec3 specular;\n"
+"  sampler2D shadowMap;\n"
 "};\n"
 "uniform DirectionalLight dirLight;\n"
 
-"struct PointLight {\n"
-"  vec3 position;\n"
-
-"  float distance;\n"
-"  float constant;\n"
-"  float linear;\n"
-"  float quadratic;\n"
-
-"  vec3 ambient;\n"
-"  vec3 diffuse;\n"
-"  vec3 specular;\n"
-"};\n"
-"uniform int numberOfPointLights;\n"
-"uniform PointLight pointLights[16];\n"
-
-"struct SpotLight {\n"
+"struct Light {\n"
+"  int isSpot;\n"
 "  vec3 position;\n"
 "  vec3 direction;\n"
 
@@ -89,8 +76,8 @@ const std::string lit_fragment =
 "  vec3 diffuse;\n"
 "  vec3 specular;\n"
 "};\n"
-"uniform int numberOfSpotLights;\n"
-"uniform SpotLight spotLights[16];\n"
+"uniform int numberOfLights;\n"
+"uniform Light lights[32];\n"
 
 "in vec2 tex_uv;\n"
 
@@ -111,15 +98,15 @@ const std::string lit_fragment =
 "  return (ambient+diffuse+specular);\n"
 "}\n"
 
-"vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {\n"
+"vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir) {\n"
 "  vec3 lightDir = normalize(light.position - fragPos);\n"
 "  float diff = max(dot(normal, lightDir), 0.0);\n"
 "  vec3 reflectDir = reflect(-lightDir, normal);\n"
 "  float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);\n"
 "  float distance = length(light.position - fragPos);\n"
-//"  float attenuation = 1.0 / (light.constant + light.linear * distance +"
-//"                                            light.quadratic * (distance * distance));\n"
-"  float attenuation = 1;\n"
+"  float attenuation = 1.0 / (light.constant + light.linear * distance +"
+"                                            light.quadratic * (distance * distance));\n"
+//"  float attenuation = 1;\n"
 "  vec3 ambient  = light.ambient  * vec3(texture(material.albedo, tex_uv));\n"
 "  vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.albedo, tex_uv));\n"
 
@@ -150,9 +137,9 @@ const std::string lit_fragment =
 "  }\n"
 "  vec3 col = CalcDirLight(dirLight, normal, normalize(viewPos - frag_pos));\n"
 
-"  for (int i = 0; i < numberOfPointLights; ++i)\n"
-//"     col += CalcPointLight(pointLights[i], normal, frag_pos, normalize(viewPos-frag_pos));\n"
-"     col += pointLights[i].diffuse;\n"
+"  for (int i = 0; i < numberOfLights; ++i)\n"
+"     col += CalcPointLight(lights[i], normal, frag_pos, normalize(viewPos-frag_pos));\n"
+//"     col += pointLights[i].diffuse;\n"
 
 "  o = vec4(col, 1);\n"
 "}\0";

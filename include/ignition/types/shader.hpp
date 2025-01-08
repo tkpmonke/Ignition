@@ -11,9 +11,10 @@ namespace Ignition::Rendering {
    extern std::unordered_map<std::string, int> shader_lookup_table;
    
    enum ShaderType {
-      Unlit = 0,
-      Lit = 1,
-      Compute = 2,
+      None = 0,
+      Unlit = 1,
+      Lit = 2,
+      Compute = 3,
    }; 
    class Shader {
    public:   

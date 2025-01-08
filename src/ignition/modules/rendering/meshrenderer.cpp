@@ -79,7 +79,7 @@ namespace Ignition::Rendering {
    }
    
    void MeshRenderer::Update() {
-      if (this->shader.program != currentProgram) {
+      if (this->shader.program != (uint)currentProgram) {
          glUseProgram(this->shader.program);
          currentProgram = this->shader.program;
         
@@ -89,7 +89,7 @@ namespace Ignition::Rendering {
 
          this->shader.SetMatrix4(camera->viewProj, "projection");
       }
-      if (this->vao != currentVao) {
+      if (this->vao != (uint)currentVao) {
          glBindVertexArray(this->vao); 
          currentVao = this->vao;
       }
@@ -102,13 +102,15 @@ namespace Ignition::Rendering {
       model = glm::scale(model, this->transform->scale);
 
       this->shader.SetMatrix4(model, "model");
-      if (shader.albedo.type == IGNITION_2D) {
-         glActiveTexture(GL_TEXTURE0 ); 
-         glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
-         this->shader.SetInt(0, "material.albedo");
+
+      if (this->shader.type != ShaderType::None) {
+         if (shader.albedo.type == IGNITION_2D) {
+            glActiveTexture(GL_TEXTURE0 ); 
+            glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
+            this->shader.SetInt(0, "material.albedo");
+         }
+         this->shader.SetVec4(this->shader.color*this->shader.intensity, "material.color");
       }
-      this->shader.SetVec4(this->shader.color*this->shader.intensity, "material.color");
-      
       if (this->shader.type == ShaderType::Lit)
       {
          this->shader.SetFloat(32, "material.shininess");
@@ -118,50 +120,36 @@ namespace Ignition::Rendering {
          //glActiveTexture(GL_TEXTURE1); 
          //glBindTexture(GL_TEXTURE_2D, this->shader.diffuse);
          
-         this->shader.SetVec3(Vector3(-0.2f, 0.6f, -0.3f), "dirLight.direction");
-         this->shader.SetVec3(Vector3(0.05f, 0.05f, 0.05f), "dirLight.ambient");
-         this->shader.SetVec3(Vector3(0.1f, 0.1f, 0.1f), "dirLight.diffuse");
-         this->shader.SetVec3(Vector3(0.5f, 0.5f, 0.5f), "dirLight.specular");
+         this->shader.SetVec3(directionalLight.direction, "dirLight.direction");
+         this->shader.SetVec3(directionalLight.ambient, "dirLight.ambient");
+         this->shader.SetVec3(directionalLight.diffuse, "dirLight.diffuse");
+         this->shader.SetVec3(directionalLight.specular, "dirLight.specular");
 
+         this->shader.SetInt(directionalLight.shadowMap.depth, "dirLight.shadowMap");
+
+         glActiveTexture(GL_TEXTURE1);
+         glBindTexture(GL_TEXTURE_2D, directionalLight.shadowMap.depth);
          this->shader.SetVec3(camera->transform.position, "viewPos");
 
-         int spotCount = 0;
-         int pointCount = 0;
+         this->shader.SetInt((int)lights.size(), "numberOfLights");
          for (int l = 0; l < (int)lights.size(); ++l) {
-            if (lights[l]->type == LightType::Spot) {
-               std::string varNameStart = "spotLights[" + std::to_string(spotCount) + "].";
-               this->shader.SetInt(spotCount++, "numberOfSpotLights");
+            std::string varNameStart = "lights[" + std::to_string(l) + "].";
 
-               this->shader.SetVec3(lights[l]->transform->position, varNameStart+"position");
-               this->shader.SetVec3(lights[l]->ambient, varNameStart+"ambient");
-               this->shader.SetVec3(lights[l]->diffuse, varNameStart+"diffuse");
-               this->shader.SetVec3(lights[l]->specular, varNameStart+"specular");
+            this->shader.SetBool(lights[l]->type == LightType::Spot, varNameStart+"isSpot");
 
-               this->shader.SetFloat(lights[l]->distance, varNameStart+"distance");
-               this->shader.SetFloat(lights[l]->constant, varNameStart+"constant");
-               this->shader.SetFloat(lights[l]->linear, varNameStart+"linear");
-               this->shader.SetFloat(lights[l]->quadratic, varNameStart+"quadratic");
-               
-               this->shader.SetFloat(lights[l]->cutOff, varNameStart+"cutOff");
-               this->shader.SetFloat(lights[l]->outerCutOff, varNameStart+"outerCutOff");
+            this->shader.SetVec3(lights[l]->transform->position, varNameStart+"position");
+            this->shader.SetVec3(lights[l]->ambient, varNameStart+"ambient");
+            this->shader.SetVec3(lights[l]->diffuse, varNameStart+"diffuse");
+            this->shader.SetVec3(lights[l]->specular, varNameStart+"specular");
 
-
-            } else if (lights[l]->type == LightType::Point) {
-               std::string varNameStart = "pointLights[" + std::to_string(pointCount) + "].";
-               this->shader.SetInt(pointCount++, "numberOfPointLights");
-               
-               this->shader.SetVec3(lights[l]->transform->position, varNameStart+"position");
-               this->shader.SetVec3(lights[l]->ambient, varNameStart+"ambient");
-               this->shader.SetVec3(lights[l]->diffuse, varNameStart+"diffuse");
-               this->shader.SetVec3(lights[l]->specular, varNameStart+"specular");
-               
-               this->shader.SetFloat(lights[l]->distance, varNameStart+"distance");
-               this->shader.SetFloat(lights[l]->constant, varNameStart+"constant");
-               this->shader.SetFloat(lights[l]->linear, varNameStart+"linear");
-               this->shader.SetFloat(lights[l]->quadratic, varNameStart+"quadratic");
-            }
+            this->shader.SetFloat(lights[l]->distance, varNameStart+"distance");
+            this->shader.SetFloat(lights[l]->constant, varNameStart+"constant");
+            this->shader.SetFloat(lights[l]->linear, varNameStart+"linear");
+            this->shader.SetFloat(lights[l]->quadratic, varNameStart+"quadratic");
+            
+            this->shader.SetFloat(lights[l]->cutOff, varNameStart+"cutOff");
+            this->shader.SetFloat(lights[l]->outerCutOff, varNameStart+"outerCutOff");
          }
-
       }
 
       glDrawElements(GL_TRIANGLES, this->model.indices.size(), GL_UNSIGNED_INT, 0);
@@ -171,7 +159,6 @@ namespace Ignition::Rendering {
       Ignition::IO::WriteString(model.path);
 
       Ignition::IO::Write8((int)shader.type);
-
       Ignition::IO::WriteFloat(shader.color.r);
       Ignition::IO::WriteFloat(shader.color.g);
       Ignition::IO::WriteFloat(shader.color.b);
@@ -198,11 +185,13 @@ namespace Ignition::Rendering {
       switch(type) {
          case(Unlit): {
             Shader s = Shader(unlit_vertex, unlit_fragment, type);
+            s.albedo.SetFlags(TextureFlags::Linear);
             LoadShader(s);
             break;
          }
          case(Lit): {
             Shader s = Shader(unlit_vertex, lit_fragment, type);
+            s.albedo.SetFlags(TextureFlags::Linear);
             LoadShader(s);
             break;
          }

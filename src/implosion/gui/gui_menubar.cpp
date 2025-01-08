@@ -17,7 +17,7 @@ namespace Implosion {
                exit(0);
             }
             ImGui::EndMenu();
-         }
+         } 
          
          if (ImGui::BeginMenu("Scene"))
          {

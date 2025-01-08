@@ -111,6 +111,11 @@ namespace Ignition::Physics {
                this->collider.CreateSphere(IO::ReadFloat());
                IO::DebugPrint("Loaded Sphere > " + std::to_string(this->collider.shapeVariables.radius));
                break;
+            case(Collider::Mesh):
+               auto ptr = object->GetMeshRenderer();
+               if (ptr != nullptr) 
+                  this->collider.CreateMesh(&ptr->model.vertices, &ptr->model.indices);
+               break;
          }
          AddCollider(this->collider);
       } else {
@@ -137,6 +142,10 @@ namespace Ignition::Physics {
       EMotionType motionType = _static ? EMotionType::Static : EMotionType::Dynamic;
       int layer = _static ? Layers::NonMoving : Layers::Moving;
 
+      if (collider.shape == nullptr) {
+         std::cerr << "Collider shape is null!\n";
+         return;
+      }
       
       BodyCreationSettings settings(
           collider.shape,

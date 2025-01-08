@@ -33,7 +33,17 @@ namespace Ignition {
 
       Transform transform;
 
-      virtual void Update() { UPDATE_OBJECT();}
+      virtual void Update() {
+         this->transform.UpdateVectors();
+         for (std::shared_ptr<Module> m : modules)  {
+            m->transform = &this->transform;
+            m->object = this;
+            if (!m->enabled || !this->enabled) continue;
+            if (!Ignition::IO::InEditor() || m->runs_in_editor()) { 
+               m->Update();
+            }
+         }
+      }
 
       Object* parent;
       
