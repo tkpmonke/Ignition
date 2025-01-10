@@ -30,4 +30,5 @@ namespace Ignition::Scripting::AngelScript {
 
    // random
    void RegisterMiscFunctions();
+   void RegisterExpose();
 }

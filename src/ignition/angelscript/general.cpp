@@ -1,11 +1,9 @@
 #include "angelscript/angelscript.hpp"
-
 #include "types/transform.hpp"
-#include "object.hpp"
 
+#include <new>
 
 #define S(x) r = x; assert(r >= 0)
-
 
 namespace Ignition::Scripting::AngelScript {
    void ConstructVector2(Ignition::Vector2* self) {
@@ -17,7 +15,7 @@ namespace Ignition::Scripting::AngelScript {
    }
 
    void DestructVector2(Vector2* self) {
-      delete self;
+      self->~Vector2();
    }
 
    void ConstructVector3(Ignition::Vector3* self) {
@@ -29,7 +27,7 @@ namespace Ignition::Scripting::AngelScript {
    }
 
    void DestructVector3(Vector3* self) {
-      delete self;
+      self->~Vector3();
    }
    
    void ConstructVector4(Ignition::Vector4* self) {
@@ -41,11 +39,7 @@ namespace Ignition::Scripting::AngelScript {
    }
 
    void DestructVector4(Vector4* self) {
-      delete self;
-   }
-
-   Ignition::Module* CreateModule() {
-      return new Ignition::Module();
+      self->~Vector4();
    }
 
    void RegisterVectors() {
@@ -100,24 +94,6 @@ namespace Ignition::Scripting::AngelScript {
       S(asEngine->RegisterObjectProperty("Transform", "Vector3 right", asOFFSET(Ignition::Transform, position)));
       S(asEngine->RegisterObjectProperty("Transform", "Vector3 up", asOFFSET(Ignition::Transform, position)));
    }
-
-   void RegisterIgnitionScript() {
-      int r;
-      S(asEngine->RegisterObjectType("Module", sizeof(Ignition::Module), asOBJ_VALUE | asOBJ_POD));
-
-      S(asEngine->RegisterObjectMethod("Module", "void Start()", asMETHOD(Ignition::Module, Start), asCALL_THISCALL));
-      S(asEngine->RegisterObjectMethod("Module", "void Shutdown()", asMETHOD(Ignition::Module, Shutdown), asCALL_THISCALL));
-      
-      S(asEngine->RegisterObjectMethod("Module", "void Update()", asMETHOD(Ignition::Module, Update), asCALL_THISCALL));
-      S(asEngine->RegisterObjectMethod("Module", "void FixedUpdate()", asMETHOD(Ignition::Module, FixedUpdate), asCALL_THISCALL));
-      S(asEngine->RegisterObjectMethod("Module", "void LateUpdate()", asMETHOD(Ignition::Module, LateUpdate), asCALL_THISCALL));
-      S(asEngine->RegisterObjectMethod("Module", "void LateFixedUpdate()", asMETHOD(Ignition::Module, LateFixedUpdate), asCALL_THISCALL));
-
-      S(asEngine->RegisterObjectProperty("Module", "bool enabled", asOFFSET(Ignition::Module, enabled)));
-      S(asEngine->RegisterObjectProperty("Module", "Transform@ transform", asOFFSET(Ignition::Module, transform)));
-      S(asEngine->RegisterObjectProperty("Module", "const uint id", asOFFSET(Ignition::Module, id)));
-   }
-
    void RegisterMiscFunctions() {
       int r;
 
