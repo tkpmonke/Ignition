@@ -35,7 +35,7 @@ run `premake5 vs2022` and open the .sln file for windows devices. Windows isn't 
 </details>
 
 ## Future plans
-currently, the plans of this engine are undecided. Once I add lua, physics, audio, and AI pathfinding, I will most likely start working on real games using Ignition. Once that point happens, I will most likely only do bug fixes to the engine, and features that i feel like will benifit me in my games.
+currently, the plans of this engine are undecided. Once I add lua, physics, audio, and AI pathfinding, I will most likely start working on real games using Ignition. Once that point happens, I will most likely only do bug fixes to the engine, and features that i feel like will benefit me in my games.
 
 ## More Info
 if your gonna make a game in this engine (when it's ready for real games to be made in it), then please feel free to contact me whenever if you have a question about the engine or would like to suggest a feature to be implemented :D
