@@ -80,5 +80,6 @@ namespace Ignition::Scripting::AngelScript {
 
       */
       RegisterMiscFunctions();
+      RegisterExpose();
    }
 }
