@@ -14,6 +14,8 @@
 #include "utils/io.hpp"
 #include "input.hpp"
 
+#include "angelscript/angelscript.hpp"
+
 bool Ignition::IO::editor = false;
 int main() {
 #ifdef EDITOR 
@@ -45,6 +47,8 @@ int main() {
       Ignition::project.LoadProject(&window);
 
       Ignition::Rendering::directionalLight.Init();
+
+      Ignition::Scripting::AngelScript::InitilizeAngelScript();
  
       while (window.IsOpen())
       {

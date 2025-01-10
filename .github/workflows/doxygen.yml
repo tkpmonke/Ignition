@@ -33,12 +33,4 @@ jobs:
         run:
           touch docs/html/.nojekyll
       
-      - name: Deploy Page
-        run: |
-          rm -rf docs/bin/*
-          mv docs/html docs/bin
-          git config --global user.email ${{ secrets.EMAIL }}
-          git config --global user.name ${{ secrets.NAME }}
-          git add --all
-          git commit -am "Generated Doxygen Docs"
-          git push -f origin gh-pages
+      

@@ -54,3 +54,20 @@ project "ig-jolt"
    filter "configurations:Release"
       defines { "NDEBUG" }
       optimize "On"
+
+project "ig-angelscript"
+   kind           "StaticLib"
+   language       "C++"
+   cppdialect     "c++17"
+   targetdir      "../bin"
+   files      {   "angelscript/**.cpp", "angelscript/**.h" }
+   includedirs { "./", "./angelscript", "./angelscript/include" }
+
+   filter "configurations:Debug"
+      defines { "DEBUG" }
+      optimize "On"
+      symbols "On"
+
+   filter "configurations:Release"
+      defines { "NDEBUG" }
+      optimize "On"
