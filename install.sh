@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp bin/libignition.a /usr/lib/
+cp bin/libignition.so /usr/lib/
 cp bin/libig-imgui.a /usr/lib/
 cp bin/libpreglsl.a /usr/lib/
 cp bin/implosion-hub /usr/bin/

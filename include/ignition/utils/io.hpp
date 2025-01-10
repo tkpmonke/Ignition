@@ -8,6 +8,7 @@
 namespace Ignition::IO {
    extern std::string log;
    static void Print(std::string msg) { write(1, ("\033[0m"+msg+"\n").c_str(), (size_t)(msg.size()+5)); }
+   static void Print(float num) { write(1, ("\033[0m"+std::to_string(num)+"\n").c_str(), (size_t)(std::to_string(num).size()+5)); }
 
 #ifdef DEBUG
    static void DebugPrint(std::string msg) { write(1, ("\033[1;34;5mDebug > \033[21m"+msg+"\033[0m\n").c_str(), msg.size()+27); }

@@ -169,7 +169,7 @@ namespace Ignition::Scripting::Lua {
          .addFunction("CreateObject", Functions::CreateObject)
          .addFunction("GetCamera", Functions::GetCamera)
 
-         .addFunction("Print", Ignition::IO::Print)
+         .addFunction("Print", (void(*)(std::string))Ignition::IO::Print)
          .addFunction("Warning", Ignition::IO::Warning)
          .addFunction("Error", Ignition::IO::Error)
          .addFunction("FatalError", Ignition::IO::FatalError)

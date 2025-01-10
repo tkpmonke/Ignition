@@ -40,51 +40,13 @@ namespace Ignition::Physics {
       friend class Rigidbody;
       friend class Colider;
 
-      void Init() {
-         RegisterDefaultAllocator();
-         Factory::sInstance = new Factory();
-         RegisterTypes();
+      void Init();
 
-         allocator = std::unique_ptr<TempAllocatorImpl>(new TempAllocatorImpl(100*1024*1024));
+      void Update(std::function<void()> physicsUpdate, std::function<void()> latePhysicsUpdate);
 
-         jobSystem = std::unique_ptr<JobSystemThreadPool>(new JobSystemThreadPool(cMaxPhysicsJobs, cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1));
+      void Shutdown();
 
-         physicsSystem.Init(
-            maxBodies, numBodyMutexes, maxBodyPairs, maxContactConstraints,
-            broad_phase_layer_interface,
-            object_vs_broadphase_layer_filter,
-            object_vs_object_layer_filter
-         );
-         
-      }
-
-      void Update(std::function<void()> physicsUpdate, std::function<void()> latePhysicsUpdate) {
-         static float pt = 0;
-         float time = glfwGetTime();
-         this->deltaTime = time-pt;
-         pt = time;
-
-         static float accumulator = 0;
-         accumulator += deltaTime;
-
-         while (accumulator >= fixedTimeStep) {
-            physicsUpdate();
-            accumulator -= fixedTimeStep;
-
-            physicsSystem.Update(fixedTimeStep, 1, allocator.get(), jobSystem.get());
-            latePhysicsUpdate();
-         }
-      }
-
-      void Shutdown() {
-         UnregisterTypes();
-         delete Factory::sInstance;
-         Factory::sInstance = nullptr;
-      }
-
-      void OptimizeCollisionPerformace() {
-         physicsSystem.OptimizeBroadPhase();
-      }
+      void OptimizeCollisionPerformace();
 
    private:
       PhysicsSystem physicsSystem;
