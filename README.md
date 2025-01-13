@@ -9,6 +9,7 @@ Right now Ignition is only avalible on the AUR, with APT planned in the near fut
 # you can use your favorite pacman wrapper
 yay -S implosion
 ```
+note that the latest release is the only one on the aur, for the most up to date builds, you need to build from source 
 
 ## Compile From Source
 <details>
