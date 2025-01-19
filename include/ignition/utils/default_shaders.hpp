@@ -3,12 +3,12 @@
 #include <string>
 
 const std::string unlit_vertex = 
-"#version 330\n"
+"#version 450 core\n"
 "layout(location = 0) in vec3 position;\n"
 "layout(location = 1) in vec3 normal;\n"
 "layout(location = 2) in vec2 uv;\n"
-"uniform mat4 projection;"
-"uniform mat4 model;"
+"uniform mat4 projection;\n"
+"uniform mat4 model;\n"
 "out vec2 tex_uv;\n"
 "out vec3 normals;\n"
 "out vec3 frag_pos;\n"
@@ -20,7 +20,7 @@ const std::string unlit_vertex =
 "}\0";
 
 const std::string unlit_fragment = 
-"#version 330\n"
+"#version 450 core\n"
 "struct Material {\n"
 "  vec4 color;\n"
 "  sampler2D albedo;\n"
@@ -32,8 +32,20 @@ const std::string unlit_fragment =
 "  o = material.color * texture(material.albedo, tex_uv);\n"
 "}\0";
 
+const std::string no_texture_unlit_fragment = 
+"#version 450 core\n"
+"struct Material {\n"
+"  vec4 color;\n"
+"};\n"
+"uniform Material material;\n"
+"out vec4 o;\n"
+"in vec2 tex_uv;\n"
+"void main() {\n"
+"  o = material.color;\n"
+"}\0";
+
 const std::string lit_fragment = 
-"#version 430\n"
+"#version 450 core\n"
 
 "struct Material {\n"
 "  vec4 color;\n"

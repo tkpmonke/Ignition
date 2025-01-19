@@ -111,8 +111,8 @@ namespace Ignition::Rendering {
             glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
             this->shader.SetInt(0, "material.albedo");
          }
-         this->shader.SetVec4(this->shader.color*this->shader.intensity, "material.color");
       }
+      this->shader.SetVec4(this->shader.color*this->shader.intensity, "material.color");
       if (this->shader.type == ShaderType_Lit)
       {
          glBindSampler(0, shader.albedo.sampler);
