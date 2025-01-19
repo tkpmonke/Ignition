@@ -69,6 +69,7 @@ namespace Ignition {
    int Scene::CreateObject() 
    {
       Ignition::Object o = Ignition::Object();                                                  
+      o.enabled = true;
       o.name = "Object " + std::to_string(objects.size());                                     
       o.tag = "Default";                                                      
       o.id = objects.size() > 0 ? objects.at(objects.size()-1).id+1 : 0;
@@ -99,6 +100,10 @@ namespace Ignition {
 
       Rendering::currentVao = std::numeric_limits<int>::max();
       Rendering::currentProgram = std::numeric_limits<int>::max();
+   }
+
+   void Scene::CompileScripts() {
+
    }
 
    void Scene::WriteSceneToDisk()
@@ -209,6 +214,10 @@ namespace Ignition {
    }
 
    void Scene::Shutdown() {
+      for (auto& o : objects) {
+         o.Shutdown();
+      }
+
       texture_lookup_table.clear();
       model_lookup_table.clear();
       shader_lookup_table.clear();

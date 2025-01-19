@@ -19,7 +19,7 @@ project "ig-imgui"
       defines { "NDEBUG" }
       optimize "On"
 
--- GLSL preprocessor
+--[[ GLSL preprocessor
 project "preglsl"
    kind           "StaticLib"
    language       "C++"
@@ -36,6 +36,7 @@ project "preglsl"
    filter "configurations:Release"
       defines { "NDEBUG" }
       optimize "On"
+--]]
 
 -- Jolt Physics
 project "ig-jolt"

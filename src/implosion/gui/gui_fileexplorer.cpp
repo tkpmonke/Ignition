@@ -7,6 +7,19 @@
 #include <algorithm> // for std::sort
 #include <cctype>    // for std::tolower
 
+#define IGNITION_AS_TEMPLATE(x) \
+"class " + x + " : IgnitionScriptBase {\n" \
+"  // called before first frame\n" \
+"  void Start() {\n" \
+"\t\t\n" \
+"  }\n" \
+"\n" \
+"  // called every frame\n" \
+"  void Update() {\n" \
+"\t\t\n" \
+"  }\n" \
+"}"
+
 namespace Implosion {
    
 
@@ -99,6 +112,8 @@ namespace Implosion {
                         type = files.additionalTextures.igscn;
                      } else if (s == ".lua") {
                         type = files.additionalTextures.lua_script;
+                     } else if (s == ".as") {
+                        type = files.additionalTextures.angelscript_script;
                      }
                   }
 
@@ -171,6 +186,10 @@ namespace Implosion {
                file.close();
             } else {
                std::ofstream file(files.activeDirectory / (std::filesystem::path)b);
+               if (((std::filesystem::path)b).extension() == ".as") {
+                  file << IGNITION_AS_TEMPLATE(((std::filesystem::path)b).filename().replace_extension("").string());
+               }
+
                file.close();
             }
 

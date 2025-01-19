@@ -1,5 +1,6 @@
 #include "angelscript/angelscript.hpp"
 #include "types/transform.hpp"
+#include "utils/io.hpp"
 
 #include <new>
 
@@ -86,13 +87,13 @@ namespace Ignition::Scripting::AngelScript {
 
       S(asEngine->RegisterObjectMethod("Transform", "void LookAt(Vector3& in pos)", asMETHOD(Ignition::Transform, LookAt), asCALL_THISCALL));
 
-      S(asEngine->RegisterObjectProperty("Transform", "Vector3 postition", asOFFSET(Ignition::Transform, position)));
-      S(asEngine->RegisterObjectProperty("Transform", "Vector3 rotation", asOFFSET(Ignition::Transform, position)));
-      S(asEngine->RegisterObjectProperty("Transform", "Vector3 scale", asOFFSET(Ignition::Transform, position)));
+      S(asEngine->RegisterObjectProperty("Transform", "Vector3 position", asOFFSET(Ignition::Transform, position)));
+      S(asEngine->RegisterObjectProperty("Transform", "Vector3 rotation", asOFFSET(Ignition::Transform, rotation)));
+      S(asEngine->RegisterObjectProperty("Transform", "Vector3 scale", asOFFSET(Ignition::Transform, scale)));
       
-      S(asEngine->RegisterObjectProperty("Transform", "Vector3 forward", asOFFSET(Ignition::Transform, position)));
-      S(asEngine->RegisterObjectProperty("Transform", "Vector3 right", asOFFSET(Ignition::Transform, position)));
-      S(asEngine->RegisterObjectProperty("Transform", "Vector3 up", asOFFSET(Ignition::Transform, position)));
+      S(asEngine->RegisterObjectProperty("Transform", "Vector3 forward", asOFFSET(Ignition::Transform, forward)));
+      S(asEngine->RegisterObjectProperty("Transform", "Vector3 right", asOFFSET(Ignition::Transform, right)));
+      S(asEngine->RegisterObjectProperty("Transform", "Vector3 up", asOFFSET(Ignition::Transform, up)));
    }
    void RegisterMiscFunctions() {
       int r;

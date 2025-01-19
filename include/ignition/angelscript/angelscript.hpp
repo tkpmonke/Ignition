@@ -2,11 +2,17 @@
 
 #include <angelscript/include/angelscript.h>
 
+#include <string>
+#include <unordered_set>
 namespace Ignition::Scripting::AngelScript {
    extern asIScriptEngine* asEngine;
+   extern asIScriptModule* igModule;
 
    void InitilizeAngelScript();
+   std::string PreprocessScript(const std::string& filePath, std::unordered_set<std::string>& includedFiles); 
    void RegisterAll();
+
+   void Shutdown();
 
    // general
    void RegisterIgnitionScript();
@@ -14,6 +20,7 @@ namespace Ignition::Scripting::AngelScript {
    void RegisterTransform();
    void RegisterObject();
    void RegisterCamera();
+   void RegisterModule();
 
    // rendering
    void RegisterModel();
@@ -31,4 +38,5 @@ namespace Ignition::Scripting::AngelScript {
    // random
    void RegisterMiscFunctions();
    void RegisterExpose();
+   void RegisterMathFunctions();
 }

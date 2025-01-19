@@ -22,7 +22,7 @@ int main() {
    Ignition::IO::DebugPrint("uh this shouldn't be an editor");
 #endif
    std::filesystem::path exePath = Ignition::IO::ReadTextFile("/proc/self/exe");
-   Ignition::IO::SetProjectHome(exePath.parent_path().string());
+   Ignition::IO::SetProjectHome(exePath.parent_path().string() + '/');
 
 
    bool applicationOpen = true;
@@ -44,11 +44,10 @@ int main() {
       Ignition::Physics::physicsWorld = std::make_shared<Ignition::Physics::World>();
       Ignition::Physics::physicsWorld->Init();
 
+      Ignition::Scripting::AngelScript::InitilizeAngelScript();
       Ignition::project.LoadProject(&window);
 
       Ignition::Rendering::directionalLight.Init();
-
-      Ignition::Scripting::AngelScript::InitilizeAngelScript();
  
       while (window.IsOpen())
       {
@@ -66,16 +65,12 @@ int main() {
 
          camera.EndRender(false);
          
-         int w,h;
-         glfwGetFramebufferSize(window, &w,&h);
-         camera.size.x = w;
-         camera.size.y = h;
-         glViewport(0, 0, w, h);
-         window.Resize(w,h);
+         
 
       }
 
       Ignition::scene.Shutdown();
+      Ignition::Scripting::AngelScript::Shutdown();
       Ignition::Physics::physicsWorld->Shutdown();
       window.Shutdown();
    }

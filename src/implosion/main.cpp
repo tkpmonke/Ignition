@@ -37,7 +37,9 @@ int main(int argc, char** argv)
       if (strcmp(argv[i], "-f") == 0
        || strcmp(argv[i], "--project") == 0)
       {
-         Ignition::IO::SetProjectHome(argv[++i]);
+         i++;
+         Ignition::IO::SetProjectHome(argv[i] + 
+               (std::string)(((std::string)argv[i]).at(((std::string)argv[i]).size()-1) == '/' ? "" : "/"));
          Ignition::IO::DebugPrint("Project Directory Set To : " + (std::string)argv[i]);
       }
       if (strcmp(argv[i], "-i") == 0)

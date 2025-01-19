@@ -45,6 +45,13 @@ namespace Ignition {
          }
       }
 
+      virtual void Shutdown() {
+         for (auto& m : modules) {
+            if (!Ignition::IO::InEditor() || m->runs_in_editor())  
+               m->Shutdown();
+         }
+      }
+
       Object* parent;
       
       void AddModule(std::shared_ptr<Module>);
@@ -83,6 +90,17 @@ namespace Ignition {
 
       bool operator==(const Object& other) const {
          return id == other.id;
+      }
+
+      Object& operator=(const Object& other) {
+         if (this != &other) {
+            this->id = other.id;
+            this->modules.clear();
+            this->modules = other.modules;
+            this->transform = other.transform;
+            this->name = other.name;
+         }
+         return *this;
       }
       
    private:

@@ -7,9 +7,9 @@ namespace Ignition {
    {
       this->modules.push_back(mod);
       modules.at(modules.size()-1)->id = modules.size();
-      mod->transform = &this->transform;
+      mod->transform = &transform;
       mod->object = this;
-      if (!Ignition::IO::InEditor() || mod->runs_in_editor() || mod->mod_type() == "Script")
+      if (!Ignition::IO::InEditor() || mod->runs_in_editor())
          mod->Start();
    }
 
