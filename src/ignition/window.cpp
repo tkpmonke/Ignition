@@ -109,7 +109,7 @@ namespace Ignition {
 #endif
       
       Ignition::IO::DebugPrint("Creating FrameBuffer Shader");
-      s = Rendering::Shader(quadVertex, quadFragment, Rendering::ShaderType::Unlit);
+      s = Rendering::Shader(quadVertex, quadFragment, Rendering::ShaderType_Unlit);
 
       Ignition::IO::DebugPrint("Creating FrameBuffer Quad");
       unsigned int VBO;

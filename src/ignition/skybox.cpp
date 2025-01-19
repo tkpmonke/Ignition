@@ -1,4 +1,5 @@
 #include "skybox.hpp"
+#include "types/shader.hpp"
 #include "modules/rendering/meshrenderer.hpp"
 #include "shapes/cube.hpp"
 #include "camera.hpp"
@@ -27,10 +28,10 @@ namespace Ignition {
    Skybox::Skybox(std::vector<std::string> textures) {
       o = Object();
       tex.SetType(IGNITION_CUBE_MAP);
-      tex.SetFlags(Rendering::Linear);
+      tex.SetFlags(Rendering::TextureFlags_Linear);
       tex.LoadData(textures);
 
-      Rendering::Shader s = Rendering::Shader(skybox_vert, skybox_frag, Rendering::Unlit);
+      Rendering::Shader s = Rendering::Shader(skybox_vert, skybox_frag, Rendering::ShaderType_Unlit);
       s.albedo = tex;
 
       Rendering::MeshRenderer m;
@@ -44,10 +45,10 @@ namespace Ignition {
    Skybox::Skybox(std::vector<const char*> textures, int w, int h, int nr, std::string name) {
       o = Object();
       tex.SetType(IGNITION_CUBE_MAP);
-      tex.SetFlags(Rendering::Linear);
+      tex.SetFlags(Rendering::TextureFlags_Linear);
       tex.LoadData(textures, w, h, nr, name);
 
-      Rendering::Shader s = Rendering::Shader(skybox_vert, skybox_frag, Rendering::Unlit);
+      Rendering::Shader s = Rendering::Shader(skybox_vert, skybox_frag, Rendering::ShaderType_Unlit);
       s.albedo = tex;
 
       Rendering::MeshRenderer m;
@@ -67,6 +68,7 @@ namespace Ignition {
 
       glUseProgram(ptr->shader.program);
 
+      glBindSampler(0, tex.sampler);
       glActiveTexture(GL_TEXTURE0 ); 
       glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
       ptr->shader.SetInt(0, "tex");
@@ -75,6 +77,7 @@ namespace Ignition {
 
       Matrix4 model = Matrix4(1.f);
       model = glm::translate(model, o.transform.position);
+      model = glm::scale(model, glm::vec3(100, 100, 100));
       ptr->shader.SetMatrix4(model, "model");
 
       ptr->shader.SetMatrix4(Ignition::mainCamera->ViewProjectionMatrix(), "projection");

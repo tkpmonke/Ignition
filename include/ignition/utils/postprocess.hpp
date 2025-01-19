@@ -7,17 +7,17 @@
 namespace Ignition::Rendering {
    class PostProcess {
    public:
-      PostProcess(std::string data, Window* window) : window(window), shader(data, ShaderType::Compute) {}
+      PostProcess(std::string data, Window* window) : window(window), shader(data, ShaderType_Compute) {}
       PostProcess(std::string data, Window* window, int passes) : 
-                  window(window), shader(data, ShaderType::Compute),
+                  window(window), shader(data, ShaderType_Compute),
                   passes(passes) {}
 
       PostProcess(std::string data, Window* window, Vector2 kernalSize) : 
-                  window(window), shader(data, ShaderType::Compute),
+                  window(window), shader(data, ShaderType_Compute),
                   kernalSize(kernalSize) {}
 
       PostProcess(std::string data, Window* window, int passes, Vector2 kernalSize) : 
-                  window(window), shader(data, ShaderType::Compute),
+                  window(window), shader(data, ShaderType_Compute),
                   passes(passes), kernalSize(kernalSize) {}
       void Render();
          

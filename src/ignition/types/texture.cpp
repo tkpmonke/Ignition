@@ -7,6 +7,44 @@
 int i = 0;
 namespace Ignition::Rendering {
    std::unordered_map<std::string, int> texture_lookup_table;
+
+   void Texture::LoadFlags() {
+
+      if (this->sampler == 0)
+         glGenSamplers(1, &this->sampler);
+
+      glBindSampler(0, this->sampler);
+      TextureFlags f = static_cast<TextureFlags>(flags);
+
+      if ((f & TextureFlags_Repeat)) {
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_REPEAT);
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_REPEAT);
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_R, GL_REPEAT);
+      }
+      if ((f & TextureFlags_Clamp)) {
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+      }
+      if ((f & TextureFlags_Mirrored_Repeat)) {
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+         glSamplerParameteri(sampler, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
+      }
+      
+      
+      if ((f & TextureFlags_Nearest)) {
+         glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+         glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      }
+      if ((f & TextureFlags_Linear)) {
+         glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+         glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      }
+
+
+   }
+
    void Texture::LoadData(std::string file)
    {
       int w, h, nr;
@@ -51,6 +89,7 @@ namespace Ignition::Rendering {
          if (name == key)
          {
             this->location = value;
+            LoadFlags();
             return;
          }
       }
@@ -63,7 +102,6 @@ namespace Ignition::Rendering {
    }
    
    void Texture::LoadData(unsigned char* data, int w, int h, int nr, std::string name, int i) {
-
       GLenum texType;
       switch (this->type) {
          case(IGNITION_2D):
@@ -78,35 +116,9 @@ namespace Ignition::Rendering {
          glGenTextures(1, &this->location);
          glBindTexture(texType, this->location);
       }
-      if (flags & TextureFlags::Repeat) {
-         glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-         glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
-         glTexParameteri(texType, GL_TEXTURE_WRAP_R, GL_REPEAT);
-      }
-      if (flags & TextureFlags::Clamp) {
-         glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-         glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-         glTexParameteri(texType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-      }
-      if (flags & TextureFlags::Mirrored_Repeat) {
-         glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-         glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-         glTexParameteri(texType, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
-      }
-      
-      if (flags & TextureFlags::Linear) {
-         glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-         glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      }
-      if (flags & TextureFlags::Nearest) {
-         glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-         glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      }
 
-
-      glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+      glGenSamplers(1, &this->sampler);
+      LoadFlags();
       GLenum format;
       switch (nr) {
          case(1):

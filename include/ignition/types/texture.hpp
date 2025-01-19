@@ -22,12 +22,12 @@ namespace Ignition::Rendering {
    extern std::unordered_map<std::string, int> texture_lookup_table;
 
    enum TextureFlags {
-      Repeat,
-      Clamp,
-      Mirrored_Repeat,
-      
-      Nearest,
-      Linear
+      TextureFlags_None = 0,
+      TextureFlags_Repeat = 1 << 0,
+      TextureFlags_Clamp = 1 << 1,
+      TextureFlags_Mirrored_Repeat = 1 << 2,
+      TextureFlags_Nearest = 1 << 3,
+      TextureFlags_Linear = 1 << 4
    };
 
    class Texture {
@@ -36,6 +36,8 @@ namespace Ignition::Rendering {
 
       void SetFlags(int flags) { this->flags = flags; }
       void SetType(int type) { this->type = type; }
+
+      void LoadFlags();
 
       /// Load data from file
       void LoadData(std::string file);
@@ -51,12 +53,16 @@ namespace Ignition::Rendering {
       /// location of the texture (used by opengl)
       unsigned int location = 0;
 
+      /// location of sampler object (used by opengl)
+      unsigned int sampler = 0;
+
       /// name of texture / path of texture
       std::string name;
       operator int() const { return location; };
       int type = IGNITION_2D;
+
+      int flags = 0;
    private:
-      int flags;
       void LoadData(unsigned char* data, int w, int h, int nr, std::string name, int i);
    };
 

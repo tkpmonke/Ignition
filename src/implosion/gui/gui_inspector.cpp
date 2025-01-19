@@ -28,6 +28,7 @@
                            ImGui::EndDragDropTarget();                                                            \
                         }
 
+
 #define MODULE_HEADER_MENU(name) \
    if (ImGui::BeginPopupContextItem((name+(std::string)"_"+mod->mod_type()).data())) {\
       if (ImGui::MenuItem(("Remove " + mod->mod_type()).data())) {\
@@ -84,6 +85,7 @@ namespace Implosion {
             for (std::shared_ptr<Ignition::Module> mod : obj->GetModules()) {
                if (ImGui::CollapsingHeader(VAR(mod->mod_type()))) {
                   ImGui::Checkbox(("Enabled##"+mod->mod_type()).data(), &mod->enabled);
+                  ImGui::Separator();
                   if (mod->mod_type() == "Mesh Renderer") {
                      auto m = std::dynamic_pointer_cast<Ignition::Rendering::MeshRenderer>(mod);
                      ImGui::BeginChild(VAR("##Mesh_Renderer"), ImVec2(0, 150));
@@ -112,22 +114,62 @@ namespace Implosion {
                         selectedObject = nullptr;
                      GUI_END_DROP_TARGET
 
+                     ImGui::Spacing();
+
                      ImGui::InputText(VAR("Texture"), &m->shader.albedo.name);
                      GUI_BEGIN_DROP_TARGET
                         std::string s = (const char*)payload->Data;
                         m->shader.albedo.LoadData(s.substr(Ignition::IO::GetProjectHome().size(), s.size()));
                      GUI_END_DROP_TARGET
 
+                     if (ImGui::BeginCombo(VAR("Texture Flags"), "Select Flags")) {
+                        bool repeat =           m->shader.albedo.flags & Ignition::Rendering::TextureFlags_Repeat;
+                        bool clamp =            m->shader.albedo.flags & Ignition::Rendering::TextureFlags_Clamp;
+                        bool mirroredRepeat =   m->shader.albedo.flags & Ignition::Rendering::TextureFlags_Mirrored_Repeat;
+                        bool nearest =          m->shader.albedo.flags & Ignition::Rendering::TextureFlags_Nearest;
+                        bool linear =           m->shader.albedo.flags & Ignition::Rendering::TextureFlags_Linear;
+
+                        if (ImGui::Checkbox("Repeat", &repeat)) {
+                           if (repeat) m->shader.albedo.flags |= Ignition::Rendering::TextureFlags_Repeat;
+                           else m->shader.albedo.flags &= ~Ignition::Rendering::TextureFlags_Repeat;
+                           m->shader.albedo.LoadFlags();
+                        }
+                        if (ImGui::Checkbox("Clamp", &clamp)) {
+                            if (clamp) m->shader.albedo.flags |= Ignition::Rendering::TextureFlags_Clamp;
+                            else m->shader.albedo.flags &= ~Ignition::Rendering::TextureFlags_Clamp;
+                           m->shader.albedo.LoadFlags();
+                        }
+                        if (ImGui::Checkbox("Mirrored Repeat", &mirroredRepeat)) {
+                            if (mirroredRepeat) m->shader.albedo.flags |= Ignition::Rendering::TextureFlags_Mirrored_Repeat;
+                            else m->shader.albedo.flags &= ~Ignition::Rendering::TextureFlags_Mirrored_Repeat;
+                           m->shader.albedo.LoadFlags();
+                        }
+                        ImGui::Separator();
+                        if (ImGui::Checkbox("Nearest", &nearest)) {
+                            if (nearest) m->shader.albedo.flags |= Ignition::Rendering::TextureFlags_Nearest;
+                            else m->shader.albedo.flags &= ~Ignition::Rendering::TextureFlags_Nearest;
+                           m->shader.albedo.LoadFlags();
+                        }
+                        if (ImGui::Checkbox("Linear", &linear)) {
+                            if (linear) m->shader.albedo.flags |= Ignition::Rendering::TextureFlags_Linear;
+                            else m->shader.albedo.flags &= ~Ignition::Rendering::TextureFlags_Linear;
+                           m->shader.albedo.LoadFlags();
+                        }
+
+                        ImGui::EndCombo();
+                     }
+
+                     ImGui::Separator();
                      if (ImGui::BeginCombo(VAR("##Shader"), "Shader")) {
                         if (ImGui::Button("Unlit")) {
                            auto tex = m->shader.albedo;
-                           m->LoadShader(Ignition::Rendering::Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::Unlit));
+                           m->LoadShader(Ignition::Rendering::Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::ShaderType_Unlit));
                            m->shader.albedo = tex;
                         }
 
                         if (ImGui::Button("Lit")) {
                            auto tex = m->shader.albedo;
-                           m->LoadShader(Ignition::Rendering::Shader(unlit_vertex, lit_fragment, Ignition::Rendering::Lit));
+                           m->LoadShader(Ignition::Rendering::Shader(unlit_vertex, lit_fragment, Ignition::Rendering::ShaderType_Lit));
                            m->shader.albedo = tex;
                         }
 
@@ -244,9 +286,9 @@ namespace Implosion {
                   if (ImGui::Button("Mesh Renderer")) {
                      Ignition::Rendering::MeshRenderer m;
                      Ignition::Rendering::Shader s = 
-                        Ignition::Rendering::Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::ShaderType::Unlit);
+                        Ignition::Rendering::Shader(unlit_vertex, unlit_fragment, Ignition::Rendering::ShaderType_Unlit);
                      s.albedo = Ignition::Rendering::Texture();
-                     s.albedo.SetFlags(Ignition::Rendering::TextureFlags::Repeat | Ignition::Rendering::TextureFlags::Nearest);
+                     s.albedo.SetFlags(Ignition::Rendering::TextureFlags_Repeat | Ignition::Rendering::TextureFlags_Nearest);
                      s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");
 
                      m.LoadShader(s);

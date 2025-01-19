@@ -103,16 +103,19 @@ namespace Ignition::Rendering {
 
       this->shader.SetMatrix4(model, "model");
 
-      if (this->shader.type != ShaderType::None) {
+      if (this->shader.type != ShaderType_None) {
          if (shader.albedo.type == IGNITION_2D) {
+
+            glBindSampler(0, shader.albedo.sampler);
             glActiveTexture(GL_TEXTURE0 ); 
             glBindTexture(GL_TEXTURE_2D, this->shader.albedo);
             this->shader.SetInt(0, "material.albedo");
          }
          this->shader.SetVec4(this->shader.color*this->shader.intensity, "material.color");
       }
-      if (this->shader.type == ShaderType::Lit)
+      if (this->shader.type == ShaderType_Lit)
       {
+         glBindSampler(0, shader.albedo.sampler);
          this->shader.SetFloat(32, "material.shininess");
          this->shader.SetBool(false, "material.use_specular_map");
          this->shader.SetVec3(Vector3(0.5f), "material.specular");
@@ -168,6 +171,7 @@ namespace Ignition::Rendering {
 
       Ignition::IO::WriteString(
             shader.albedo.name);
+      Ignition::IO::Write8(shader.albedo.flags);
    }
 
    void MeshRenderer::Deserialize() {
@@ -183,19 +187,17 @@ namespace Ignition::Rendering {
 
       int type = Ignition::IO::Read8(); 
       switch(type) {
-         case(Unlit): {
+         case(ShaderType_Unlit): {
             Shader s = Shader(unlit_vertex, unlit_fragment, type);
-            s.albedo.SetFlags(TextureFlags::Linear);
             LoadShader(s);
             break;
          }
-         case(Lit): {
+         case(ShaderType_Lit): {
             Shader s = Shader(unlit_vertex, lit_fragment, type);
-            s.albedo.SetFlags(TextureFlags::Linear);
             LoadShader(s);
             break;
          }
-         case(Compute): {
+         case(ShaderType_Compute): {
             Shader s = Shader(unlit_vertex, type);
             LoadShader(s);
             break;
@@ -211,11 +213,10 @@ namespace Ignition::Rendering {
 
       std::string s = Ignition::IO::ReadString();
       shader.albedo = Texture(); 
-      shader.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Nearest);
+      shader.albedo.SetFlags(Ignition::IO::Read8());
       if (s == "Ignition_Grid")
-         shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, s);              
+         shader.albedo.LoadData((unsigned char*)grid_texture, GRID_TEXTURE_SIZE_X, GRID_TEXTURE_SIZE_Y, GRID_TEXTURE_BPP, s);              
       else 
-         //shader.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, s);              
          shader.albedo.LoadData(s);
       
    }

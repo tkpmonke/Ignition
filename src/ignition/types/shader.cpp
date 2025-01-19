@@ -88,9 +88,9 @@ namespace Ignition::Rendering {
       char infoLog[512];
       uint shader;
 
-      assert(type == ShaderType::Compute);
+      assert(type == ShaderType_Compute);
       // should always be true
-      if (type == ShaderType::Compute)
+      if (type == ShaderType_Compute)
       {
          shader = glCreateShader(GL_COMPUTE_SHADER);
          glShaderSource(shader, 1, &shaderCode, NULL);
