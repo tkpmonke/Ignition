@@ -89,7 +89,7 @@ namespace Ignition {
             int i = m->shader.program;
             m->shader.program = program;
             auto t = m->shader.type;
-            m->shader.type = ShaderType::None;
+            m->shader.type = ShaderType_None;
             
             m->Update();
 

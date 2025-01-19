@@ -32,42 +32,42 @@ namespace Implosion {
       ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)*this->window, true);
       ImGui_ImplOpenGL3_Init("#version 330");
 
-      this->files.folder.SetFlags(Ignition::Rendering::Linear);
+      this->files.folder.SetFlags(Ignition::Rendering::TextureFlags_Linear);
       this->files.folder.LoadData(        FOLDER_IMAGE_PIXEL_DATA,
                                           FOLDER_IMAGE_WIDTH,
                                           FOLDER_IMAGE_HEIGHT,
                                           FOLDER_IMAGE_BYTES_PER_PIXEL,
                                           "Implosion_Folder");
 
-      this->files.empty_folder.SetFlags(Ignition::Rendering::Linear);
+      this->files.empty_folder.SetFlags(Ignition::Rendering::TextureFlags_Linear);
       this->files.empty_folder.LoadData(  EMPTY_FOLDER_IMAGE_PIXEL_DATA,
                                           EMPTY_FOLDER_IMAGE_WIDTH,
                                           EMPTY_FOLDER_IMAGE_HEIGHT,
                                           EMPTY_FOLDER_IMAGE_BYTES_PER_PIXEL,
                                           "Implosion_Empty_Folder");
 
-      this->files.file.SetFlags(Ignition::Rendering::Linear);
+      this->files.file.SetFlags(Ignition::Rendering::TextureFlags_Linear);
       this->files.file.LoadData(          FILE_IMAGE_PIXEL_DATA,
                                           FILE_IMAGE_WIDTH,
                                           FILE_IMAGE_HEIGHT,
                                           FILE_IMAGE_BYTES_PER_PIXEL,
                                           "Implosion_File");
 
-      this->files.additionalTextures.igscn.SetFlags(Ignition::Rendering::Linear);
+      this->files.additionalTextures.igscn.SetFlags(Ignition::Rendering::TextureFlags_Linear);
       this->files.additionalTextures.igscn.LoadData(  igscn_PIXEL_DATA,
                                                       igscn_WIDTH,
                                                       igscn_HEIGHT,
                                                       igscn_BYTES_PER_PIXEL,
                                                       "Implosion_IGSCN");
       
-      this->files.additionalTextures.lua_script.SetFlags(Ignition::Rendering::Linear);
+      this->files.additionalTextures.lua_script.SetFlags(Ignition::Rendering::TextureFlags_Linear);
       this->files.additionalTextures.lua_script.LoadData(  LUA_SCRIPT_PIXEL_DATA,
                                                       LUA_SCRIPT_WIDTH,
                                                       LUA_SCRIPT_HEIGHT,
                                                       LUA_SCRIPT_BYTES_PER_PIXEL,
                                                       "Implosion_LUA_SCRIPT");
       
-      this->files.additionalTextures.angelscript_script.SetFlags(Ignition::Rendering::Linear);
+      this->files.additionalTextures.angelscript_script.SetFlags(Ignition::Rendering::TextureFlags_Linear);
       this->files.additionalTextures.angelscript_script.LoadData(  ANGELSCRIPT_PIXEL_DATA,
                                                       ANGELSCRIPT_WIDTH,
                                                       ANGELSCRIPT_HEIGHT,

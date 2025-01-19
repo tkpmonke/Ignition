@@ -42,7 +42,7 @@ const char* gridFragmentShader =
 "  if (enableDistanceFalloff == 1) {"
 "     a = -expo(distance(vec3(camera.x, opos.y, camera.z), opos)/dist, 5.7, distanceFalloff)+1*color.a;"
 "  }"
-"  if (a <= -0.5f)"
+"  if (a <= 0)"
 "     discard;"
 "  o = vec4(color.rgb, a*alpha);"
 "}";
@@ -87,7 +87,7 @@ const char* gridXYFragmentShader =
 namespace Implosion {
    void GUI::InitGrid()
    {
-      Shader s = Shader(gridVertexShader, gridFragmentShader, ShaderType::Unlit);
+      Shader s = Shader(gridVertexShader, gridFragmentShader, ShaderType_Unlit);
       this->gridProgram = s.program;
       int gridCount = static_cast<int>(this->gridSize / this->gridSpacing );
       std::vector<float> vertices;
@@ -96,7 +96,7 @@ namespace Implosion {
       {
          if (i != 0) {
             
-            a = i % 5  == 0 ? 0.75f : 0.5f;
+            a = i % 5  == 0 ? 0.5f : 0.25f;
             a = i % 10 == 0 ? 1 : a;
 
             vertices.push_back(i * this->gridSpacing );
@@ -156,7 +156,7 @@ namespace Implosion {
       xyVertices.push_back(0);
       xyVertices.push_back(1.0f);
 
-      s = Shader(gridXYVertexShader, gridXYFragmentShader, ShaderType::Unlit);
+      s = Shader(gridXYVertexShader, gridXYFragmentShader, ShaderType_Unlit);
       this->gridXYProgram = s.program;
 
       glGenVertexArrays(1, &this->gridXYVao);

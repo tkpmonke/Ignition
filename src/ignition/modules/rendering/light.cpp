@@ -54,7 +54,7 @@ namespace Ignition::Rendering {
       Camera cam = *Ignition::mainCamera;
 
       if (program == -2) {
-         Shader s = Shader(vert, frag, ShaderType::None);
+         Shader s = Shader(vert, frag, ShaderType_None);
          program = s.program;
       }
       

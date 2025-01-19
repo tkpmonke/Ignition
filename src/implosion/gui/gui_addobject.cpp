@@ -16,10 +16,10 @@
 using namespace Ignition::Rendering;
 
 #define CREATE_SHADER()                                                                     \
-         Shader s = Shader(unlit_vertex, unlit_fragment, ShaderType::Unlit);                       \
+         Shader s = Shader(unlit_vertex, unlit_fragment, ShaderType_Unlit);                       \
          s.albedo = Texture();                                                                           \
-         s.albedo.SetFlags(TextureFlags::Repeat | TextureFlags::Linear);                                \
-         s.albedo.LoadData((unsigned char*)grid_texture, 8, 8, 3, "Ignition_Grid");              
+         s.albedo.SetFlags(TextureFlags_Repeat | TextureFlags_Nearest);                                \
+         s.albedo.LoadData((unsigned char*)grid_texture, GRID_TEXTURE_SIZE_X, GRID_TEXTURE_SIZE_Y, GRID_TEXTURE_BPP, "Ignition_Grid");              
 
 namespace Implosion {
    void GUI::AddObjectMenu()

@@ -93,9 +93,9 @@ namespace Ignition::Scripting::Lua {
          .endClass()
 
          .beginNamespace("ShaderType")
-            .addProperty("Lit", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::Lit);})
-            .addProperty("Unlit", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::Unlit);})
-            .addProperty("Compute", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::Compute);})
+            .addProperty("Lit", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::ShaderType_Lit);})
+            .addProperty("Unlit", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::ShaderType_Unlit);})
+            .addProperty("Compute", +[](){return static_cast<int>(Ignition::Rendering::ShaderType::ShaderType_Compute);})
          .endNamespace()
 
          .beginClass<Ignition::Rendering::Shader>("Shader")
