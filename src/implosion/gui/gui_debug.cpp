@@ -82,7 +82,7 @@ namespace Implosion {
 #ifdef __linux__
             ImGui::SeparatorText("CPU Info");
             static int g = 0;
-            if (g % 5 == 0) {
+            if (g % 10 == 0) {
                this->coreCount=0;
                this->cpuSpeed=0;
                std::ifstream cpu("/proc/cpuinfo");
@@ -226,6 +226,7 @@ namespace Implosion {
             } else if (selected == "Ignition_Window_Color") {
                ImGui::Image((void*)(intptr_t)this->window->color, ImVec2(this->camera->size.x,this->camera->size.y));
             } else {
+               ImGui::Text("Texture Location: %i", Ignition::Rendering::texture_lookup_table[selected]);
                ImGui::Image((void*)(intptr_t)Ignition::Rendering::texture_lookup_table[selected], ImVec2(w-40,w-40));
             }
          }

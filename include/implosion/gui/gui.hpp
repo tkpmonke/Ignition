@@ -100,5 +100,6 @@ namespace Implosion {
       } files;
    private:
       bool openAssetLoader = false;
+      Ignition::Rendering::Texture tex;
    };
 }

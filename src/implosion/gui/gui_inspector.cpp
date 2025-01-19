@@ -15,6 +15,7 @@
 #include "modules/script.hpp"
 #include "modules/physics/rigidbody.hpp"
 #include "modules/rendering/light.hpp"
+#include "camera.hpp"
 
 #include <cstring>
 
@@ -329,11 +330,11 @@ namespace Implosion {
          {
             glDisable(GL_DEPTH_TEST);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            glLineWidth(5);
+            glLineWidth(20/glm::distance(Ignition::mainCamera->transform.position, obj->transform.position));
             Ignition::Vector4 col = renderer->shader.color;
-            renderer->shader.color = (Ignition::Vector4){1,1,1,.75f}*col*.5f+.5f;
+            renderer->shader.color = (Ignition::Vector4){0.8706,0.4235,0.0353,.75f};
             float intensity = renderer->shader.intensity;
-            renderer->shader.intensity = 1;
+            renderer->shader.intensity = 1.25;
             renderer->transform = &obj->transform;
             renderer->Update();
             renderer->shader.color = col;
