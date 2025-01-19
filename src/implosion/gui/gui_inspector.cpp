@@ -148,6 +148,7 @@ namespace Implosion {
                      ImGui::BeginChild(VAR("##Script_Component"), ImVec2(0, 100));
                      ImGui::InputText(VAR("Path"), &m->path);
 
+                     /*
                      ImGui::Separator();
 
                      for (auto& v : m->variables) {
@@ -159,6 +160,7 @@ namespace Implosion {
                            ImGui::Checkbox(VAR(v.name), &v.b);
                         }
                      }
+                     */
 
                      GUI_BEGIN_DROP_TARGET
                         std::string s = (const char*)payload->Data;

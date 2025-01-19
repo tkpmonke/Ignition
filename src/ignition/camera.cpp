@@ -65,6 +65,13 @@ namespace Ignition {
           
          glfwSwapBuffers((GLFWwindow*)*this->window);
          
+         int w,h;
+         glfwGetFramebufferSize(*window, &w,&h);
+         size.x = w;
+         size.y = h;
+         glViewport(0, 0, w, h);
+         window->Resize(w,h);
+         
       }
 
       glfwPollEvents();

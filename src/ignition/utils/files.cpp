@@ -25,11 +25,17 @@
 
 namespace Ignition::IO {
    
-   std::string projectName;
+   std::string projectPath;
    std::string log;
    void SetProjectHome(std::string s)
    {
-      projectName = s;
+      projectPath = s;
+   }
+
+   std::string GetProjectHome() {
+      
+      std::string p = projectPath;
+      return p; 
    }
 
    std::string FileExplorer()
@@ -68,6 +74,10 @@ namespace Ignition::IO {
       return oss.str();
    }
 
+   /// trys to get the best file explorer based on some env variables
+   /// if that fails then it trys to get vim,nvim, or nano (in that order)
+   /// defaults to vi if none are avalible
+   /// emacs < vi
    void EditFile(std::string file) {
 #ifdef __linux
       const char* editor;
@@ -91,7 +101,6 @@ namespace Ignition::IO {
 #endif
    }
 
-   std::string GetProjectHome() { return projectName; }
 
    std::string ReadTextFile(std::string path) 
    {

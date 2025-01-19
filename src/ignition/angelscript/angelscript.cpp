@@ -3,57 +3,61 @@
 
 #include "utils/io.hpp"
 
+#include <fstream>
+#include <sstream>
+#include <unordered_set>
+#include <assert.h>
+
 namespace Ignition::Scripting::AngelScript {
    asIScriptEngine* asEngine = nullptr;
+   asIScriptModule* igModule = nullptr;
 
    void MessageCallback(const asSMessageInfo *msg, void *param) {
       if (msg->type == asMSGTYPE_WARNING ) {
-         IO::Warning(std::to_string(msg->row) + (std::string)":" + std::to_string(msg->col) + (std::string)" " + msg->message);
+         IO::Warning(std::to_string(msg->row) + (std::string)":"
+               + std::to_string(msg->col) + (std::string)" " + msg->message);
       } else if (msg->type == asMSGTYPE_INFORMATION ) {
-         IO::Print(std::to_string(msg->row) + (std::string)":" + std::to_string(msg->col) + (std::string)" " + msg->message);
+         IO::Print(std::to_string(msg->row) + (std::string)":"
+               + std::to_string(msg->col) + (std::string)" " + msg->message);
       } else if (msg->type == asMSGTYPE_ERROR) {
-         IO::Error(std::to_string(msg->row) + (std::string)":" + std::to_string(msg->col) + (std::string)" " + msg->message);
+         IO::Error(std::to_string(msg->row) + (std::string)":"
+               + std::to_string(msg->col) + (std::string)" " + msg->message);
       }
+   }
+
+   std::string PreprocessScript(const std::string& filePath, std::unordered_set<std::string>& includedFiles) {
+      std::ifstream file(filePath);
+      if (!file.is_open()) {
+         throw std::runtime_error("Could not open file: " + filePath);
+      }
+
+      std::ostringstream processedScript;
+      std::string line;
+
+      while (std::getline(file, line)) {
+         /*if (line.substr(0, 8) == "#include") {
+            std::string includePath = line.substr(9); // Extract path
+            includePath = includePath.substr(1, includePath.size() - 2); // Remove quotes
+
+            if (includedFiles.find(includePath) == includedFiles.end()) {
+               includedFiles.insert(includePath);
+               processedScript << PreprocessScript(includePath, includedFiles);
+            } else {*/
+               processedScript << line << "\n";
+            //}
+         //}
+      }
+
+      return processedScript.str();
    }
    
    void InitilizeAngelScript() {
       asEngine = asCreateScriptEngine();
       asEngine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
       RegisterAll();
+   }
 
-      const char* script = R"(
-         
-         class Test : IgnitionScript {
-            void Start() override {
-               Print("Start Called");
-            }
-         }
-
-         void main() {
-            Test t;
-            t.Start();
-
-            Print("22");
-            Vector2 v;
-            v.x = 10;
-            v.y = 20;
-            Print(v.x);
-            Print(v.y);
-         }
-      )";
-
-      asIScriptModule* mod = asEngine->GetModule("Ignition_Scripts", asGM_ALWAYS_CREATE);
-      mod->AddScriptSection("script", script);
-      mod->Build();
-
-
-      asIScriptContext* ctx = asEngine->CreateContext();
-      asIScriptFunction* func = mod->GetFunctionByDecl("void main()");
-
-      ctx->Prepare(func);
-      ctx->Execute();
-
-      ctx->Release();
+   void Shutdown() {
       asEngine->ShutDownAndRelease();
    }
 
@@ -63,7 +67,11 @@ namespace Ignition::Scripting::AngelScript {
       RegisterVectors();
       RegisterTransform();
       RegisterIgnitionScript();
+      
+      RegisterObject();
+      RegisterModule();
 
+      RegisterCamera();
       /*
       RegisterModel();
       RegisterShader();
@@ -72,8 +80,6 @@ namespace Ignition::Scripting::AngelScript {
       RegisterCollider();
       RegisterRigidbody();
 
-      RegisterObject();
-      RegisterCamera();
 
       RegisterInputKeys();
       RegisterInputFunctions();
@@ -81,5 +87,6 @@ namespace Ignition::Scripting::AngelScript {
       */
       RegisterMiscFunctions();
       RegisterExpose();
+      RegisterMathFunctions();
    }
 }

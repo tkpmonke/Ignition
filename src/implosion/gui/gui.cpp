@@ -9,6 +9,7 @@
 #include "sprites/empty_folder.hpp"
 #include "sprites/igscn.hpp"
 #include "sprites/lua_script.hpp"
+#include "sprites/angelscript_script.hpp"
 
 namespace Implosion {
    std::string s = Ignition::IO::GetHome() + "/Implosion/gui";
@@ -65,6 +66,13 @@ namespace Implosion {
                                                       LUA_SCRIPT_HEIGHT,
                                                       LUA_SCRIPT_BYTES_PER_PIXEL,
                                                       "Implosion_LUA_SCRIPT");
+      
+      this->files.additionalTextures.angelscript_script.SetFlags(Ignition::Rendering::Linear);
+      this->files.additionalTextures.angelscript_script.LoadData(  ANGELSCRIPT_PIXEL_DATA,
+                                                      ANGELSCRIPT_WIDTH,
+                                                      ANGELSCRIPT_HEIGHT,
+                                                      ANGELSCRIPT_BYTES_PER_PIXEL,
+                                                      "Implosion_ANGELSCRIPT");
    }
 
    void GUI::NewFrame()
