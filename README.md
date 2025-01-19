@@ -9,6 +9,7 @@ Right now Ignition is only avalible on the AUR, with APT planned in the near fut
 # you can use your favorite pacman wrapper
 yay -S implosion
 ```
+note that the latest release is the only one on the aur, for the most up to date builds, you need to build from source 
 
 ## Compile From Source
 <details>
@@ -21,12 +22,12 @@ ignition uses the following
 - GLM
 - Assimp
 - LuaBridge
-- 7z (for hub)
-- python (for hub)
 - stb_image.h (included)
 - IMGUI (included)
+- AngelScript (for scripting) (included)
+- Jolt Physics (included)
 
-all of which can be installed using most linux package managers (only pacman/AUR tested)
+all of which that are not already included in the libs folder can be installed using most linux package managers (only pacman/AUR tested)
     
 run `premake5 gmake2 && make` for unix-like systems. A optimization you can use is to pass the `-j` flag into make, running it with multiple threads (doesn't work on all systems)<br/><br/>
 or<br/><br/>
