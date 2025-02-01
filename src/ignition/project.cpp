@@ -60,6 +60,8 @@ namespace Ignition {
       pack(Ignition::IO::GetProjectHome().data(),(Ignition::IO::GetProjectHome() + "/bin").data(), 1); 
       auto exeLoc = Ignition::IO::GetProjectHome() + "/bin/" + this->name;
       std::filesystem::copy_file("/usr/bin/ignition-runtime", exeLoc);
+      auto soLoc = Ignition::IO::GetProjectHome() + "/bin/libignition.so";
+      std::filesystem::copy_file("/usr/lib/libignition.so", soLoc);
 
       return exeLoc;
    }

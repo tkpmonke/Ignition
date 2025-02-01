@@ -4,7 +4,7 @@
 #include "types/model.hpp"
 
 #include <GL/glew.h>
-#include <module.hpp>
+#include "module_registry.hpp"
 
 #include <unordered_map>
 
@@ -13,16 +13,14 @@ namespace Ignition::Rendering {
    extern int currentVao;
    extern std::unordered_map<std::string, int> model_lookup_table;
 
-   class MeshRenderer : public Module{
-   public:
-      CREATE_MODULE("Mesh Renderer");
-      bool runs_in_editor() override { return true; }
+   class MeshRenderer : public Module {
+      IGMODULE(MeshRenderer)
+      IGRUNS_IN_EDITOR()
+   public: 
 
       Shader shader;
       Model model;     
 
-      MeshRenderer() = default;
-      
       /// Set s to currect shader
       void LoadShader(Shader s) {this->shader = s; }
 

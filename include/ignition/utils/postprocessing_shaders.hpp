@@ -95,7 +95,7 @@ const std::string pp_tonemap =
 "layout (local_size_x = 10, local_size_y = 10, local_size_z = 1) in;"
 "layout(binding=0, rgba32f) uniform image2D img;"
 "const float gamma = 2.2;"
-"const float exposure = 1;"
+"const float exposure = 10;"
 "const int type = 1;"
 //0 = none
 //1 = reinhard

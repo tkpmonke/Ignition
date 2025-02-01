@@ -2,10 +2,11 @@
 
 #include <string>
 #include <memory>
+#include <unordered_map>
+#include <any>
 
 #include "types/transform.hpp"
 
-#define CREATE_MODULE(name) const std::string mod_type() override { return name; }
 namespace Ignition {
    class Object;
    class Module {
@@ -23,8 +24,12 @@ namespace Ignition {
       virtual void Serialize() {};
       virtual void Deserialize() {};
 
-      virtual bool runs_in_editor() { return false; }
-      virtual const std::string mod_type() { return "Module"; }; 
+      virtual bool _runs_in_editor() const { return false; }
+      virtual const std::string _get_name() { return "Module"; }; 
+
+      using Properties = std::unordered_map<std::string, std::any>;
+      Properties properties;
+      virtual void BindProperties() {}
 
       bool enabled = true;
       Transform* transform;

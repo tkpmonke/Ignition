@@ -80,6 +80,7 @@ namespace Ignition::IO {
    /// emacs < vi
    void EditFile(std::string file) {
 #ifdef __linux
+/*
       const char* editor;
       if ((editor = getenv("EDITOR")) == NULL)
          if ((editor = getenv("VISUAL")) == NULL)
@@ -96,6 +97,19 @@ namespace Ignition::IO {
 
       if (system(((std::string)term + " -e " + editor + (std::string)" " + file + " &").data()) != 0)
          Ignition::IO::Error("Could not find a text editor, try setting the env variable EDITOR to your prefered text editor or install vim,nvim,nano, or vi");
+         */
+      pid_t pid = fork();
+
+      if (pid == 0) {
+         const char* term;
+         if ((term = getenv("TERM")) == NULL) {
+            Ignition::IO::Error("Cannot open file in new terminal window, consider setting $TERM");
+         }
+
+         execlp(term, term, "-e", "xdg-open", file.data(), NULL);
+      } else {
+         return;
+      }
 #elif defined(_WIN32)
       ShellExecute(NULL, "open", file.data(), NULL, NULL, SW_SHOWNORMAL);
 #endif

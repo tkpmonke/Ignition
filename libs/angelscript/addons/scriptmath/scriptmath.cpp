@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <math.h>
+#include <cmath>
 #include <float.h>
 #include <string.h>
 #include "scriptmath.h"
@@ -154,6 +155,8 @@ bool closeTo(double a, double b, double epsilon)
 	return diff / (fabs(a) + fabs(b)) < epsilon;
 }
 
+
+
 void RegisterScriptMath_Native(asIScriptEngine *engine)
 {
 	int r;
@@ -197,6 +200,7 @@ void RegisterScriptMath_Native(asIScriptEngine *engine)
 	r = engine->RegisterGlobalFunction("float abs(float)", asFUNCTIONPR(fabsf, (float), float), asCALL_CDECL); assert( r >= 0 );
 	r = engine->RegisterGlobalFunction("float floor(float)", asFUNCTIONPR(floorf, (float), float), asCALL_CDECL); assert( r >= 0 );
 	r = engine->RegisterGlobalFunction("float fraction(float)", asFUNCTIONPR(fractionf, (float), float), asCALL_CDECL); assert( r >= 0 );
+
 
 	// Don't register modf because AngelScript already supports the % operator
 #else

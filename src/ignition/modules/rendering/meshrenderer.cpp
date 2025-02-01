@@ -116,9 +116,9 @@ namespace Ignition::Rendering {
       if (this->shader.type == ShaderType_Lit)
       {
          glBindSampler(0, shader.albedo.sampler);
-         this->shader.SetFloat(32, "material.shininess");
+         this->shader.SetFloat(shader.shininess, "material.shininess");
          this->shader.SetBool(false, "material.use_specular_map");
-         this->shader.SetVec3(Vector3(0.5f), "material.specular");
+         this->shader.SetVec3(shader.specular, "material.specular");
          this->shader.SetBool(false, "material.use_normal_map");
          //glActiveTexture(GL_TEXTURE1); 
          //glBindTexture(GL_TEXTURE_2D, this->shader.diffuse);
@@ -141,17 +141,19 @@ namespace Ignition::Rendering {
             this->shader.SetBool(lights[l]->type == LightType::Spot, varNameStart+"isSpot");
 
             this->shader.SetVec3(lights[l]->transform->position, varNameStart+"position");
+            this->shader.SetVec3(glm::normalize(glm::radians(lights[l]->transform->forward)), varNameStart+"direction");
             this->shader.SetVec3(lights[l]->ambient, varNameStart+"ambient");
             this->shader.SetVec3(lights[l]->diffuse, varNameStart+"diffuse");
             this->shader.SetVec3(lights[l]->specular, varNameStart+"specular");
 
-            this->shader.SetFloat(lights[l]->distance, varNameStart+"distance");
+            this->shader.SetFloat(lights[l]->power, varNameStart+"power");
+            this->shader.SetFloat(lights[l]->fallOff, varNameStart+"fallOff");
             this->shader.SetFloat(lights[l]->constant, varNameStart+"constant");
             this->shader.SetFloat(lights[l]->linear, varNameStart+"linear");
             this->shader.SetFloat(lights[l]->quadratic, varNameStart+"quadratic");
             
-            this->shader.SetFloat(lights[l]->cutOff, varNameStart+"cutOff");
-            this->shader.SetFloat(lights[l]->outerCutOff, varNameStart+"outerCutOff");
+            this->shader.SetFloat(glm::cos(glm::radians(lights[l]->cutOff)), varNameStart+"cutOff");
+            this->shader.SetFloat(glm::cos(glm::radians(lights[l]->outerCutOff)), varNameStart+"outerCutOff");
          }
       }
 
@@ -168,6 +170,8 @@ namespace Ignition::Rendering {
       Ignition::IO::WriteFloat(shader.color.a);
 
       Ignition::IO::WriteFloat(shader.intensity);
+      Ignition::IO::WriteFloat(shader.shininess);
+      Ignition::IO::WriteVector3(shader.specular);
 
       Ignition::IO::WriteString(
             shader.albedo.name);
@@ -210,6 +214,8 @@ namespace Ignition::Rendering {
       shader.color.a = Ignition::IO::ReadFloat();
 
       shader.intensity = Ignition::IO::ReadFloat();
+      shader.shininess = Ignition::IO::ReadFloat();
+      shader.specular = Ignition::IO::ReadVector3();
 
       std::string s = Ignition::IO::ReadString();
       shader.albedo = Texture(); 

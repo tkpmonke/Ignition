@@ -43,10 +43,28 @@ namespace Ignition::Scripting::AngelScript {
       self->~Vector4();
    }
 
+   void Vector2Assign(asIScriptGeneric* gen) {
+      Vector2* self = reinterpret_cast<Vector2*>(gen->GetObject());
+      Vector2* other = reinterpret_cast<Vector2*>(gen->GetArgAddress(0));
+      if (&self != &other) {
+         *self = *other;
+      }
+      *reinterpret_cast<Vector2*>(gen->GetAddressOfReturnLocation()) = *self;
+
+   }
+   
+   void Vector3Assign(Vector3* self, const Vector3* other) {
+       if (self == nullptr || other == nullptr) {
+           std::cerr << "Error: Invalid pointer in Vector3Assign" << std::endl;
+           return;
+       }
+       *self = *other;
+   
+   }
    void RegisterVectors() {
       int r;
 
-      S(asEngine->RegisterObjectType("Vector2", sizeof(Ignition::Vector2), asOBJ_VALUE));
+      S(asEngine->RegisterObjectType("Vector2", sizeof(Ignition::Vector2), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<Ignition::Vector2>()));
       S(asEngine->RegisterObjectProperty("Vector2", "float x", asOFFSET(Ignition::Vector2, x)));
       S(asEngine->RegisterObjectProperty("Vector2", "float y", asOFFSET(Ignition::Vector2, y)));
       S(asEngine->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT, "void f()",
@@ -55,8 +73,9 @@ namespace Ignition::Scripting::AngelScript {
                asFUNCTION(ConstructVector2Args), asCALL_CDECL_OBJLAST));
       S(asEngine->RegisterObjectBehaviour("Vector2", asBEHAVE_DESTRUCT, "void d()",
                asFUNCTION(DestructVector2), asCALL_CDECL_OBJLAST));
+      S(asEngine->RegisterObjectMethod("Vector2", "Vector2& opAssign(const Vector2 &in)", asFUNCTION(Vector2Assign), asCALL_GENERIC));
 
-      S(asEngine->RegisterObjectType("Vector3", sizeof(Ignition::Vector3), asOBJ_VALUE));
+      S(asEngine->RegisterObjectType("Vector3", sizeof(Ignition::Vector3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<Ignition::Vector3>()));
       S(asEngine->RegisterObjectProperty("Vector3", "float x", asOFFSET(Ignition::Vector3, x)));
       S(asEngine->RegisterObjectProperty("Vector3", "float y", asOFFSET(Ignition::Vector3, y)));
       S(asEngine->RegisterObjectProperty("Vector3", "float z", asOFFSET(Ignition::Vector3, z)));
@@ -66,6 +85,7 @@ namespace Ignition::Scripting::AngelScript {
                asFUNCTION(ConstructVector3Args), asCALL_CDECL_OBJLAST));
       S(asEngine->RegisterObjectBehaviour("Vector3", asBEHAVE_DESTRUCT, "void d()",
                asFUNCTION(DestructVector3), asCALL_CDECL_OBJLAST));
+      S(asEngine->RegisterObjectMethod("Vector3", "Vector3& opAssign(const Vector3 &in)", asFUNCTION(Vector3Assign), asCALL_CDECL_OBJFIRST));
       
       S(asEngine->RegisterObjectType("Vector4", sizeof(Ignition::Vector4), asOBJ_VALUE));
       S(asEngine->RegisterObjectProperty("Vector4", "float x", asOFFSET(Ignition::Vector4, x)));

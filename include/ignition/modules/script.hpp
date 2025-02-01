@@ -1,6 +1,6 @@
 #pragma once
 
-#include "module.hpp"
+#include "module_registry.hpp"
 //#include "lua/lualib.hpp"
 //#include <vector>
 
@@ -32,14 +32,8 @@ namespace Ignition {
    };
 
    class Script : public Module {
+     IGMODULE(Script); 
    public:
-      CREATE_MODULE("Script")
-
-      // defaults to lua
-      enum { 
-         AngelScript = 0,
-      } language = AngelScript;
-
       std::string path;
       
       void Start() override;

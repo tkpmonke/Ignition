@@ -8,6 +8,12 @@ namespace Ignition::Scripting::AngelScript {
    extern asIScriptEngine* asEngine;
    extern asIScriptModule* igModule;
 
+   template<class A, class B>
+   B* refCast(A* a) {
+       if (a == nullptr) return nullptr;
+       return (B*)a;
+   }
+
    void InitilizeAngelScript();
    std::string PreprocessScript(const std::string& filePath, std::unordered_set<std::string>& includedFiles); 
    void RegisterAll();
