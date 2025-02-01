@@ -41,11 +41,13 @@ namespace Ignition::Rendering {
       /// Main Texture
       Texture albedo;
 
-      float shininess;
+      /// shininess of shader
+      float shininess = 32;
 
       /// Changes intensity of color
       float intensity = 1.f;
-      Vector3 specular;
+
+      Vector3 specular = Vector3(0.5f);
 
       void SetFloat(float v, std::string name);
       void SetInt(int v, std::string name);

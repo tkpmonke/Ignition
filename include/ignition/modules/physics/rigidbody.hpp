@@ -3,11 +3,12 @@
 #include "physics.hpp"
 #include "module.hpp"
 #include "collider.hpp"
+#include "module_registry.hpp"
 
 namespace Ignition::Physics {
    class Rigidbody : public Module {
+      IGMODULE(Rigidbody)
    public:
-      CREATE_MODULE("Rigidbody");
 
       float mass = 1;
       float bounciness = 0.1f;
@@ -29,8 +30,6 @@ namespace Ignition::Physics {
 
       void Serialize() override;
       void Deserialize() override;
-
-      Rigidbody() = default;
 
    private:
       Vector3 QuatToEuler(JPH::Quat);

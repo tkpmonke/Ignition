@@ -64,14 +64,14 @@ bool CheckRayMeshIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDi
                               model->model.vertices[i+1],
                               model->model.vertices[i+2]};
 
+      f *= model->transform->scale;
+
       cubeMin = glm::min(cubeMin, f); 
       cubeMax = glm::max(cubeMax, f); 
    }
 
    cubeMin += model->transform->position; 
    cubeMax += model->transform->position; 
-   cubeMin *= model->transform->scale; 
-   cubeMax *= model->transform->scale; 
 
    //printf("MIN : X=%f Y=%f Z=%f\n", cubeMin.x, cubeMin.y, cubeMin.z); 
    //printf("MAX : X=%f Y=%f Z=%f\n\n", cubeMax.x, cubeMax.y, cubeMax.z); 
@@ -85,7 +85,7 @@ namespace Implosion {
       double x,y;
 
       glfwGetCursorPos((GLFWwindow*)*window, &x, &y);
-      ImVec2 pos = ImGui::GetWindowPos();
+      ImVec2 pos = ImGui::GetCursorScreenPos();
       x -= pos.x;
       y -= pos.y;
 
@@ -96,8 +96,6 @@ namespace Implosion {
       //printf("ORG : X=%f Y=%f Z=%f\n", rayOrigin.x, rayOrigin.y, rayOrigin.z); 
       //printf("DIR : X=%f Y=%f Z=%f\n\n", rayDirection.x, rayDirection.y, rayDirection.z); 
       
-      float distance;
-      glm::vec3 intersectionPoint;
       bool b = false;
 
       for (auto& obj : *Ignition::scene.GetObjects())

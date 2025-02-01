@@ -1,5 +1,7 @@
-#include "module.hpp"
+#pragma once
+
 #include "types/texture.hpp"
+#include "module_registry.hpp"
 
 #include <memory>
 #include <vector>
@@ -12,11 +14,12 @@ namespace Ignition::Rendering {
 
    class Light : public Module {
    public:
-      CREATE_MODULE("Light");
+      IGMODULE(Light);
 
       LightType type = Point;
 
-      float distance=5;
+      float power = 1;
+      float fallOff = 0.009f;
       
       const float constant = 1.0f;
       const float linear = 0.09f;
@@ -27,8 +30,8 @@ namespace Ignition::Rendering {
       Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
 
       // only in use if using spot light
-      float cutOff;
-      float outerCutOff;
+      float cutOff = 25;
+      float outerCutOff = 30;
 
       void Serialize() override;
       void Deserialize() override;

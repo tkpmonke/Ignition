@@ -189,7 +189,7 @@ namespace Implosion {
       ImGui::End();
       
       if (ImGui::Begin("Texture Inspector")) {
-         ImGui::BeginChild("Texture List", ImVec2(0, 300));
+         ImGui::BeginChild("Texture List", ImVec2(0, 250));
 
          static std::string selected;
          if (ImGui::Selectable("Ignition_Window_Color", selected == "Ignition_Window_Color")) {

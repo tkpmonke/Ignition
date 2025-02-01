@@ -1,4 +1,5 @@
 #include "gui/gui.hpp"
+#include "gui/gizmos.hpp"
 #include "imgui_stdlib.h"
 #include <glm/gtc/type_ptr.hpp>
 
@@ -89,7 +90,7 @@ namespace Implosion {
                   ImGui::Separator();
                   if (mod->mod_type() == "Mesh Renderer") {
                      auto m = std::dynamic_pointer_cast<Ignition::Rendering::MeshRenderer>(mod);
-                     ImGui::BeginChild(VAR("##Mesh_Renderer"), ImVec2(0, 150));
+                     ImGui::BeginChild(VAR("##Mesh_Renderer"), ImVec2(0, 200));
 
                      if (ImGui::BeginCombo(VAR("Mesh"), m->model.name == "" ? "Mesh" : m->model.name.data())) {
                         if (ImGui::Button("None")) {
@@ -182,7 +183,11 @@ namespace Implosion {
 
 
                      ImGui::ColorEdit4(VAR("Color"), glm::value_ptr(m->shader.color));
+                     ImGui::ColorEdit3(VAR("Specular"), glm::value_ptr(m->shader.specular));
                      ImGui::DragFloat(VAR("Intensity"), &m->shader.intensity);
+                     if (ImGui::DragFloat(VAR("Shininess"), &m->shader.shininess))
+                        if (m->shader.shininess < 1)
+                           m->shader.shininess = 1;
 
                      ImGui::EndChild();
 
@@ -269,10 +274,12 @@ namespace Implosion {
                         ImGui::EndCombo();
                      }
 
-                     ImGui::InputFloat(VAR("Distance"), &m->distance);
-                     ImGui::InputFloat3(VAR("Ambient"), (float*)&m->ambient);
-                     ImGui::InputFloat3(VAR("Diffuse"), (float*)&m->diffuse);
-                     ImGui::InputFloat3(VAR("Specular"), (float*)&m->specular);
+                     ImGui::InputFloat(VAR("Power"), &m->power);
+                     ImGui::InputFloat(VAR("Falloff"), &m->fallOff);
+                     ImGui::Spacing();
+                     ImGui::ColorEdit3(VAR("Ambient"), (float*)&m->ambient);
+                     ImGui::ColorEdit3(VAR("Diffuse"), (float*)&m->diffuse);
+                     ImGui::ColorEdit3(VAR("Specular"), (float*)&m->specular);
 
                      if (m->type == Ignition::Rendering::Spot) {
                         ImGui::InputFloat(VAR("Cut Off"), &m->cutOff);
@@ -323,6 +330,7 @@ namespace Implosion {
 
       if (obj != nullptr)
       {
+         
 
          Ignition::Rendering::MeshRenderer* renderer = (Ignition::Rendering::MeshRenderer*)obj->GetModule("Mesh Renderer").get(); 
 

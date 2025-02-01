@@ -31,7 +31,7 @@ namespace Ignition {
       int r;
 
       S(asEngine->RegisterGlobalProperty("Transform transform", &t));
-      S(asEngine->RegisterGlobalProperty("Object object", &o));
+      S(asEngine->RegisterGlobalProperty("Object@ object", nullptr));
       S(asEngine->RegisterGlobalProperty("float time", &time));
    }
 

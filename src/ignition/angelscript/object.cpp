@@ -15,28 +15,21 @@ Ignition::Camera* GetMainCamera() {
    return Ignition::mainCamera;
 }
 
-template<class A, class B>
-B* refCast(A* a)
-{
-    // If the handle already is a null handle, then just return the null handle
-    if( !a ) return 0;
- 
-    // Now try to dynamically cast the pointer to the wanted type
-    B* b = dynamic_cast<B*>(a);
-    return b;
-}
 
 namespace Ignition::Scripting::AngelScript {
    void RegisterObject() { 
       int r;
-      S(asEngine->RegisterObjectType("Object", sizeof(Ignition::Object), asOBJ_REF | asOBJ_NOCOUNT));
 
       S(asEngine->RegisterObjectProperty("Object", "Transform transform", asOFFSET(Ignition::Object, transform)));
       S(asEngine->RegisterObjectProperty("Object", "string name", asOFFSET(Ignition::Object, name)));
       S(asEngine->RegisterObjectProperty("Object", "string tag", asOFFSET(Ignition::Object, tag)));
       S(asEngine->RegisterObjectProperty("Object", "bool enabled", asOFFSET(Ignition::Object, enabled)));
+      
+      S(asEngine->RegisterObjectMethod("Object", "Module@ GetModule(string)", asMETHOD(Ignition::Object, GetModule), asCALL_THISCALL));
+      S(asEngine->RegisterObjectMethod("Object", "Rigidbody@ GetRigidbody()", asMETHOD(Ignition::Object, GetRigidbody), asCALL_THISCALL));
 
       S(asEngine->RegisterGlobalFunction("Object@ CreateObject()", asFUNCTION(CreateObject), asCALL_CDECL));
+      
    }
 
    void RegisterCamera() {

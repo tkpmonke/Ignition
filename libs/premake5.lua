@@ -72,3 +72,21 @@ project "ig-angelscript"
    filter "configurations:Release"
       defines { "NDEBUG" }
       optimize "On"
+
+project "ig-imguizmo"
+   kind           "StaticLib"
+   language       "C++"
+   cppdialect     "c++17"
+   targetdir      "../bin"
+   includedirs{   "imgui" }
+   files      {   "imguizmo/**.cpp", "imguizmo/**.h" }
+   links      {   "glfw", "GL", "ig-imgui" }
+
+   filter "configurations:Debug"
+      defines { "DEBUG" }
+      optimize "On"
+      symbols "On"
+
+   filter "configurations:Release"
+      defines { "NDEBUG" }
+      optimize "On"

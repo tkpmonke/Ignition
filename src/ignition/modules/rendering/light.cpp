@@ -11,7 +11,8 @@ namespace Ignition::Rendering {
 
    void Light::Serialize() {
       Write8(type);
-      WriteFloat(distance);
+      WriteFloat(fallOff);
+      WriteFloat(power);
       WriteVector3(ambient);
       WriteVector3(diffuse);
       WriteVector3(specular);
@@ -24,7 +25,9 @@ namespace Ignition::Rendering {
 
    void Light::Deserialize() {
       type = (LightType)Read8();
-      distance = ReadFloat();
+
+      fallOff = ReadFloat();
+      power = ReadFloat();
 
       ambient = ReadVector3();
       diffuse = ReadVector3();

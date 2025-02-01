@@ -1,4 +1,5 @@
 #include "gui/gui.hpp"
+#include "gui/gizmos.hpp"
 #include "utils/files.hpp"
 #include "input/commands.hpp"
 
@@ -80,6 +81,7 @@ namespace Implosion {
       ImGui_ImplOpenGL3_NewFrame();
       ImGui_ImplGlfw_NewFrame();
       ImGui::NewFrame();
+      Gizmos::InitilizeGizmos();
    
       ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
    }

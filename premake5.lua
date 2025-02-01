@@ -22,7 +22,7 @@ project "ignition"
 
    filter "configurations:Debug"
       defines { "DEBUG" }
-      optimize "On"
+      --optimize "On"
       symbols "On"
 
    filter "configurations:Release"
@@ -34,10 +34,10 @@ project "implosion"
    language "C++"
    cppdialect "c++17"
    targetdir "bin"
-   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker", "libs", "/usr/include/bullet" }
+   includedirs { "include/ignition", "include/ignition/components", "include/implosion", "include/implosion/utils", "libs/imgui", "libs/assetpacker", "libs" }
    files { "src/implosion/**.cpp", "include/**.hpp", "libs/imgui/**.h" }
    removefiles "hub/*"
-   links { "glfw", "GL", "GLEW", "ignition", "ig-imgui", "lua5.4"}
+   links { "glfw", "GL", "GLEW", "ignition", "ig-imgui", "lua5.4", "ig-imguizmo"}
 
    defines { "EDITOR" }
 

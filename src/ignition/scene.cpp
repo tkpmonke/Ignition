@@ -126,7 +126,7 @@ namespace Ignition {
 
          for (std::shared_ptr<Module> m : objects[i].GetModules())
          {
-            Ignition::IO::WriteString(m->mod_type()); 
+            Ignition::IO::WriteString(m->_get_name()); 
             Ignition::IO::Write8(m->enabled);
             m->Serialize();
          }  
@@ -170,40 +170,11 @@ namespace Ignition {
             std::string type = Ignition::IO::ReadString();
             bool enabled = Ignition::IO::Read8();
 
-            if (type == "Mesh Renderer")
-            {
-               auto m = std::make_shared<MeshRenderer>();
-               m->object = &o;
-               m->enabled = enabled;
-               m->Deserialize();
-               o.AddModule(m);
-            }
-
-            if (type == "Script")
-            {
-               auto m = std::make_shared<Ignition::Script>();
-               m->object = &o;
-               m->enabled = enabled;
-               m->Deserialize();
-               o.AddModule(m);
-            }
-
-            if (type == "Rigidbody") {
-               auto rb = std::make_shared<Ignition::Physics::Rigidbody>();
-               rb->object = &o;
-               rb->enabled = enabled;
-               o.AddModule(rb);
-               auto r = (Ignition::Physics::Rigidbody*)o.GetModule("Rigidbody").get();
-               r->Deserialize();
-            }
-
-            if (type == "Light") {
-               auto m = std::make_shared<Ignition::Rendering::Light>();
-               m->object = &o;
-               m->enabled = enabled;
-               m->Deserialize(); 
-               o.AddModule(m);
-               lights.push_back(m);
+            auto module = Ignition::ModuleDB::GetInstance().CreateModule(type);
+            if (module) {
+               module->enabled = enabled;
+               module->Deserialize();
+               o.AddModule(module);
             }
          }
 

@@ -3,6 +3,7 @@
 #include "types/shader.hpp"
 #include "utils/default_shaders.hpp"
 #include "types/texture.hpp"
+#include "modules/rendering/light.hpp"
 
 #include "shapes/square.hpp"
 #include "shapes/cube.hpp"
@@ -24,31 +25,60 @@ using namespace Ignition::Rendering;
 namespace Implosion {
    void GUI::AddObjectMenu()
    {
-      if (ImGui::BeginMenu("Create Object"))
+      if (ImGui::BeginMenu("Create"))
       {
-         if (ImGui::MenuItem("Empty"))
-         {
+         if (ImGui::MenuItem("Empty")) {
             Ignition::scene.CreateObject();
             this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
          }
-         if (ImGui::MenuItem("Square"))
-         {
-            CREATE_SHADER(); 
-            MeshRenderer m;
-            m.LoadModel(square_model);
-            m.LoadShader(s);
-            std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
-            Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject()).AddModule(ptr);
+
+         if (ImGui::BeginMenu("Shapes")) {
+            
+            if (ImGui::MenuItem("Square")) {
+               CREATE_SHADER(); 
+               MeshRenderer m;
+               m.LoadModel(square_model);
+               m.LoadShader(s);
+               std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
+               int i = Ignition::scene.CreateObject();
+               Ignition::scene.GetObjects()->at(i).AddModule(ptr);
+               Ignition::scene.GetObjects()->at(i).name = "Square";
+               this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
+            }
+            if (ImGui::MenuItem("Cube")) {
+               CREATE_SHADER(); 
+               MeshRenderer m;
+               m.LoadModel(cube_model);
+               m.LoadShader(s);
+               std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
+               Ignition::Object* o = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
+               o->name = "Cube";
+               o->AddModule(ptr);
+               this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
+            }
+            ImGui::EndMenu();
          }
-         if (ImGui::MenuItem("Cube"))
-         {
-            CREATE_SHADER(); 
-            MeshRenderer m;
-            m.LoadModel(cube_model);
-            m.LoadShader(s);
-            std::shared_ptr<MeshRenderer> ptr = std::make_shared<MeshRenderer>(m);
-            Ignition::Object* o = &Ignition::scene.GetObjects()->at(Ignition::scene.CreateObject());
-            o->AddModule(ptr);
+
+         if (ImGui::BeginMenu("Lighting")) {
+            if (ImGui::MenuItem("Point Light")) {
+               std::shared_ptr<Light> ptr = std::make_shared<Light>();
+               ptr->type = LightType::Point;
+               int i = Ignition::scene.CreateObject();
+               Ignition::scene.GetObjects()->at(i).AddModule(ptr);
+               Ignition::scene.GetObjects()->at(i).name = "Point Light";
+               lights.push_back(ptr);
+               this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
+            }
+            if (ImGui::MenuItem("Spot Light")) {
+               std::shared_ptr<Light> ptr = std::make_shared<Light>();
+               ptr->type = LightType::Spot;
+               int i = Ignition::scene.CreateObject();
+               Ignition::scene.GetObjects()->at(i).AddModule(ptr);
+               Ignition::scene.GetObjects()->at(i).name = "Spot Light";
+               lights.push_back(ptr);
+               this->selectedObject = &Ignition::scene.GetObjects()->at(Ignition::scene.GetObjects()->size()-1);
+            }
+            ImGui::EndMenu();
          }
          ImGui::EndMenu();
       }

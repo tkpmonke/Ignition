@@ -2,6 +2,7 @@
 #include <angelscript/addons/scriptstdstring/scriptstdstring.h>
 
 #include "utils/io.hpp"
+#include "object.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -68,23 +69,24 @@ namespace Ignition::Scripting::AngelScript {
       RegisterTransform();
       RegisterIgnitionScript();
       
-      RegisterObject();
+      int r = asEngine->RegisterObjectType("Object", sizeof(Ignition::Object), asOBJ_REF | asOBJ_NOCOUNT);
+      assert(r >= 0);
       RegisterModule();
-
-      RegisterCamera();
       /*
       RegisterModel();
       RegisterShader();
       RegisterMeshRenderer();
+      RegisterInputKeys();
 
+      */
       RegisterCollider();
       RegisterRigidbody();
 
+      RegisterObject();
+      RegisterCamera();
 
-      RegisterInputKeys();
       RegisterInputFunctions();
 
-      */
       RegisterMiscFunctions();
       RegisterExpose();
       RegisterMathFunctions();
