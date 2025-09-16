@@ -1,8 +1,6 @@
 # WARNING
 this engine is really shitty and has been abandoned for good reason. I see no reason to use this code or even look at it tbh unless you wanna point and laugh at me lol. 
 
-If you want a decent and actually slightly thought out engine, look at [shooter-engine](https://github.com/tkpmonke/shooter-engine)
-
 # Ignition
 Fast, Lightweight, and easy-to-use general purpose game engine
 
